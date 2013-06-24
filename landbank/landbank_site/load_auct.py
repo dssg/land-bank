@@ -13,10 +13,10 @@ def load_auctions(auction_file, verbose = False):
   with open(auction_file,'r') as f:
     reader = csv.reader(f, delimiter="\t")
     reader.next()
-    i = 0;
+    #i = 0;
     for row in reader:
-      if (i==10):
-        break
+      #if (i==10):
+        #break
       try:
         auction =  Auction.objects.get(\
         pin     = row[1]\
@@ -43,7 +43,7 @@ def load_auctions(auction_file, verbose = False):
 	,no_tract_info = row[22]\
 	,ca_num = row [23]\
 	,ca_name = row[24].strip()\
-	,place00 = row[25].strip()\
+	,place = row[25].strip()\
 	,gisdate = row[26].strip()\
 	,ptype = row[27]\
 	,residential = row[28]\
@@ -77,7 +77,7 @@ def load_auctions(auction_file, verbose = False):
 	,no_tract_info = row[22]\
 	,ca_num = row [23]\
 	,ca_name = row[24].strip()\
-	,place00 = row[25].strip()\
+	,place = row[25].strip()\
 	,gisdate = row[26].strip()\
 	,ptype = row[27]\
 	,residential = row[28]\
@@ -85,5 +85,5 @@ def load_auctions(auction_file, verbose = False):
 	,adj_yd = row[30]\
         ,loc       = None if row[19]=='' else Point((Decimal(row[20]), Decimal(row[19])))\
         )
-      i += 1
+      #i += 1
       auction.save()
