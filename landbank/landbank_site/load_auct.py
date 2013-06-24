@@ -1,15 +1,10 @@
-import os, csv, datetime, pytz, time
-from pytz import timezone
+import os, csv
+from load_utils import spss_to_posix
 from models import Auction
 from decimal import Decimal
 from django.contrib.gis.geos import Point
 
 auction_file = '/mnt/ebs/data/repdata_auct_2012q4_Fellows.tsv'
-
-utc = pytz.utc
-central_tz = timezone('US/Central')
-gregorian_diff = (datetime.datetime(1970, 1, 1) - datetime.datetime(1582, 10, 14)).total_seconds()
-year_2100 = time.mktime(datetime.datetime(2100,1,1).timetuple())
 
 def run(verbose = True):
   load_auctions(auction_file, verbose = verbose)
@@ -18,16 +13,16 @@ def load_auctions(auction_file, verbose = False):
   with open(auction_file,'r') as f:
     reader = csv.reader(f, delimiter="\t")
     reader.next()
-    #i = 0;
+    i = 0;
     for row in reader:
-      #if (i==10):
-      #  break
+      if (i==10):
+        break
       try:
         auction =  Auction.objects.get(\
         pin     = row[1]\
         ,doc    = row[2]\
-        ,date_doc = datetime.datetime.fromtimestamp(Decimal(row[3])-Decimal(gregorian_diff)).replace(tzinfo=utc).astimezone(central_tz) if row[3] > year_2100 else row[3]\
-	,date_rec = datetime.datetime.fromtimestamp(Decimal(row[4])-Decimal(gregorian_diff)).replace(tzinfo=utc).astimezone(central_tz) if row[4] > year_2100 else row[4]\
+        ,date_doc = spss_to_posix(row[3])\
+	,date_rec = spss_to_posix(row[4])\
 	,reo = True if row[5]==1 else False\
 	,buyer = row[6].strip()\
 	,buyer_type = row[7].strip()\
@@ -60,8 +55,8 @@ def load_auctions(auction_file, verbose = False):
         auction =  Auction(\
         pin     = row[1]\
         ,doc    = row[2]\
-        ,date_doc = datetime.datetime.fromtimestamp(Decimal(row[3])-Decimal(gregorian_diff)).replace(tzinfo=utc).astimezone(central_tz) if row[3] > year_2100 else row[3]\
-	,date_rec = datetime.datetime.fromtimestamp(Decimal(row[4])-Decimal(gregorian_diff)).replace(tzinfo=utc).astimezone(central_tz) if row[4] > year_2100 else row[4]\
+        ,date_doc = spss_to_posix(row[3])\
+	,date_rec = spss_to_posix(row[4])\
 	,reo = True if row[5]==1 else False\
 	,buyer = row[6].strip()\
 	,buyer_type = row[7].strip()\
@@ -90,5 +85,5 @@ def load_auctions(auction_file, verbose = False):
 	,adj_yd = row[30]\
         ,loc       = None if row[19]=='' else Point((Decimal(row[20]), Decimal(row[19])))\
         )
-        #i += 1
+      i += 1
       auction.save()
