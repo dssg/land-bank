@@ -1,43 +1,40 @@
 from django.contrib.gis.db import models
 
-class Auction(models.Model):                                         # results of 'dtype' from pandas
-  pin           = models.FloatField('Property ID number', db_index=True)            # pin1                    float64
-  doc           = models.CharField('???', null=True, max_length=16)                           # doc_num_t1              float64
-  date_doc      = models.DateTimeField('Date documented', null=True)            # date_doc_t1             float64
-  date_rec      = models.DateTimeField('Date recorded', null=True)              # date_rec_t1             float64
-  reo           = models.NullBooleanField('Entering REO', null=True)                # Entering_REO              int64
-  buyer         = models.CharField('Buyer name', max_length=100, null=True)     # Buyer1                   object
-  buyer_type    = models.CharField('Buyer type', max_length=100, null=True)     # Buyer1_Type              object
-  seller        = models.CharField('Seller name', max_length=100, null=True)    # Seller1                  object
-  seller_type   = models.CharField('Seller type', max_length=100, null=True)    # Seller1_Type             object
-  yq_doc        = models.IntegerField('???', null=True)                         # YYYYQ_DOC                 int64
-  yeard         = models.IntegerField('???', null=True)                         # YEARD                     int64
-  apt           = models.CharField('Apartment numer', max_length=10, null=True) # APT                      object
-  direction     = models.CharField('Street direction', max_length=2, null=True) # DIR                      object
-  houseno       = models.CharField('House number', max_length=10, null=True)    # HOUSENO                  object
-  street        = models.CharField('Street name', max_length=50, null=True)    # STREET                   object
-  suffix        = models.CharField('Street suffix', max_length=10, null=True)   # SUFFIX                   object
-  addr_final    = models.CharField('???', max_length=100, null=True)            # ADDR_FINAL               object
-  city_final    = models.CharField('???', max_length=100, null=True)            # CITY_FINAL               object
-  lat_y         = models.FloatField('Latitude', null=True)                      # LAT_Y                   float64
-  long_x        = models.FloatField('Longitude', null=True)                     # LNG_X                   float64
-  tract_fix     = models.FloatField('???', null=True)                           # Tract_Fix               float64
-  no_tract_info = models.IntegerField('???', null=True)                         # No_Tract_Info             int64
-  ca_num        = models.IntegerField('???', null=True)                         # CA_num                    int64
-  ca_name       = models.CharField('Community area', max_length=100, null=True) # CA_name                  object
-  place         = models.CharField('???', max_length=100, null=True)            # Place00                  object
-  gisdate       = models.CharField('???', max_length=100, null=True)            # GISDate                  object
-  ptype         = models.IntegerField('Property type', null=True)               # PTYPE1_CAT                int64
-  residential   = models.IntegerField('Residential?', null=True)                # RESIDENTIAL_PROPERTY      int64
-  adj_yq        = models.IntegerField('Adjudicated quarter?', null=True)        # ADJ_YYYYQ                 int64
-  adj_yd        = models.IntegerField('Adjudicated day?', null=True)            # ADJ_YYYYD                 int64
-
+class Auction(models.Model):
+  pin           = models.FloatField('Property ID number', db_index=True)
+  doc           = models.CharField('???', null=True, max_length=16)
+  date_doc      = models.DateTimeField('Date documented', null=True)
+  date_rec      = models.DateTimeField('Date recorded', null=True)
+  reo           = models.NullBooleanField('Entering REO', null=True)
+  buyer         = models.CharField('Buyer name', max_length=100, null=True)
+  buyer_type    = models.CharField('Buyer type', max_length=100, null=True)
+  seller        = models.CharField('Seller name', max_length=100, null=True)
+  seller_type   = models.CharField('Seller type', max_length=100, null=True)
+  yq_doc        = models.IntegerField('???', null=True)
+  yeard         = models.IntegerField('???', null=True)
+  apt           = models.CharField('Apartment numer', max_length=10, null=True)
+  direction     = models.CharField('Street direction', max_length=2, null=True)
+  houseno       = models.CharField('House number', max_length=10, null=True)
+  street        = models.CharField('Street name', max_length=50, null=True)
+  suffix        = models.CharField('Street suffix', max_length=10, null=True)
+  addr_final    = models.CharField('???', max_length=100, null=True)
+  city_final    = models.CharField('???', max_length=100, null=True)
+  lat_y         = models.FloatField('Latitude', null=True)
+  long_x        = models.FloatField('Longitude', null=True)
+  tract_fix     = models.FloatField('???', null=True)
+  no_tract_info = models.IntegerField('???', null=True)
+  ca_num        = models.IntegerField('???', null=True)
+  ca_name       = models.CharField('Community area', max_length=100, null=True)
+  place         = models.CharField('???', max_length=100, null=True)
+  gisdate       = models.CharField('???', max_length=100, null=True)
+  ptype         = models.IntegerField('Property type', null=True)
+  residential   = models.IntegerField('Residential?', null=True)
+  adj_yq        = models.IntegerField('Adjudicated quarter?', null=True)
+  adj_yd        = models.IntegerField('Adjudicated day?', null=True)
   loc           = models.PointField(null=True)
   objects       = models.GeoManager()
-
   def __unicode__(self):
     return unicode(self.pin)
-
   class Meta:
     app_label = 'landbank_site'
 
@@ -45,8 +42,8 @@ class Auction(models.Model):                                         # results o
 class CashFin(models.Model):
   pin                = models.FloatField('Property ID number', db_index=True)
   doc                = models.CharField('???', null=True, max_length=16)
-  date_doc           = models.DateTimeField('Date documented', null=True)            # date_doc_t1             float64
-  date_rec           = models.DateTimeField('Date recorded', null=True)              # date_rec_t1             float64
+  date_doc           = models.DateTimeField('Date documented', null=True)
+  date_rec           = models.DateTimeField('Date recorded', null=True)
   year               = models.IntegerField('???', null=True)
   amount_prime       = models.FloatField('???', null=True)
   likely_distressed  = models.NullBooleanField('???', null=True)
@@ -72,19 +69,16 @@ class CashFin(models.Model):
   gisdate            = models.CharField('???', null=True, max_length=100)
   ptype              = models.IntegerField('???', null=True)
   residential        = models.IntegerField('???', null=True)
-
   loc           = models.PointField(null=True)
   objects       = models.GeoManager()
-
   def __unicode__(self):
     return unicode(self.pin)
-
   class Meta:
     app_label = 'landbank_site'
 
 
-class Foreclosure(models.Model):                                         # results of 'dtype' from pandas
-  pin           = models.FloatField('Property ID number', db_index=True)            # pin1                    float64
+class Foreclosure(models.Model):
+  pin           = models.FloatField('Property ID number', db_index=True)
   filing_date   = models.DateTimeField('Date filed', null=True)
   case_num1     = models.IntegerField('???', null=True)
   case_num2     = models.CharField('???', null=True, max_length=100)
@@ -92,80 +86,74 @@ class Foreclosure(models.Model):                                         # resul
   defendant_first_name = models.CharField('???', null=True, max_length=100)
   defendant_last_name = models.CharField('???', null=True, max_length=100)
   plantiff      = models.CharField('???', null=True, max_length=100)
-  date_doc      = models.DateTimeField('Date documented', null=True)            # date_doc_t1             float64
-  date_rec      = models.DateTimeField('Date recorded', null=True)              # date_rec_t1             float64
-  yq_doc        = models.IntegerField('???', null=True)                         # YYYYQ_DOC                 int64
-  yeard         = models.IntegerField('???', null=True)                         # YEARD                     int64
-  apt           = models.CharField('Apartment numer', max_length=10, null=True) # APT                      object
-  direction     = models.CharField('Street direction', max_length=2, null=True) # DIR                      object
-  houseno       = models.CharField('House number', max_length=10, null=True)    # HOUSENO                  object
-  street        = models.CharField('Street name', max_length=50, null=True)    # STREET                   object
-  suffix        = models.CharField('Street suffix', max_length=10, null=True)   # SUFFIX                   object
-  addr_final    = models.CharField('???', max_length=100, null=True)            # ADDR_FINAL               object
-  city_final    = models.CharField('???', max_length=100, null=True)            # CITY_FINAL               object
-  lat_y         = models.FloatField('Latitude', null=True)                      # LAT_Y                   float64
-  long_x        = models.FloatField('Longitude', null=True)                     # LNG_X                   float64
-  tract_fix     = models.FloatField('???', null=True)                           # Tract_Fix               float64
-  no_tract_info = models.IntegerField('???', null=True)                         # No_Tract_Info             int64
-  ca_num        = models.IntegerField('???', null=True)                         # CA_num                    int64
-  ca_name       = models.CharField('Community area', max_length=100, null=True) # CA_name                  object
-  place         = models.CharField('???', max_length=100, null=True)            # Place00                  object
-  gisdate       = models.CharField('???', max_length=100, null=True)            # GISDate                  object
-  ptype         = models.IntegerField('Property type', null=True)               # PTYPE1_CAT                int64
-  residential   = models.IntegerField('Residential?', null=True)                # RESIDENTIAL_PROPERTY      int64
-  adj_yq        = models.IntegerField('Adjudicated quarter?', null=True)        # ADJ_YYYYQ                 int64
-  adj_yd        = models.IntegerField('Adjudicated day?', null=True)            # ADJ_YYYYD                 int64
-
+  date_doc      = models.DateTimeField('Date documented', null=True)
+  date_rec      = models.DateTimeField('Date recorded', null=True)
+  yq_doc        = models.IntegerField('???', null=True)
+  yeard         = models.IntegerField('???', null=True)
+  apt           = models.CharField('Apartment numer', max_length=10, null=True)
+  direction     = models.CharField('Street direction', max_length=2, null=True)
+  houseno       = models.CharField('House number', max_length=10, null=True)
+  street        = models.CharField('Street name', max_length=50, null=True)
+  suffix        = models.CharField('Street suffix', max_length=10, null=True)
+  addr_final    = models.CharField('???', max_length=100, null=True)
+  city_final    = models.CharField('???', max_length=100, null=True)
+  lat_y         = models.FloatField('Latitude', null=True)
+  long_x        = models.FloatField('Longitude', null=True)
+  tract_fix     = models.FloatField('???', null=True)
+  no_tract_info = models.IntegerField('???', null=True)
+  ca_num        = models.IntegerField('???', null=True)
+  ca_name       = models.CharField('Community area', max_length=100, null=True)
+  place         = models.CharField('???', max_length=100, null=True)
+  gisdate       = models.CharField('???', max_length=100, null=True)
+  ptype         = models.IntegerField('Property type', null=True)
+  residential   = models.IntegerField('Residential?', null=True)
+  adj_yq        = models.IntegerField('Adjudicated quarter?', null=True)
+  adj_yd        = models.IntegerField('Adjudicated day?', null=True)
   loc           = models.PointField(null=True)
   objects       = models.GeoManager()
-
   def __unicode__(self):
     return unicode(self.pin)
-
   class Meta:
     app_label = 'landbank_site'
 
 
 class Mortgage(models.Model):
-  pin           = models.FloatField('Property ID number', db_index=True)            # pin1                    float64
+  pin           = models.FloatField('Property ID number', db_index=True)
   doc           = models.CharField('Document ID', null=True, max_length=100)
   mort_amt      = models.FloatField('Mortgage dollar amount', null=True)
-  date_doc      = models.DateTimeField('Date documented', null=True)            # date_doc_t1             float64
-  date_rec      = models.DateTimeField('Date recorded', null=True)              # date_rec_t1             float64
+  date_doc      = models.DateTimeField('Date documented', null=True)
+  date_rec      = models.DateTimeField('Date recorded', null=True)
   borrower1     = models.CharField('Borrower', max_length=100, null=True)
   borrower1_type = models.CharField('Borrower type', max_length=10, null=True) 
   lender1       = models.CharField('Lender', max_length=100, null=True)
   lender1_type  = models.CharField('Type of lender', max_length=10, null=True)
   lender2       = models.CharField('Lender', max_length=100, null=True)
   lender2_type  = models.CharField('Type of lender', max_length=10, null=True)
-  yq_doc        = models.IntegerField('???', null=True)                         # YYYYQ_DOC                 int64
-  yeard         = models.IntegerField('???', null=True)                         # YEARD                     int64
-  apt           = models.CharField('Apartment numer', max_length=10, null=True) # APT                      object
-  direction     = models.CharField('Street direction', max_length=2, null=True) # DIR                      object
-  houseno       = models.CharField('House number', max_length=10, null=True)    # HOUSENO                  object
-  street        = models.CharField('Street name', max_length=50, null=True)    # STREET                   object
-  suffix        = models.CharField('Street suffix', max_length=10, null=True)   # SUFFIX                   object
-  addr_final    = models.CharField('???', max_length=100, null=True)            # ADDR_FINAL               object
-  city_final    = models.CharField('???', max_length=100, null=True)            # CITY_FINAL               object
-  lat_y         = models.FloatField('Latitude', null=True)                      # LAT_Y                   float64
-  long_x        = models.FloatField('Longitude', null=True)                     # LNG_X                   float64
-  tract_fix     = models.FloatField('???', null=True)                           # Tract_Fix               float64
-  no_tract_info = models.IntegerField('???', null=True)                         # No_Tract_Info             int64
-  ca_num        = models.IntegerField('???', null=True)                         # CA_num                    int64
-  ca_name       = models.CharField('Community area', max_length=100, null=True) # CA_name                  object
-  place         = models.CharField('???', max_length=100, null=True)            # Place00                  object
-  gisdate       = models.CharField('???', max_length=100, null=True)            # GISDate                  object
-  ptype         = models.IntegerField('Property type', null=True)               # PTYPE1_CAT                int64
-  residential   = models.IntegerField('Residential?', null=True)                # RESIDENTIAL_PROPERTY      int64
-  adj_yq        = models.IntegerField('Adjudicated quarter?', null=True)        # ADJ_YYYYQ                 int64
-  adj_yd        = models.IntegerField('Adjudicated day?', null=True)            # ADJ_YYYYD                 int64
-
+  yq_doc        = models.IntegerField('???', null=True)
+  yeard         = models.IntegerField('???', null=True)
+  apt           = models.CharField('Apartment numer', max_length=10, null=True)
+  direction     = models.CharField('Street direction', max_length=2, null=True)
+  houseno       = models.CharField('House number', max_length=10, null=True)
+  street        = models.CharField('Street name', max_length=50, null=True)
+  suffix        = models.CharField('Street suffix', max_length=10, null=True)
+  addr_final    = models.CharField('???', max_length=100, null=True)
+  city_final    = models.CharField('???', max_length=100, null=True)
+  lat_y         = models.FloatField('Latitude', null=True)
+  long_x        = models.FloatField('Longitude', null=True)
+  tract_fix     = models.FloatField('???', null=True)
+  no_tract_info = models.IntegerField('???', null=True)
+  ca_num        = models.IntegerField('???', null=True)
+  ca_name       = models.CharField('Community area', max_length=100, null=True)
+  place         = models.CharField('???', max_length=100, null=True)
+  gisdate       = models.CharField('???', max_length=100, null=True)
+  ptype         = models.IntegerField('Property type', null=True)
+  residential   = models.IntegerField('Residential?', null=True)
+  adj_yq        = models.IntegerField('Adjudicated quarter?', null=True)
+  adj_yd        = models.IntegerField('Adjudicated day?', null=True)
   loc           = models.PointField(null=True)
   objects       = models.GeoManager()
-
   def __unicode__(self):
     return unicode(self.pin)
-
   class Meta:
     app_label = 'landbank_site'
 
@@ -174,8 +162,8 @@ class Transaction(models.Model):
   pin           = models.FloatField('Property ID number', db_index=True)
   amount_prime  = models.FloatField('Mortgage amount', null=True) 
   doc		= models.CharField('Document ID', null=True, max_length=100)
-  date_doc      = models.DateTimeField('Date documented', null=True)            # date_doc_t1             float64
-  date_rec      = models.DateTimeField('Date recorded', null=True)              # date_rec_t1             float64
+  date_doc      = models.DateTimeField('Date documented', null=True)
+  date_rec      = models.DateTimeField('Date recorded', null=True)
   buyer		= models.CharField('Buyer', max_length=100, null=True)
   buyer_type	= models.CharField('Buyer type', max_length=10, null=True)
   seller	= models.CharField('Seller', max_length=100, null=True)
@@ -183,34 +171,74 @@ class Transaction(models.Model):
   non_condo	= models.NullBooleanField('???', null=True) 
   purchase_less_20k = models.NullBooleanField('???', null=True) 
   business_buyer = models.NullBooleanField('???', null=True) 
-  yq_doc        = models.IntegerField('???', null=True)                         # YYYYQ_DOC                 int64
-  yeard         = models.IntegerField('???', null=True)                         # YEARD                     int64
-  apt           = models.CharField('Apartment numer', max_length=10, null=True) # APT                      object
-  direction     = models.CharField('Street direction', max_length=2, null=True) # DIR                      object
-  houseno       = models.CharField('House number', max_length=10, null=True)    # HOUSENO                  object
-  street        = models.CharField('Street name', max_length=50, null=True)    # STREET                   object
-  suffix        = models.CharField('Street suffix', max_length=10, null=True)   # SUFFIX                   object
-  addr_final    = models.CharField('???', max_length=100, null=True)            # ADDR_FINAL               object
-  city_final    = models.CharField('???', max_length=100, null=True)            # CITY_FINAL               object
-  lat_y         = models.FloatField('Latitude', null=True)                      # LAT_Y                   float64
-  long_x        = models.FloatField('Longitude', null=True)                     # LNG_X                   float64
-  tract_fix     = models.FloatField('???', null=True)                           # Tract_Fix               float64
-  no_tract_info = models.IntegerField('???', null=True)                         # No_Tract_Info             int64
-  ca_num        = models.IntegerField('???', null=True)                         # CA_num                    int64
-  ca_name       = models.CharField('Community area', max_length=100, null=True) # CA_name                  object
-  place         = models.CharField('???', max_length=100, null=True)            # Place00                  object
-  gisdate       = models.CharField('???', max_length=100, null=True)            # GISDate                  object
-  ptype         = models.IntegerField('Property type', null=True)               # PTYPE1_CAT                int64
-  residential   = models.IntegerField('Residential?', null=True)                # RESIDENTIAL_PROPERTY      int64
-  adj_yq        = models.IntegerField('Adjudicated quarter?', null=True)        # ADJ_YYYYQ                 int64
-  adj_yd        = models.IntegerField('Adjudicated day?', null=True)            # ADJ_YYYYD                 int64
-
+  yq_doc        = models.IntegerField('???', null=True)
+  yeard         = models.IntegerField('???', null=True)
+  apt           = models.CharField('Apartment numer', max_length=10, null=True)
+  direction     = models.CharField('Street direction', max_length=2, null=True)
+  houseno       = models.CharField('House number', max_length=10, null=True)
+  street        = models.CharField('Street name', max_length=50, null=True)
+  suffix        = models.CharField('Street suffix', max_length=10, null=True)
+  addr_final    = models.CharField('???', max_length=100, null=True)
+  city_final    = models.CharField('???', max_length=100, null=True)
+  lat_y         = models.FloatField('Latitude', null=True)
+  long_x        = models.FloatField('Longitude', null=True)
+  tract_fix     = models.FloatField('???', null=True)
+  no_tract_info = models.IntegerField('???', null=True)
+  ca_num        = models.IntegerField('???', null=True)
+  ca_name       = models.CharField('Community area', max_length=100, null=True)
+  place         = models.CharField('???', max_length=100, null=True)
+  gisdate       = models.CharField('???', max_length=100, null=True)
+  ptype         = models.IntegerField('Property type', null=True)
+  residential   = models.IntegerField('Residential?', null=True)
+  adj_yq        = models.IntegerField('Adjudicated quarter?', null=True)
+  adj_yd        = models.IntegerField('Adjudicated day?', null=True)
   loc           = models.PointField(null=True)
   objects       = models.GeoManager()
-
   def __unicode__(self):
     return unicode(self.pin)
+  class Meta:
+    app_label = 'landbank_site'
 
+
+class Assessor(models.Model):                                         
+  pin                           = models.FloatField('Property ID number', db_index=True)
+  houseno                       = models.CharField('', max_length=100, null=True)
+  direction                     = models.CharField('', max_length=2, null=True)
+  street                        = models.CharField('', max_length=100, null=True)
+  year_built                    = models.IntegerField('Year the property was built', null=True)
+  attic_desc                    = models.CharField('', max_length=250, null=True)
+  basement_desc                 = models.CharField('', max_length=250, null=True)
+  class_description             = models.CharField('', max_length=250, null=True)
+  current_building_assmt        = models.FloatField('', null=True)
+  current_land_assmt            = models.FloatField('', null=True)
+  current_total_assmt           = models.FloatField('', null=True)
+  ext_desc                      = models.CharField('', max_length=100, null=True)
+  garage_desc                   = models.CharField('', max_length=100, null=True)
+  sqft_bldg                     = models.FloatField('', null=True)
+  sqft_land                     = models.FloatField('', null=True)
+  ptype                         = models.CharField('', max_length=100, null=True)
+  type_pt_sf                    = models.NullBooleanField('', null=True)
+  type_pt_condo                 = models.NullBooleanField('', null=True)
+  type_pt_2_4                   = models.NullBooleanField('', null=True)
+  type_pt_5                     = models.NullBooleanField('', null=True)
+  type_pt_nonres                = models.NullBooleanField('', null=True)
+  type_pt_unknown               = models.NullBooleanField('', null=True)
+  pt_type1_cat                  = models.IntegerField('???', null=True)
+  estim_hunit                   = models.IntegerField('Estimated number of housing units based on sqft', null=True)
+  lat_y                         = models.FloatField('Latitude', null=True)
+  long_x                        = models.FloatField('Longitude', null=True)
+  tract_fix                     = models.FloatField('???', null=True)
+  no_tract_info                 = models.IntegerField('???', null=True)
+  ca_num                        = models.IntegerField('???', null=True)
+  ca_name                       = models.CharField('Community area', max_length=100, null=True)
+  place                         = models.CharField('???', max_length=100, null=True)
+  ward                          = models.IntegerField('Ward number, if available', null=True)
+  chicago_flag                  = models.NullBooleanField('', null=True)
+  gisdate                       = models.CharField('', max_length=100, null=True)
+  loc                           = models.PointField(null=True)
+  objects                       = models.GeoManager()
+  def __unicode__(self):
+    return unicode(self.pin)
   class Meta:
     app_label = 'landbank_site'
 
