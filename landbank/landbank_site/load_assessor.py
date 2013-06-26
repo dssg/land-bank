@@ -1,5 +1,4 @@
 import os, csv
-from load_utils import spss_to_posix
 from models import Assessor
 from decimal import Decimal
 from django.contrib.gis.geos import Point
