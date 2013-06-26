@@ -14,3 +14,4 @@ wsgiref==0.1.2
 yolk==0.4.3
 django==1.5.1
 south==0.8.1
+django-tastypie==0.9.15
