@@ -1,7 +1,7 @@
 import os
 import sys
 PROJECT_ROOT = os.path.dirname(__file__)
-sys.path.insert(0, os.path.join(PROJECT_ROOT, "../landbank_site"))
+sys.path.insert(0, os.path.join(PROJECT_ROOT, "../landbank_data"))
 # Django settings for landbank project.
 
 DEBUG = False
@@ -126,7 +126,8 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.gis',
     'south',
-    'landbank_site',
+    'tastypie',
+    'landbank_data',
     # Uncomment the next line to enable the admin:
     # 'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:

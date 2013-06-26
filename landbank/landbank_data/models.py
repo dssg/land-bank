@@ -36,7 +36,7 @@ class Auction(models.Model):
   def __unicode__(self):
     return unicode(self.pin)
   class Meta:
-    app_label = 'landbank_site'
+    app_label = 'landbank_data'
 
 
 class CashFin(models.Model):
@@ -74,7 +74,7 @@ class CashFin(models.Model):
   def __unicode__(self):
     return unicode(self.pin)
   class Meta:
-    app_label = 'landbank_site'
+    app_label = 'landbank_data'
 
 
 class Foreclosure(models.Model):
@@ -114,7 +114,7 @@ class Foreclosure(models.Model):
   def __unicode__(self):
     return unicode(self.pin)
   class Meta:
-    app_label = 'landbank_site'
+    app_label = 'landbank_data'
 
 
 class Mortgage(models.Model):
@@ -155,7 +155,7 @@ class Mortgage(models.Model):
   def __unicode__(self):
     return unicode(self.pin)
   class Meta:
-    app_label = 'landbank_site'
+    app_label = 'landbank_data'
 
 
 class Transaction(models.Model):
@@ -197,7 +197,7 @@ class Transaction(models.Model):
   def __unicode__(self):
     return unicode(self.pin)
   class Meta:
-    app_label = 'landbank_site'
+    app_label = 'landbank_data'
 
 
 class Assessor(models.Model):                                         
@@ -240,5 +240,5 @@ class Assessor(models.Model):
   def __unicode__(self):
     return unicode(self.pin)
   class Meta:
-    app_label = 'landbank_site'
+    app_label = 'landbank_data'
 

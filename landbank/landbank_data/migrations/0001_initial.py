@@ -8,8 +8,198 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
+        # Adding model 'Auction'
+        db.create_table(u'landbank_data_auction', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('pin', self.gf('django.db.models.fields.FloatField')(db_index=True)),
+            ('doc', self.gf('django.db.models.fields.CharField')(max_length=16, null=True)),
+            ('date_doc', self.gf('django.db.models.fields.DateTimeField')(null=True)),
+            ('date_rec', self.gf('django.db.models.fields.DateTimeField')(null=True)),
+            ('reo', self.gf('django.db.models.fields.NullBooleanField')(null=True, blank=True)),
+            ('buyer', self.gf('django.db.models.fields.CharField')(max_length=100, null=True)),
+            ('buyer_type', self.gf('django.db.models.fields.CharField')(max_length=100, null=True)),
+            ('seller', self.gf('django.db.models.fields.CharField')(max_length=100, null=True)),
+            ('seller_type', self.gf('django.db.models.fields.CharField')(max_length=100, null=True)),
+            ('yq_doc', self.gf('django.db.models.fields.IntegerField')(null=True)),
+            ('yeard', self.gf('django.db.models.fields.IntegerField')(null=True)),
+            ('apt', self.gf('django.db.models.fields.CharField')(max_length=10, null=True)),
+            ('direction', self.gf('django.db.models.fields.CharField')(max_length=2, null=True)),
+            ('houseno', self.gf('django.db.models.fields.CharField')(max_length=10, null=True)),
+            ('street', self.gf('django.db.models.fields.CharField')(max_length=50, null=True)),
+            ('suffix', self.gf('django.db.models.fields.CharField')(max_length=10, null=True)),
+            ('addr_final', self.gf('django.db.models.fields.CharField')(max_length=100, null=True)),
+            ('city_final', self.gf('django.db.models.fields.CharField')(max_length=100, null=True)),
+            ('lat_y', self.gf('django.db.models.fields.FloatField')(null=True)),
+            ('long_x', self.gf('django.db.models.fields.FloatField')(null=True)),
+            ('tract_fix', self.gf('django.db.models.fields.FloatField')(null=True)),
+            ('no_tract_info', self.gf('django.db.models.fields.IntegerField')(null=True)),
+            ('ca_num', self.gf('django.db.models.fields.IntegerField')(null=True)),
+            ('ca_name', self.gf('django.db.models.fields.CharField')(max_length=100, null=True)),
+            ('place', self.gf('django.db.models.fields.CharField')(max_length=100, null=True)),
+            ('gisdate', self.gf('django.db.models.fields.CharField')(max_length=100, null=True)),
+            ('ptype', self.gf('django.db.models.fields.IntegerField')(null=True)),
+            ('residential', self.gf('django.db.models.fields.IntegerField')(null=True)),
+            ('adj_yq', self.gf('django.db.models.fields.IntegerField')(null=True)),
+            ('adj_yd', self.gf('django.db.models.fields.IntegerField')(null=True)),
+            ('loc', self.gf('django.contrib.gis.db.models.fields.PointField')(null=True)),
+        ))
+        db.send_create_signal('landbank_data', ['Auction'])
+
+        # Adding model 'CashFin'
+        db.create_table(u'landbank_data_cashfin', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('pin', self.gf('django.db.models.fields.FloatField')(db_index=True)),
+            ('doc', self.gf('django.db.models.fields.CharField')(max_length=16, null=True)),
+            ('date_doc', self.gf('django.db.models.fields.DateTimeField')(null=True)),
+            ('date_rec', self.gf('django.db.models.fields.DateTimeField')(null=True)),
+            ('year', self.gf('django.db.models.fields.IntegerField')(null=True)),
+            ('amount_prime', self.gf('django.db.models.fields.FloatField')(null=True)),
+            ('likely_distressed', self.gf('django.db.models.fields.NullBooleanField')(null=True, blank=True)),
+            ('likely_cash', self.gf('django.db.models.fields.NullBooleanField')(null=True, blank=True)),
+            ('buyer', self.gf('django.db.models.fields.CharField')(max_length=100, null=True)),
+            ('buyer_type', self.gf('django.db.models.fields.CharField')(max_length=100, null=True)),
+            ('seller', self.gf('django.db.models.fields.CharField')(max_length=100, null=True)),
+            ('seller_type', self.gf('django.db.models.fields.CharField')(max_length=100, null=True)),
+            ('apt', self.gf('django.db.models.fields.CharField')(max_length=100, null=True)),
+            ('direction', self.gf('django.db.models.fields.CharField')(max_length=100, null=True)),
+            ('houseno', self.gf('django.db.models.fields.CharField')(max_length=100, null=True)),
+            ('street', self.gf('django.db.models.fields.CharField')(max_length=100, null=True)),
+            ('suffix', self.gf('django.db.models.fields.CharField')(max_length=100, null=True)),
+            ('addr_final', self.gf('django.db.models.fields.CharField')(max_length=100, null=True)),
+            ('city_final', self.gf('django.db.models.fields.CharField')(max_length=100, null=True)),
+            ('lat_y', self.gf('django.db.models.fields.FloatField')(null=True)),
+            ('long_x', self.gf('django.db.models.fields.FloatField')(null=True)),
+            ('tract_fix', self.gf('django.db.models.fields.FloatField')(null=True)),
+            ('no_tract_info', self.gf('django.db.models.fields.IntegerField')(null=True)),
+            ('ca_num', self.gf('django.db.models.fields.IntegerField')(null=True)),
+            ('ca_name', self.gf('django.db.models.fields.CharField')(max_length=100, null=True)),
+            ('place', self.gf('django.db.models.fields.CharField')(max_length=100, null=True)),
+            ('gisdate', self.gf('django.db.models.fields.CharField')(max_length=100, null=True)),
+            ('ptype', self.gf('django.db.models.fields.IntegerField')(null=True)),
+            ('residential', self.gf('django.db.models.fields.IntegerField')(null=True)),
+            ('loc', self.gf('django.contrib.gis.db.models.fields.PointField')(null=True)),
+        ))
+        db.send_create_signal('landbank_data', ['CashFin'])
+
+        # Adding model 'Foreclosure'
+        db.create_table(u'landbank_data_foreclosure', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('pin', self.gf('django.db.models.fields.FloatField')(db_index=True)),
+            ('filing_date', self.gf('django.db.models.fields.DateTimeField')(null=True)),
+            ('case_num1', self.gf('django.db.models.fields.IntegerField')(null=True)),
+            ('case_num2', self.gf('django.db.models.fields.CharField')(max_length=100, null=True)),
+            ('case_num3', self.gf('django.db.models.fields.FloatField')(null=True)),
+            ('defendant_first_name', self.gf('django.db.models.fields.CharField')(max_length=100, null=True)),
+            ('defendant_last_name', self.gf('django.db.models.fields.CharField')(max_length=100, null=True)),
+            ('plantiff', self.gf('django.db.models.fields.CharField')(max_length=100, null=True)),
+            ('date_doc', self.gf('django.db.models.fields.DateTimeField')(null=True)),
+            ('date_rec', self.gf('django.db.models.fields.DateTimeField')(null=True)),
+            ('yq_doc', self.gf('django.db.models.fields.IntegerField')(null=True)),
+            ('yeard', self.gf('django.db.models.fields.IntegerField')(null=True)),
+            ('apt', self.gf('django.db.models.fields.CharField')(max_length=10, null=True)),
+            ('direction', self.gf('django.db.models.fields.CharField')(max_length=2, null=True)),
+            ('houseno', self.gf('django.db.models.fields.CharField')(max_length=10, null=True)),
+            ('street', self.gf('django.db.models.fields.CharField')(max_length=50, null=True)),
+            ('suffix', self.gf('django.db.models.fields.CharField')(max_length=10, null=True)),
+            ('addr_final', self.gf('django.db.models.fields.CharField')(max_length=100, null=True)),
+            ('city_final', self.gf('django.db.models.fields.CharField')(max_length=100, null=True)),
+            ('lat_y', self.gf('django.db.models.fields.FloatField')(null=True)),
+            ('long_x', self.gf('django.db.models.fields.FloatField')(null=True)),
+            ('tract_fix', self.gf('django.db.models.fields.FloatField')(null=True)),
+            ('no_tract_info', self.gf('django.db.models.fields.IntegerField')(null=True)),
+            ('ca_num', self.gf('django.db.models.fields.IntegerField')(null=True)),
+            ('ca_name', self.gf('django.db.models.fields.CharField')(max_length=100, null=True)),
+            ('place', self.gf('django.db.models.fields.CharField')(max_length=100, null=True)),
+            ('gisdate', self.gf('django.db.models.fields.CharField')(max_length=100, null=True)),
+            ('ptype', self.gf('django.db.models.fields.IntegerField')(null=True)),
+            ('residential', self.gf('django.db.models.fields.IntegerField')(null=True)),
+            ('adj_yq', self.gf('django.db.models.fields.IntegerField')(null=True)),
+            ('adj_yd', self.gf('django.db.models.fields.IntegerField')(null=True)),
+            ('loc', self.gf('django.contrib.gis.db.models.fields.PointField')(null=True)),
+        ))
+        db.send_create_signal('landbank_data', ['Foreclosure'])
+
+        # Adding model 'Mortgage'
+        db.create_table(u'landbank_data_mortgage', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('pin', self.gf('django.db.models.fields.FloatField')(db_index=True)),
+            ('doc', self.gf('django.db.models.fields.CharField')(max_length=100, null=True)),
+            ('mort_amt', self.gf('django.db.models.fields.FloatField')(null=True)),
+            ('date_doc', self.gf('django.db.models.fields.DateTimeField')(null=True)),
+            ('date_rec', self.gf('django.db.models.fields.DateTimeField')(null=True)),
+            ('borrower1', self.gf('django.db.models.fields.CharField')(max_length=100, null=True)),
+            ('borrower1_type', self.gf('django.db.models.fields.CharField')(max_length=10, null=True)),
+            ('lender1', self.gf('django.db.models.fields.CharField')(max_length=100, null=True)),
+            ('lender1_type', self.gf('django.db.models.fields.CharField')(max_length=10, null=True)),
+            ('lender2', self.gf('django.db.models.fields.CharField')(max_length=100, null=True)),
+            ('lender2_type', self.gf('django.db.models.fields.CharField')(max_length=10, null=True)),
+            ('yq_doc', self.gf('django.db.models.fields.IntegerField')(null=True)),
+            ('yeard', self.gf('django.db.models.fields.IntegerField')(null=True)),
+            ('apt', self.gf('django.db.models.fields.CharField')(max_length=10, null=True)),
+            ('direction', self.gf('django.db.models.fields.CharField')(max_length=2, null=True)),
+            ('houseno', self.gf('django.db.models.fields.CharField')(max_length=10, null=True)),
+            ('street', self.gf('django.db.models.fields.CharField')(max_length=50, null=True)),
+            ('suffix', self.gf('django.db.models.fields.CharField')(max_length=10, null=True)),
+            ('addr_final', self.gf('django.db.models.fields.CharField')(max_length=100, null=True)),
+            ('city_final', self.gf('django.db.models.fields.CharField')(max_length=100, null=True)),
+            ('lat_y', self.gf('django.db.models.fields.FloatField')(null=True)),
+            ('long_x', self.gf('django.db.models.fields.FloatField')(null=True)),
+            ('tract_fix', self.gf('django.db.models.fields.FloatField')(null=True)),
+            ('no_tract_info', self.gf('django.db.models.fields.IntegerField')(null=True)),
+            ('ca_num', self.gf('django.db.models.fields.IntegerField')(null=True)),
+            ('ca_name', self.gf('django.db.models.fields.CharField')(max_length=100, null=True)),
+            ('place', self.gf('django.db.models.fields.CharField')(max_length=100, null=True)),
+            ('gisdate', self.gf('django.db.models.fields.CharField')(max_length=100, null=True)),
+            ('ptype', self.gf('django.db.models.fields.IntegerField')(null=True)),
+            ('residential', self.gf('django.db.models.fields.IntegerField')(null=True)),
+            ('adj_yq', self.gf('django.db.models.fields.IntegerField')(null=True)),
+            ('adj_yd', self.gf('django.db.models.fields.IntegerField')(null=True)),
+            ('loc', self.gf('django.contrib.gis.db.models.fields.PointField')(null=True)),
+        ))
+        db.send_create_signal('landbank_data', ['Mortgage'])
+
+        # Adding model 'Transaction'
+        db.create_table(u'landbank_data_transaction', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('pin', self.gf('django.db.models.fields.FloatField')(db_index=True)),
+            ('amount_prime', self.gf('django.db.models.fields.FloatField')(null=True)),
+            ('doc', self.gf('django.db.models.fields.CharField')(max_length=100, null=True)),
+            ('date_doc', self.gf('django.db.models.fields.DateTimeField')(null=True)),
+            ('date_rec', self.gf('django.db.models.fields.DateTimeField')(null=True)),
+            ('buyer', self.gf('django.db.models.fields.CharField')(max_length=100, null=True)),
+            ('buyer_type', self.gf('django.db.models.fields.CharField')(max_length=10, null=True)),
+            ('seller', self.gf('django.db.models.fields.CharField')(max_length=100, null=True)),
+            ('seller_type', self.gf('django.db.models.fields.CharField')(max_length=10, null=True)),
+            ('non_condo', self.gf('django.db.models.fields.NullBooleanField')(null=True, blank=True)),
+            ('purchase_less_20k', self.gf('django.db.models.fields.NullBooleanField')(null=True, blank=True)),
+            ('business_buyer', self.gf('django.db.models.fields.NullBooleanField')(null=True, blank=True)),
+            ('yq_doc', self.gf('django.db.models.fields.IntegerField')(null=True)),
+            ('yeard', self.gf('django.db.models.fields.IntegerField')(null=True)),
+            ('apt', self.gf('django.db.models.fields.CharField')(max_length=10, null=True)),
+            ('direction', self.gf('django.db.models.fields.CharField')(max_length=2, null=True)),
+            ('houseno', self.gf('django.db.models.fields.CharField')(max_length=10, null=True)),
+            ('street', self.gf('django.db.models.fields.CharField')(max_length=50, null=True)),
+            ('suffix', self.gf('django.db.models.fields.CharField')(max_length=10, null=True)),
+            ('addr_final', self.gf('django.db.models.fields.CharField')(max_length=100, null=True)),
+            ('city_final', self.gf('django.db.models.fields.CharField')(max_length=100, null=True)),
+            ('lat_y', self.gf('django.db.models.fields.FloatField')(null=True)),
+            ('long_x', self.gf('django.db.models.fields.FloatField')(null=True)),
+            ('tract_fix', self.gf('django.db.models.fields.FloatField')(null=True)),
+            ('no_tract_info', self.gf('django.db.models.fields.IntegerField')(null=True)),
+            ('ca_num', self.gf('django.db.models.fields.IntegerField')(null=True)),
+            ('ca_name', self.gf('django.db.models.fields.CharField')(max_length=100, null=True)),
+            ('place', self.gf('django.db.models.fields.CharField')(max_length=100, null=True)),
+            ('gisdate', self.gf('django.db.models.fields.CharField')(max_length=100, null=True)),
+            ('ptype', self.gf('django.db.models.fields.IntegerField')(null=True)),
+            ('residential', self.gf('django.db.models.fields.IntegerField')(null=True)),
+            ('adj_yq', self.gf('django.db.models.fields.IntegerField')(null=True)),
+            ('adj_yd', self.gf('django.db.models.fields.IntegerField')(null=True)),
+            ('loc', self.gf('django.contrib.gis.db.models.fields.PointField')(null=True)),
+        ))
+        db.send_create_signal('landbank_data', ['Transaction'])
+
         # Adding model 'Assessor'
-        db.create_table(u'landbank_site_assessor', (
+        db.create_table(u'landbank_data_assessor', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('pin', self.gf('django.db.models.fields.FloatField')(db_index=True)),
             ('houseno', self.gf('django.db.models.fields.CharField')(max_length=100, null=True)),
@@ -47,16 +237,31 @@ class Migration(SchemaMigration):
             ('gisdate', self.gf('django.db.models.fields.CharField')(max_length=100, null=True)),
             ('loc', self.gf('django.contrib.gis.db.models.fields.PointField')(null=True)),
         ))
-        db.send_create_signal('landbank_site', ['Assessor'])
+        db.send_create_signal('landbank_data', ['Assessor'])
 
 
     def backwards(self, orm):
+        # Deleting model 'Auction'
+        db.delete_table(u'landbank_data_auction')
+
+        # Deleting model 'CashFin'
+        db.delete_table(u'landbank_data_cashfin')
+
+        # Deleting model 'Foreclosure'
+        db.delete_table(u'landbank_data_foreclosure')
+
+        # Deleting model 'Mortgage'
+        db.delete_table(u'landbank_data_mortgage')
+
+        # Deleting model 'Transaction'
+        db.delete_table(u'landbank_data_transaction')
+
         # Deleting model 'Assessor'
-        db.delete_table(u'landbank_site_assessor')
+        db.delete_table(u'landbank_data_assessor')
 
 
     models = {
-        'landbank_site.assessor': {
+        'landbank_data.assessor': {
             'Meta': {'object_name': 'Assessor'},
             'attic_desc': ('django.db.models.fields.CharField', [], {'max_length': '250', 'null': 'True'}),
             'basement_desc': ('django.db.models.fields.CharField', [], {'max_length': '250', 'null': 'True'}),
@@ -95,7 +300,7 @@ class Migration(SchemaMigration):
             'ward': ('django.db.models.fields.IntegerField', [], {'null': 'True'}),
             'year_built': ('django.db.models.fields.IntegerField', [], {'null': 'True'})
         },
-        'landbank_site.auction': {
+        'landbank_data.auction': {
             'Meta': {'object_name': 'Auction'},
             'addr_final': ('django.db.models.fields.CharField', [], {'max_length': '100', 'null': 'True'}),
             'adj_yd': ('django.db.models.fields.IntegerField', [], {'null': 'True'}),
@@ -130,7 +335,7 @@ class Migration(SchemaMigration):
             'yeard': ('django.db.models.fields.IntegerField', [], {'null': 'True'}),
             'yq_doc': ('django.db.models.fields.IntegerField', [], {'null': 'True'})
         },
-        'landbank_site.cashfin': {
+        'landbank_data.cashfin': {
             'Meta': {'object_name': 'CashFin'},
             'addr_final': ('django.db.models.fields.CharField', [], {'max_length': '100', 'null': 'True'}),
             'amount_prime': ('django.db.models.fields.FloatField', [], {'null': 'True'}),
@@ -164,7 +369,7 @@ class Migration(SchemaMigration):
             'tract_fix': ('django.db.models.fields.FloatField', [], {'null': 'True'}),
             'year': ('django.db.models.fields.IntegerField', [], {'null': 'True'})
         },
-        'landbank_site.foreclosure': {
+        'landbank_data.foreclosure': {
             'Meta': {'object_name': 'Foreclosure'},
             'addr_final': ('django.db.models.fields.CharField', [], {'max_length': '100', 'null': 'True'}),
             'adj_yd': ('django.db.models.fields.IntegerField', [], {'null': 'True'}),
@@ -200,7 +405,7 @@ class Migration(SchemaMigration):
             'yeard': ('django.db.models.fields.IntegerField', [], {'null': 'True'}),
             'yq_doc': ('django.db.models.fields.IntegerField', [], {'null': 'True'})
         },
-        'landbank_site.mortgage': {
+        'landbank_data.mortgage': {
             'Meta': {'object_name': 'Mortgage'},
             'addr_final': ('django.db.models.fields.CharField', [], {'max_length': '100', 'null': 'True'}),
             'adj_yd': ('django.db.models.fields.IntegerField', [], {'null': 'True'}),
@@ -237,7 +442,7 @@ class Migration(SchemaMigration):
             'yeard': ('django.db.models.fields.IntegerField', [], {'null': 'True'}),
             'yq_doc': ('django.db.models.fields.IntegerField', [], {'null': 'True'})
         },
-        'landbank_site.transaction': {
+        'landbank_data.transaction': {
             'Meta': {'object_name': 'Transaction'},
             'addr_final': ('django.db.models.fields.CharField', [], {'max_length': '100', 'null': 'True'}),
             'adj_yd': ('django.db.models.fields.IntegerField', [], {'null': 'True'}),
@@ -277,4 +482,4 @@ class Migration(SchemaMigration):
         }
     }
 
-    complete_apps = ['landbank_site']
+    complete_apps = ['landbank_data']
