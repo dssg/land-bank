@@ -19,7 +19,7 @@ def load_assessors(assessor_file, verbose = False):
         #break
       try:
         assessor = Assessor.objects.get(\
-	pin                            = row[1]\
+        pin     = '{:0>14}'.format(int(Decimal(row[1])))\
 	,houseno                       = row[2].strip()\
 	,direction                     = row[3].strip()\
 	,street                        = row[4].strip()\
@@ -57,7 +57,7 @@ def load_assessors(assessor_file, verbose = False):
         )
       except:
         assessor = Assessor(\
-	pin                            = row[1]\
+        pin     = '{:0>14}'.format(int(Decimal(row[1])))\
 	,houseno                       = row[2].strip()\
 	,direction                     = row[3].strip()\
 	,street                        = row[4].strip()\

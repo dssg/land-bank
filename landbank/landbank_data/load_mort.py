@@ -19,7 +19,7 @@ def load_mortgages(mortgage_file, verbose = False):
         #break
       try:
         mortgage =  Mortgage.objects.get(\
-        pin     = row[1]\
+        pin     = '{:0>14}'.format(int(Decimal(row[1])))\
         ,doc    = row[2]\
 	,mort_amt = row[3]\
         ,date_doc = spss_to_posix(row[4])\
@@ -55,7 +55,7 @@ def load_mortgages(mortgage_file, verbose = False):
         )
       except:
         mortgage =  Mortgage(\
-        pin     = row[1]\
+        pin     = '{:0>14}'.format(int(Decimal(row[1])))\
         ,doc    = row[2]\
 	,mort_amt = row[3]\
         ,date_doc = spss_to_posix(row[4])\
