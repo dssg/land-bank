@@ -1,7 +1,7 @@
 from django.contrib.gis.db import models
 
 class Auction(models.Model):
-  pin           = models.FloatField('Property ID number', db_index=True)
+  pin           = models.CharField('Property ID number', max_length=14, db_index=True)
   doc           = models.CharField('Recorder of Deeds document number', null=True, max_length=16)
   date_doc      = models.DateTimeField('Date documented', null=True)
   date_rec      = models.DateTimeField('Date recorded', null=True)
@@ -40,7 +40,7 @@ class Auction(models.Model):
 
 
 class CashFin(models.Model):
-  pin                = models.FloatField('Property ID number', db_index=True)
+  pin                = models.CharField('Property ID number', max_length=14, db_index=True)
   doc                = models.CharField('Recorder of Deeds document number', null=True, max_length=16)
   date_doc           = models.DateTimeField('Date documented', null=True)
   date_rec           = models.DateTimeField('Date recorded', null=True)
@@ -78,7 +78,7 @@ class CashFin(models.Model):
 
 
 class Foreclosure(models.Model):
-  pin           = models.FloatField('Property ID number', db_index=True)
+  pin           = models.CharField('Property ID number', max_length=14, db_index=True)
   filing_date   = models.DateTimeField('Date filed', null=True)
   case_num1     = models.IntegerField('Case number', null=True)
   case_num2     = models.CharField('Case number (2)', null=True, max_length=100)
@@ -118,7 +118,7 @@ class Foreclosure(models.Model):
 
 
 class Mortgage(models.Model):
-  pin           = models.FloatField('Property ID number', db_index=True)
+  pin           = models.CharField('Property ID number', max_length=14, db_index=True)
   doc           = models.CharField('Document ID', null=True, max_length=100)
   mort_amt      = models.FloatField('Mortgage dollar amount', null=True)
   date_doc      = models.DateTimeField('Date documented', null=True)
@@ -159,7 +159,7 @@ class Mortgage(models.Model):
 
 
 class Transaction(models.Model):
-  pin           = models.FloatField('Property ID number', db_index=True)
+  pin           = models.CharField('Property ID number', max_length=14, db_index=True)
   amount_prime  = models.FloatField('Mortgage amount', null=True) 
   doc		= models.CharField('Document ID', null=True, max_length=100)
   date_doc      = models.DateTimeField('Date documented', null=True)
@@ -201,7 +201,7 @@ class Transaction(models.Model):
 
 
 class Assessor(models.Model):                                         
-  pin                           = models.FloatField('Property ID number', db_index=True)
+  pin                           = models.CharField('Property ID number', max_length=14, db_index=True)
   houseno                       = models.CharField('Address number', max_length=100, null=True)
   direction                     = models.CharField('Street direction', max_length=2, null=True)
   street                        = models.CharField('Street name', max_length=100, null=True)
