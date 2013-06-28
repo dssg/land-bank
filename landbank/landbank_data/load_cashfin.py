@@ -19,7 +19,7 @@ def load_cashfin(cashfin_file, verbose = False):
         #break
       try:
         cashfin =  CashFin.objects.get(\
-        pin     = row[1]\
+        pin     = '{:0>14}'.format(int(Decimal(row[1])))\
         ,doc    = row[2]\
         ,date_doc = spss_to_posix(row[3])\
 	,date_rec = spss_to_posix(row[4])\
@@ -52,7 +52,7 @@ def load_cashfin(cashfin_file, verbose = False):
         )
       except:
         cashfin =  CashFin(\
-        pin     = row[1]\
+        pin     = '{:0>14}'.format(int(Decimal(row[1])))\
         ,doc    = row[2]\
         ,date_doc = spss_to_posix(row[3])\
 	,date_rec = spss_to_posix(row[4])\
