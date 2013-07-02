@@ -19,7 +19,7 @@ def load_transactions(transaction_file, verbose = False):
         #break
       try:
         transaction =  Transaction.objects.get(\
-        pin     = row[1]\
+        pin     = '{:0>14}'.format(int(Decimal(row[1])))\
 	,amount_prime = row[2] if row[2].isdigit() else None\
         ,doc    = row[3]\
         ,date_doc = spss_to_posix(row[4])\
@@ -56,7 +56,7 @@ def load_transactions(transaction_file, verbose = False):
         )
       except:
         transaction =  Transaction(\
-        pin     = row[1]\
+        pin     = '{:0>14}'.format(int(Decimal(row[1])))\
 	,amount_prime = row[2] if row[2].isdigit() else None\
         ,doc    = row[3]\
         ,date_doc = spss_to_posix(row[4])\

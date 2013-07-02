@@ -19,7 +19,7 @@ def load_auctions(auction_file, verbose = False):
         #break
       try:
         auction =  Auction.objects.get(\
-        pin     = row[1]\
+        pin     = '{:0>14}'.format(int(Decimal(row[1])))\
         ,doc    = row[2]\
         ,date_doc = spss_to_posix(row[3])\
 	,date_rec = spss_to_posix(row[4])\
@@ -53,7 +53,7 @@ def load_auctions(auction_file, verbose = False):
         )
       except:
         auction =  Auction(\
-        pin     = row[1]\
+        pin     = '{:0>14}'.format(int(Decimal(row[1])))\
         ,doc    = row[2]\
         ,date_doc = spss_to_posix(row[3])\
 	,date_rec = spss_to_posix(row[4])\
