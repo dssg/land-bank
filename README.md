@@ -1,21 +1,34 @@
-landbank
-========
+#DSSG Cook County Land Bank Project
 
-DSSG Cook County Land Bank project
+####Goals
+1. Build a usable web interface for both public use and for use by land bank employees that interfaces with a Postgres database in order to organize, query, and access the data in a convenient manner.
+2. Create a model that will determine the critera by which the Cook County Land Bank which neighborhoods to help first, which properties in that neighborhood, and their potential new uses.
 
-Goals:
-1) to build a usable web interface for both public use and for use by land bank employees that interfaces with a postgres database in order to organize, query, and access the data in a usable manner.
-2) to create a model that will determine the critera by which the Cook County Land Bank which neighborhoods to help first, which properties in that neighborhood, and their potential new uses
+####Data
+- Institute for Housing Studies (IHS) at DePaul University datasets
+- Cook County Assessor file
+- County shapefile
 
-Data:
-acquired from the Institute for Housing Studies (IHS) at DePaul University 
+####Required Software
+- GIS software: ArcGIS 10.1 or QGIS
+- Postgres 9.1
+- PostGIS
+- Python 2.7.x
 
-Required Software:
-GIS software: ArcGIS 10.1 or QGIS
+####Setup
+- Install Postgres and PostGIS
+- Clone the repository and configure Django to enable South and TastyPie, and to interface with your Postgres database.
+- Run an initial South migration to create database tables/views:
+
+```
+$ python manage.py schemamigration landbank_data --initial
+$ python manage.py migrate landbank_data
+```
 
 
-Setup:
+- Modify and run load_*.py scripts with desired input files to populate base tables.
 
-Our Partners:
-The Cook County Land Bank
-The Institute for Housing Studies at DePaul University
+####Our Partners
+- DePaul University Institute for Housing Studies 
+- The Cook County Land Bank Authority & Board of Directors
+- Cook County Commisioner's office
