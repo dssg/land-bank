@@ -19,7 +19,7 @@ def load_foreclosures(forc_file, verbose = False):
         #break
       try:
         forc = Foreclosure.objects.get(\
-        pin     = row[1]\
+        pin     = '{:0>14}'.format(int(Decimal(row[1])))\
 	,filing_date   = spss_to_posix(row[2])\
 	,case_num1     = row[3]\
 	,case_num2     = row[4].strip()\
@@ -52,7 +52,7 @@ def load_foreclosures(forc_file, verbose = False):
         )
       except:
         forc =  Foreclosure(\
-        pin     = row[1]\
+        pin     = '{:0>14}'.format(int(Decimal(row[1])))\
 	,filing_date   = spss_to_posix(row[2])\
 	,case_num1     = row[3]\
 	,case_num2     = row[4].strip()\
