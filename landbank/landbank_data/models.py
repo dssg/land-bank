@@ -1,7 +1,7 @@
 from django.contrib.gis.db import models
 
 class Auction(models.Model):
-  pin           = models.FloatField('Property ID number', db_index=True)
+  pin           = models.CharField('Property ID number', max_length=14, db_index=True)
   doc           = models.CharField('Recorder of Deeds document number', null=True, max_length=16)
   date_doc      = models.DateTimeField('Date documented', null=True)
   date_rec      = models.DateTimeField('Date recorded', null=True)
@@ -40,7 +40,7 @@ class Auction(models.Model):
 
 
 class CashFin(models.Model):
-  pin                = models.FloatField('Property ID number', db_index=True)
+  pin                = models.CharField('Property ID number', max_length=14, db_index=True)
   doc                = models.CharField('Recorder of Deeds document number', null=True, max_length=16)
   date_doc           = models.DateTimeField('Date documented', null=True)
   date_rec           = models.DateTimeField('Date recorded', null=True)
@@ -78,7 +78,7 @@ class CashFin(models.Model):
 
 
 class Foreclosure(models.Model):
-  pin           = models.FloatField('Property ID number', db_index=True)
+  pin           = models.CharField('Property ID number', max_length=14, db_index=True)
   filing_date   = models.DateTimeField('Date filed', null=True)
   case_num1     = models.IntegerField('Case number', null=True)
   case_num2     = models.CharField('Case number (2)', null=True, max_length=100)
@@ -118,7 +118,7 @@ class Foreclosure(models.Model):
 
 
 class Mortgage(models.Model):
-  pin           = models.FloatField('Property ID number', db_index=True)
+  pin           = models.CharField('Property ID number', max_length=14, db_index=True)
   doc           = models.CharField('Document ID', null=True, max_length=100)
   mort_amt      = models.FloatField('Mortgage dollar amount', null=True)
   date_doc      = models.DateTimeField('Date documented', null=True)
@@ -159,7 +159,7 @@ class Mortgage(models.Model):
 
 
 class Transaction(models.Model):
-  pin           = models.FloatField('Property ID number', db_index=True)
+  pin           = models.CharField('Property ID number', max_length=14, db_index=True)
   amount_prime  = models.FloatField('Mortgage amount', null=True) 
   doc		= models.CharField('Document ID', null=True, max_length=100)
   date_doc      = models.DateTimeField('Date documented', null=True)
@@ -201,7 +201,7 @@ class Transaction(models.Model):
 
 
 class Assessor(models.Model):                                         
-  pin                           = models.FloatField('Property ID number', db_index=True)
+  pin                           = models.CharField('Property ID number', max_length=14, db_index=True)
   houseno                       = models.CharField('Address number', max_length=100, null=True)
   direction                     = models.CharField('Street direction', max_length=2, null=True)
   street                        = models.CharField('Street name', max_length=100, null=True)
@@ -223,20 +223,34 @@ class Assessor(models.Model):
   type_pt_5                     = models.NullBooleanField('5+ unit building?', null=True)
   type_pt_nonres                = models.NullBooleanField('Non-residental building?', null=True)
   type_pt_unknown               = models.NullBooleanField('Building of unknown type?', null=True)
-  pt_type1_cat                  = models.IntegerField('???', null=True)
+  pt_type1_cat                  = models.IntegerField('Property type code', null=True)
   estim_hunit                   = models.IntegerField('Estimated number of housing units based on sqft', null=True)
   lat_y                         = models.FloatField('Latitude', null=True)
   long_x                        = models.FloatField('Longitude', null=True)
-  tract_fix                     = models.FloatField('???', null=True)
-  no_tract_info                 = models.IntegerField('???', null=True)
+  tract_fix                     = models.FloatField('Census tract', null=True)
+  no_tract_info                 = models.NullBooleanField('No geography information?', null=True)
   ca_num                        = models.IntegerField('Community area number', null=True)
   ca_name                       = models.CharField('Community area', max_length=100, null=True)
   place                         = models.CharField('Cook County subdivision', max_length=100, null=True)
   ward                          = models.IntegerField('Ward number, if available', null=True)
   chicago_flag                  = models.NullBooleanField('Within city limits?', null=True)
   gisdate                       = models.CharField('GIS file reference date', max_length=100, null=True)
-  loc                           = models.PointField(null=True)
+  loc                           = models.PointField(null=True,srid=3435)
   objects                       = models.GeoManager()
+  def __unicode__(self):
+    return unicode(self.pin)
+  class Meta:
+    app_label = 'landbank_data'
+
+
+class Scavenger(models.Model):
+  pin                           = models.CharField('Property ID number', max_length=14, db_index=True)
+  township			= models.IntegerField('Township ID number', null=True)
+  volume			= models.CharField('???', max_length=3, null=True)
+  tax_year			= models.IntegerField('Year of tax balance', null=True)
+  tax_type			= models.CharField('???', max_length=2, null=True)
+  tax_amount			= models.FloatField('???', null=True)
+  total_amount			= models.FloatField('???', null=True)
   def __unicode__(self):
     return unicode(self.pin)
   class Meta:
