@@ -38,12 +38,12 @@ def load_assessors(assessor_file, verbose = False):
       try:    sqft_land    = float(row[15])
       except: sqft_land    = None
       ptype                = row[16].strip()
-      type_pt_sf           = True if row[17]==1 else False
-      type_pt_condo        = True if row[18]==1 else False
-      type_pt_2_4          = True if row[19]==1 else False
-      type_pt_5            = True if row[20]==1 else False
-      type_pt_nonres       = True if row[21]==1 else False
-      type_pt_unknown      = True if row[22]==1 else False
+      type_pt_sf           = 1 if int(row[17])==1 else 0
+      type_pt_condo        = 1 if int(row[18])==1 else 0
+      type_pt_2_4          = 1 if int(row[19])==1 else 0
+      type_pt_5            = 1 if int(row[20])==1 else 0
+      type_pt_nonres       = 1 if int(row[21])==1 else 0
+      type_pt_unknown      = 1 if int(row[22])==1 else 0
       try:    pt_type1_cat = int(row[23])
       except: pt_type1_cat = None
       try:    estim_hunit  = int(row[24])
@@ -54,7 +54,7 @@ def load_assessors(assessor_file, verbose = False):
       except: long_x       = None
       try:    tract_fix    = Decimal(row[27]) 
       except: tract_fix    = None
-      no_tract_info        = True if row[28]==1 else False
+      no_tract_info        = True if int(row[28])==1 else False
       try:    ca_num       = Decimal(row[29]) 
       except: ca_num       = None
       ca_name              = row[30].strip()
@@ -74,7 +74,7 @@ def load_assessors(assessor_file, verbose = False):
 	year_built                     = year_built,\
 	attic_desc                     = attic_desc,\
 	basement_desc                  = basement_desc,\
-	class_description              = class_description,\
+	class_desc                     = class_desc,\
 	current_building_assmt         = current_building_assmt,\
 	current_land_assmt             = current_land_assmt,\
 	current_total_assmt            = current_total_assmt,\
@@ -112,7 +112,7 @@ def load_assessors(assessor_file, verbose = False):
 	year_built                     = year_built,\
 	attic_desc                     = attic_desc,\
 	basement_desc                  = basement_desc,\
-	class_description              = class_description,\
+	class_desc                     = class_desc,\
 	current_building_assmt         = current_building_assmt,\
 	current_land_assmt             = current_land_assmt,\
 	current_total_assmt            = current_total_assmt,\
