@@ -59,7 +59,7 @@ def load_foreclosures(forc_file, verbose = False):
       except:	adj_yq = None
       try:	adj_yd = int(row[29])
       except:	adj_yd = None
-      loc = None if row[18]=='' else Point((Decimal(row[19]), Decimal(row[18])))
+      loc = None if row[18]=='' else Point((Decimal(row[19]), Decimal(row[18])),srid=4326).transform(3435)
       try:
         forc = Foreclosure.objects.get(\
         pin = pin\
