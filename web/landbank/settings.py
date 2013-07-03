@@ -2,6 +2,7 @@ import os
 import sys
 PROJECT_ROOT = os.path.dirname(__file__)
 sys.path.insert(0, os.path.join(PROJECT_ROOT, "../landbank_data"))
+sys.path.insert(0, os.path.join(PROJECT_ROOT, "../landbank_data/file_import"))
 # Django settings for landbank project.
 
 DEBUG = False
