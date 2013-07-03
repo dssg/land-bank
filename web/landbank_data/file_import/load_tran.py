@@ -64,7 +64,7 @@ def load_transactions(transaction_file, verbose = False):
       except:   adj_yq = None
       try:	adj_yd = int(row[33])
       except:	adj_yd = None
-      loc       = None if row[22]=='' else Point((Decimal(row[23]), Decimal(row[22])))
+      loc       = None if row[22]=='' else Point((Decimal(row[23]), Decimal(row[22])),srid=4326).transform(3435)
       try:
         transaction =  Transaction.objects.get(\
         pin = pin\
