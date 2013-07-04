@@ -1,0 +1,1 @@
+d <- read.table(file="~/Documents/chicago/dssg-landbank-project/analysis/testfc.csv",header=FALSE,sep=",",)

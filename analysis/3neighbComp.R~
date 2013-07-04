@@ -1,0 +1,8 @@
+neighb3comp <- function(x,y,z,d)
+    {
+        data_mask <- ((d$community_area == levels(d[['community_area']])[x]) |
+            (d$community_area == levels(d[['community_area']])[y]) |
+            (d$community_area == levels(d[['community_area']])[z]))
+                        
+        p <- ggplot(
+    }

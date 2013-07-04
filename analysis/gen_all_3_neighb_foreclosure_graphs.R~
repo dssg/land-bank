@@ -1,0 +1,27 @@
+gen_all_3_neighb_forclosure <- function(d)
+    {
+        for(i in 1:(nrow(d)-2))
+            {
+                for(j in (i+1):(nrow(d)-1))
+                    {
+                      for(k in (j+1):nrow(d))
+                          {
+                              p1 <- neighb3comp(i,j,k,d)
+                              chart_path <-"/home/evan/Documents/chicago/dssg-landbank-project/analysis/forclosure_graphs"
+                              firstG <- sub(' ',"_",levels(d[['community_area']])[x])
+                              secG <- sub(' ',"_",levels(d[['community_area']])[y])
+                              thirdG<- sub(' ',"_",levels(d[['community_area']])[z])
+                              chart_title <- substitute(paste("Foreclosures",
+                                                              firstG,
+                                                              secG,
+                                                              thirdG,
+                                                              sep="_"))
+                              prefix=paste(chart_path,chart_title,sep="/")
+                              suffix="pdf"
+                              full_name <- paste(prefix,suffix,sep=".")
+                              ggsave(filename=full_name)
+                          }
+                  
+                   
+            }
+    }
