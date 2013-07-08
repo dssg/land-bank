@@ -9,7 +9,7 @@ gen_all_3_neighb_forclosure <- function(d)
                           {
                               cat("i=",i,"j=",j,"k=",k,"\n")
                               p1 <- neighb3comp(i,j,k,d)
-                              chart_path <-"/home/evan/Documents/chicago/dssg-landbank-project/analysis/foreclosure_graphs"
+                              chart_path <-"~/dssg-landbank-project/analysis/foreclosure_graphs"
                               firstG <- sub(' ',"_",levels(d[['community_area']])[i])
                               secG <- sub(' ',"_",levels(d[['community_area']])[j])
                               thirdG<- sub(' ',"_",levels(d[['community_area']])[k])
