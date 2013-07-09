@@ -63,8 +63,7 @@ def load_assessors(assessor_file, verbose = False):
       except: ward         = None
       chicago_flag         = True if row[33]==1 else False
       gisdate              = row[34].strip()
-      if long_x is not None: loc = Point(long_x, lat_y, srid=4326).transform(3435)
-
+      loc       = None if row[25]=='' else Point((Decimal(row[26]), Decimal(row[25])), srid=4326).transform(3435)
       try:
         assessor = Assessor.objects.get(\
         pin                            = pin,\
