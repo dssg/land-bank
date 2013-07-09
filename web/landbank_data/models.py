@@ -256,3 +256,12 @@ class Scavenger(models.Model):
   class Meta:
     app_label = 'landbank_data'
 
+class CensusTract(models.Model):
+  geoid                         = models.CharField('Census tract ID', max_length=20, null=False)
+  commarea                      = models.CharField('Community area', max_length=20, null=False)
+  loc                           = models.MultiPolygonField(null=False, srid=3435)
+  objects                       = models.GeoManager()
+  def __unicode__(self):
+    return unicode(self.geoid)
+  class Meta:
+    app_label = 'landbank_data'
