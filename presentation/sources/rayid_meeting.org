@@ -1,0 +1,8 @@
+* Landbank
+* Outline Solutions
+* Time series visualizations
+  - clustering
+  - Lakeview 38
+  - Brighton Park 12
+  - Englewood 24
+  - Douglas 18
