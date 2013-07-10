@@ -265,3 +265,42 @@ class CensusTract(models.Model):
     return unicode(self.geoid)
   class Meta:
     app_label = 'landbank_data'
+
+class SummaryStats(models.Model):
+  # identifying characteristics of geographic area and property type segment
+  area_id                       = models.FloatField('Foriegn key to table containing numbered area geometries', null=True)
+  area_type                     = models.CharField('Descriptor of land area subdivision like ward, census tract, etc.', max_length=30, null=True)
+  area_name                     = models.CharField('Name of area subdivision if applicable like Near North Side, Lakeview, etc.', max_length = 50, null=True)
+  geom                          = models.MultiPolygonField(null=True,srid=3435)
+  ptype_sf                      = models.NullBooleanField('Single family property', default=False)
+  ptype_2_4                     = models.NullBooleanField('Two to four family property', default=False)
+  ptype_5                       = models.NullBooleanField('Five or more family property', default=False)
+  ptype_condo                   = models.NullBooleanField('Condominium property', default=False)
+  ptype_nonres                  = models.NullBooleanField('Non-residential, i.e., commercial or industrial property', default=False)
+  ptype_unknown                 = models.NullBooleanField('Unknown property type', default=False)
+
+  # summary statistics of properties 
+  bldg_assmt_avg                = models.FloatField('Average building assessed value', null=True)
+  land_assmt_avg                = models.FloatField('Average land assessed value', null=True)
+  total_assmt_avg               = models.FloatField('Average total assessed value', null=True)
+  
+
+  objects                       = models.GeoManager()
+  def get_ptype(self):
+    ptype_str = 'unknown'
+    if self.ptype_sf:
+      ptype_str = 'sf'
+    elif self.ptype_2_4:
+      ptype_str = '2_4'
+    elif self.ptype_5: 
+      ptype_str = '5' 
+    elif self.ptype_condo:
+      ptype_str = 'condo'
+    elif self.ptype_nonres:
+      ptype_str = 'nonres'
+    return ptype_str
+  def __unicode__(self):
+    return unicode(self.area_type) + u' ' + unicode(self.area_id) + u' ptype:' + unicode(self.get_ptype())
+  class Meta:
+    app_label = 'landbank_data'
+
