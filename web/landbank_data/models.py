@@ -280,10 +280,13 @@ class SummaryStats(models.Model):
   ptype_unknown                 = models.NullBooleanField('Unknown property type', default=False)
 
   # summary statistics of properties 
+  count				= models.IntegerField('Number of properties in the given geographical and property type segment', null=True)
   bldg_assmt_avg                = models.FloatField('Average building assessed value', null=True)
   land_assmt_avg                = models.FloatField('Average land assessed value', null=True)
   total_assmt_avg               = models.FloatField('Average total assessed value', null=True)
-  
+  bldg_sqft_avg			= models.FloatField('Average building square footage', null=True)
+  land_sqft_avg			= models.FloatField('Average land plot square footage', null=True)
+  ppsf_avg			= models.FloatField('Average price per square foot-single family homes only', null=True)
 
   objects                       = models.GeoManager()
   def get_ptype(self):
@@ -304,3 +307,22 @@ class SummaryStats(models.Model):
   class Meta:
     app_label = 'landbank_data'
 
+class Wards(models.Model):
+  data_admin			= models.FloatField('???', null=True)
+  perimeter			= models.FloatField('???', null=True)
+  ward				= models.IntegerField('Ward number, does not match primary key', null=True)
+  alderman			= models.CharField('Alderman name', max_length=60, null=True)
+  ward_class			= models.IntegerField('???', null=True)
+  ward_phone 			= models.CharField('Ward phone number', max_length=12, null=True)
+  hall_phone			= models.CharField('???? phone number', max_length=12, null=True)
+  hall_office			= models.CharField('???', max_length=45, null=True)
+  address			= models.CharField('??? address', max_length=39, null=True)
+  edit_date			= models.CharField('Unformatted date of last edit?', max_length=10, null=True)
+  shape_area			= models.FloatField('???', null=True)
+  shape_len			= models.FloatField('???', null=True)
+  geom				= models.MultiPolygonField(null=False, srid=3435)
+  objects			= models.GeoManager()
+  def __unicode__(self):
+    return unicode(self.ward)
+  class Meta:
+    app_label = 'landbank_data'
