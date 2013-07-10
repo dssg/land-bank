@@ -252,6 +252,31 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal('landbank_data', ['Scavenger'])
 
+        # Adding model 'SummaryStats'
+        db.create_table(u'landbank_data_summarystats', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('area_id', self.gf('django.db.models.fields.FloatField')(null=True)),
+            ('area_type', self.gf('django.db.models.fields.CharField')(max_length=30, null=True)),
+            ('area_name', self.gf('django.db.models.fields.CharField')(max_length=50, null=True)),
+            ('geom', self.gf('django.contrib.gis.db.models.fields.MultiPolygonField')(srid=3435, null=True)),
+            ('ptype_sf', self.gf('django.db.models.fields.NullBooleanField')(default=False, null=True, blank=True)),
+            ('ptype_2_4', self.gf('django.db.models.fields.NullBooleanField')(default=False, null=True, blank=True)),
+            ('ptype_5', self.gf('django.db.models.fields.NullBooleanField')(default=False, null=True, blank=True)),
+            ('ptype_condo', self.gf('django.db.models.fields.NullBooleanField')(default=False, null=True, blank=True)),
+            ('ptype_nonres', self.gf('django.db.models.fields.NullBooleanField')(default=False, null=True, blank=True)),
+            ('ptype_unknown', self.gf('django.db.models.fields.NullBooleanField')(default=False, null=True, blank=True)),
+            ('bldg_assmt_avg', self.gf('django.db.models.fields.FloatField')(null=True)),
+            ('bldg_assmt_med', self.gf('django.db.models.fields.FloatField')(null=True)),
+            ('bldg_assmt_var', self.gf('django.db.models.fields.FloatField')(null=True)),
+            ('land_assmt_avg', self.gf('django.db.models.fields.FloatField')(null=True)),
+            ('land_assmt_med', self.gf('django.db.models.fields.FloatField')(null=True)),
+            ('land_assmt_var', self.gf('django.db.models.fields.FloatField')(null=True)),
+            ('total_assmt_avg', self.gf('django.db.models.fields.FloatField')(null=True)),
+            ('total_assmt_med', self.gf('django.db.models.fields.FloatField')(null=True)),
+            ('total_assmt_var', self.gf('django.db.models.fields.FloatField')(null=True)),
+        ))
+        db.send_create_signal('landbank_data', ['SummaryStats'])
+
 
     def backwards(self, orm):
         # Deleting model 'Auction'
@@ -274,6 +299,9 @@ class Migration(SchemaMigration):
 
         # Deleting model 'Scavenger'
         db.delete_table(u'landbank_data_scavenger')
+
+        # Deleting model 'SummaryStats'
+        db.delete_table(u'landbank_data_summarystats')
 
 
     models = {
@@ -468,6 +496,29 @@ class Migration(SchemaMigration):
             'total_amount': ('django.db.models.fields.FloatField', [], {'null': 'True'}),
             'township': ('django.db.models.fields.IntegerField', [], {'null': 'True'}),
             'volume': ('django.db.models.fields.CharField', [], {'max_length': '3', 'null': 'True'})
+        },
+        'landbank_data.summarystats': {
+            'Meta': {'object_name': 'SummaryStats'},
+            'area_id': ('django.db.models.fields.FloatField', [], {'null': 'True'}),
+            'area_name': ('django.db.models.fields.CharField', [], {'max_length': '50', 'null': 'True'}),
+            'area_type': ('django.db.models.fields.CharField', [], {'max_length': '30', 'null': 'True'}),
+            'bldg_assmt_avg': ('django.db.models.fields.FloatField', [], {'null': 'True'}),
+            'bldg_assmt_med': ('django.db.models.fields.FloatField', [], {'null': 'True'}),
+            'bldg_assmt_var': ('django.db.models.fields.FloatField', [], {'null': 'True'}),
+            'geom': ('django.contrib.gis.db.models.fields.MultiPolygonField', [], {'srid': '3435', 'null': 'True'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'land_assmt_avg': ('django.db.models.fields.FloatField', [], {'null': 'True'}),
+            'land_assmt_med': ('django.db.models.fields.FloatField', [], {'null': 'True'}),
+            'land_assmt_var': ('django.db.models.fields.FloatField', [], {'null': 'True'}),
+            'ptype_2_4': ('django.db.models.fields.NullBooleanField', [], {'default': 'False', 'null': 'True', 'blank': 'True'}),
+            'ptype_5': ('django.db.models.fields.NullBooleanField', [], {'default': 'False', 'null': 'True', 'blank': 'True'}),
+            'ptype_condo': ('django.db.models.fields.NullBooleanField', [], {'default': 'False', 'null': 'True', 'blank': 'True'}),
+            'ptype_nonres': ('django.db.models.fields.NullBooleanField', [], {'default': 'False', 'null': 'True', 'blank': 'True'}),
+            'ptype_sf': ('django.db.models.fields.NullBooleanField', [], {'default': 'False', 'null': 'True', 'blank': 'True'}),
+            'ptype_unknown': ('django.db.models.fields.NullBooleanField', [], {'default': 'False', 'null': 'True', 'blank': 'True'}),
+            'total_assmt_avg': ('django.db.models.fields.FloatField', [], {'null': 'True'}),
+            'total_assmt_med': ('django.db.models.fields.FloatField', [], {'null': 'True'}),
+            'total_assmt_var': ('django.db.models.fields.FloatField', [], {'null': 'True'})
         },
         'landbank_data.transaction': {
             'Meta': {'object_name': 'Transaction'},
