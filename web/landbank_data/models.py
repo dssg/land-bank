@@ -257,7 +257,7 @@ class Scavenger(models.Model):
     app_label = 'landbank_data'
 
 class CensusTract(models.Model):
-  fips 				= models.CharField('Census tract ID', max_length=20, null=False)
+  fips 				= models.CharField('Census tract ID', max_length=20, null=True)
   commarea                      = models.IntegerField('Community area', null=False)
   loc                           = models.MultiPolygonField(null=False, srid=3435)
   objects                       = models.GeoManager()
@@ -324,5 +324,17 @@ class Wards(models.Model):
   objects			= models.GeoManager()
   def __unicode__(self):
     return unicode(self.ward)
+  class Meta:
+    app_label = 'landbank_data'
+
+class CommunityAreas(models.Model):
+  area_number			= models.IntegerField('Community area number', null=True)
+  area_name			= models.CharField('Community area name', max_length=80, null=True)
+  shape_area			= models.FloatField('???', null=True)
+  shape_len			= models.FloatField('???', null=True)
+  geom				= models.MultiPolygonField(null=False, srid=3435)
+  objects			= models.GeoManager()
+  def __unicode__(self):
+    return unicode(self.area_number) + u'_' + unicode(self.area_name)
   class Meta:
     app_label = 'landbank_data'
