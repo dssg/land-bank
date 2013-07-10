@@ -1,0 +1,1005 @@
+\documentclass{beamer}
+\usepackage[latin1]{inputenc}
+\usetheme{Goettingen}
+\title[Parole is depressing]{Work Hours and status as a protective factor for depression in persons under court supervision}
+\author{Evan Misshula}
+\institute{CUNY John Jay\\Criminal Justice\\\textcolor{blue}{www.snrg-nyc.org}}
+\usepackage{graphicx}
+\usepackage[retainorgcmds]{IEEEtrantools}
+\usepackage{color}
+\usepackage{MnSymbol}
+\usepackage{amsmath}
+\interdisplaylinepenalty=2500
+\DeclareMathOperator{\normal}{N^+}
+\DeclareMathOperator{\lognormal}{Log-\mathcal{N}}
+\theoremstyle{plain} 
+\newtheorem{markov}{Theorem}
+\newtheorem{trunFact}{Corollary}
+\usepackage{algorithmic}
+\usepackage{array}
+\usepackage{amssymb}
+\usepackage{mdwmath}
+\usepackage{verbatim}
+\usepackage{mdwtab}
+\usepackage[retainorgcmds]{IEEEtrantools}
+\usepackage{eqparbox}
+\usepackage[tight,footnotesize]{subfigure}
+\usepackage{fixltx2e}
+\usepackage{stfloats}
+\usepackage{url}
+\usepackage[american]{babel}
+\usepackage[autostyle]{csquotes}
+\usepackage{graphicx}
+\usepackage[
+    backend=biber,
+    style=apa,
+    natbib=true,
+    url=false, 
+    doi=true,
+    eprint=false
+]{biblatex}
+\DeclareLanguageMapping{american}{american-apa}
+
+\addbibresource{proposal.bib}
+\usepackage[noblocks]{authblk}
+\hyphenation{op-tical net-works semi-conduc-tor}
+\date{\today}
+
+\begin{document}
+\begin{frame}
+\titlepage
+\end{frame}
+
+\AtBeginSubsection[]
+{
+  \begin{frame}<beamer>
+    \frametitle{Layout}
+    \tableofcontents[currentsection,currentsubsection]
+  \end{frame}
+}
+
+\section{The introduction}
+
+\subsection{Scope}
+
+\begin{frame}
+\frametitle{Scope of the problem}
+The Size of Correction Population in the US:
+\begin{enumerate}
+\pause \item There are 16 million people in the US with a felony conviction  \parencite{Uggen2006}.
+\pause \item This is approximately 7.5\% of the adult population in the United States.  
+\pause \item More than four and half million are on some form of community supervision.  
+\end{enumerate}
+\pause
+Harms of depression:
+\begin{enumerate}
+\pause \item Depression is often associated with a variety of health risks as well as criminal offending.  
+\pause \item Surprisingly even the incidence of depression amongst those under criminal supervision has not not been studied. 
+\pause \item Does employment mediate depression?
+\pause \item Is unemployment lower for those offenders not on criminal supervision?
+\end{enumerate}
+\end{frame}
+
+\subsection{Outline of Analysis}
+\begin{frame}
+\frametitle{Outline of analysis}
+\begin{enumerate}
+\item Examine the most recent  National Survey on Drug Use and Health (NSDUH) series (formerly titled National Household Survey on Drug Abuse). 
+\begin{enumerate}[a)] 
+\item NSDUH measures the prevalence and correlates of drug use in the United States \parencite{NSDUH2009}.
+\end{enumerate}
+\item Use data from 2008 - 2009.  
+\begin{enumerate}[a)] 
+\item In 2008 the NSDUH began to collect data on recent depression (within the last twelve months).
+\end{enumerate}
+\item Explore if persons under court supervision report more recent depression than the average US resident over age 12 
+\item Examine if this changes if we control for work status and work hours
+\item Compare the group of persons on supervision with those who report a recent arrest but are not placed on community supervision 
+\end{enumerate}
+\end{frame}
+
+\begin{frame}
+\begin{enumerate}
+\item Compare the employment status of the two groups controlling for a variety of demographic, health and criminal justice factors.  
+\item Finally, assess if net of other factors employment conditions predict depressive symptoms. 
+\end{enumerate}
+\end{frame}
+
+\section{Literature Review}
+
+\begin{frame}
+\frametitle{Prior work}
+Harms of depression:
+\begin{enumerate}
+\pause \item suicide ideation \parencite{Palmer2005}
+\pause \item self harm \parencite{Kroll2008}
+\pause \item propensity for criminal offending \parencite{Schroeder2011,JemmaC2010,Kroll2008,Ostrowsky2005} 
+\pause \item severity of future crimes \parencite{Hayes2009,JemmaC2010}.  
+\end{enumerate}
+\pause
+It is interesting that in two studies of parole failure \parencite{Bucklen2009, Rakis2005} unmet material needs were a less powerful predictor than ``anti-social'' attitudes.  In fact, these studies may be inadvertantly capturing depression.
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Prior work}
+The harms associated with prison exposure have also been examined by some scholars.
+\begin{enumerate}
+\pause \item Serving time in prison lowers the probability of future employment and depresses wages \parencite{Pager2003,Western2002}.  
+\pause \item Serving prison time has also been associated with a disruption in marriage stability \parencite{Lopoo2005}.
+\end{enumerate}
+\end{frame}
+\section{Criminologial Theory}
+
+\begin{frame}
+\frametitle{Criminologial Theory}
+Criminology offer theories for why depression might be higher among offenders on supervision (and why employment might moderate it):
+\begin{enumerate}
+\pause \item Labeling theory \parencite{Matza1969} would say that the acts of reporting reinforces both an inferior label and a lower social position.  
+\pause \item Conflict Theory \parencite{jac79} offers an explanation that the power group of police and parole supervisors takes status and material goods by oppressing the lower group of largely racial minority ``offenders.''  
+\pause \item Critical Criminology \parencite{Wacquant2001} would argue that depression is a rational reaction to a system of incarceration designed to send urban minority youth to a series of prisons designed as employment subsidies for rural systematically overrepresented white residents. 
+\end{enumerate}
+\end{frame}
+
+\begin{frame}
+\frametitle{Theories suggest why employment might moderate depression}
+Each of these theories would also posit a different explanation of why employment might moderate this depression.  
+\begin{enumerate}
+\pause \item Labeling theory would say that employment allows the ``offender'' to modify their own label to ``worker and provider''.  
+\pause \item Conflict theory would say that the a union or other organization to which the offender belongs might offer some protection against the police by being able to muster a political response to protect one of their own.  
+\pause \item Critical Criminology would claim that offenders are no better off as members of the working proletariat than as members of the lumpenproletariat.  The improvement in feeling is as the result of a false consciousness.  
+\end{enumerate}
+\pause
+Further research is needed to make these distictions.  It is a limitation of our observational data and proposal that we are unable to distinguish between these root causes.
+\end{frame}
+
+\section{Available Evidence}
+
+\begin{frame}
+\frametitle{The Data}
+We will restrict the data set to the union of those with the statuses, parole/supervised release status in the past year (PAROL), probation status in the past year (PROB). \\
+\pause
+We control for:
+\begin{enumerate}
+\item age (CATAG3)
+\item race (NEWRACE2)
+\item socio-economic status (EDUCCAT2 and INCOME\footnote{The variable INCOME measures family income.})
+\item gender (IRSEX)
+\end{enumerate}
+\end{frame}
+
+\begin{frame}
+Our dependent variable is whether the respondent reports depression in the past 12 months (DEPRSYR). \\
+Additional predictor variables include job status, recent arrest and hours worked.  
+\begin{enumerate}
+\item Job status is computed from the variable
+\item JBSTATR2 where the results are narrowed to three response categories full-time employment, part-time employment or other.  
+\item Recent arrest status is computed from the variable NOBOOKY2 where the results are narrowed to two response categories, arrested in the last 12 months or not.  
+\item The number of hours worked measured by the variable WRKHRSW2.  
+\item Suicide ideation within the past 12 months is reported in the variable SUICTHNK.   
+\end{enumerate}
+\pause
+This will be used in a logistic regression to predict depression in the past year (DEPRSYR) and suicide ideation (MHSUITHK).
+\end{frame}
+
+\section{Results}
+\begin{frame}
+\frametitle{Results}
+Our results are divided into three sections.  
+\begin{enumerate}
+\pause \item We review the demographics of our sample population.  
+\pause \item We present the incidence and prevelence tables for our population.
+\pause \item We conclude by presenting the results of our logistic regression.
+\end{enumerate}
+\end{frame}
+
+\begin{frame}
+\frametitle{Defining the population and control}
+\begin{enumerate}
+\item We define court supervision as being under on probation in the last twelve months or having been released to parole or supervised release within the last twelve months.\footnote{Each of these conditions is recorded by the survey.  The survey variables used to determine status are ``PROB'' and ``PAROL.''}
+\item Our control population is the population over age 12 in the United States.
+\end{enumerate}
+\end{frame}
+
+\begin{frame}
+\frametitle{Using the NSDUH}
+The National Survey of Drug Use and Health is a valuable but complicated resource.  
+\begin{enumerate}
+\item It is a stratified sample of the US population over age 12.  
+\item Groups at risk for drug use are oversampled relative to their prevelence in the population.  
+\end{enumerate}
+\end{frame}
+\begin{frame}
+\frametitle{Two kinds of tables}
+Standard practice in public health dictates that we will display two figures. 
+\begin{enumerate}[I.]
+\pause \item  The first%, Figure~\ref{tab1} (p.~\pageref{tab1}) 
+shows the actual survey results for those under court supervision and compares them to the survey of all Americans over age 12.
+\pause \item The second table%, Figure~\ref{tab2} (p.~\pageref{tab2}) 
+provides the National Survey of Drug Use and Health's population estimates of the affected population. 
+\pause \item We use binary logistic regression to predict the incidence of depression.  
+\end{enumerate}
+\end{frame}
+
+\subsection{Demographics}
+
+\begin{frame}
+\frametitle{Demographics}
+It is both standard and good practice to control for age, race, socio-economic status (typically some combination of income and education) and gender.  
+\begin{enumerate}
+\item We also include recent job and arrest status to detect any important effects these may have on recent incidence of depression.  
+\item We include one continuous variable, W-2 work hours to see if greater engagement with work is a protective factor against depression, all other things being equal.
+\end{enumerate}
+\end{frame}
+
+\subsubsection{Age}
+
+\begin{frame}
+
+\begin{table}[tbp]
+\tiny
+\begin{center}
+\caption{Sample and US overall population estimate (count) by age category and sample year}
+\label{agetabcount}
+\begin{tabular}{lrrrr}
+  \hline
+ & US pop 08 est & US overall 08 & US pop 09 est & US overall 09 \\ 
+  \hline
+12-17 Years Old &    840,772 & 24,892,326 &    805,213 & 24,608,987 \\ 
+  18-25 Years Old &  1,765,764 & 32,938,183 &  1,984,751 & 33,579,988 \\ 
+  26-34 Years Old &  1,645,983 & 35,634,108 &  1,534,834 & 36,214,628 \\ 
+  35-49 Years Old &  1,540,945 & 64,529,781 &  1,506,523 & 63,996,786 \\ 
+  50 or Older &    867,866 & 91,820,690 &    722,463 & 93,415,143 \\ 
+  totals-age &   6,661,329 & 249,815,089 &   6,553,784 & 251,815,532 \\ 
+   \hline
+\end{tabular}
+\end{center}
+\end{table}
+
+\end{frame}
+
+\begin{frame}
+\begin{table}[tbp]
+\tiny
+\begin{center}
+\caption{Sample and US overall population estimate (percentage) by age category and sample year}
+\label{agetabpct}
+\begin{tabular}{lrrrr}
+  \hline
+ & US pop 08 est & US overall 08 & US pop 09 est & 09 US Overall \\ 
+  \hline
+12-17 Years Old & 13 & 10 & 12 & 10 \\ 
+  18-25 Years Old & 27 & 13 & 30 & 13 \\ 
+  26-34 Years Old & 25 & 14 & 23 & 14 \\ 
+  35-49 Years Old & 23 & 26 & 23 & 25 \\ 
+  50 or Older & 13 & 37 & 11 & 37 \\ 
+  totals-age & 101 & 100 & 99 & 99 \\ 
+   \hline
+\end{tabular}
+\end{center}
+\end{table}
+
+\end{frame}
+\subsubsection{Race}
+\begin{frame}
+\frametitle{Race}
+\begin{table}[tbp]
+\tiny
+\begin{center}
+\caption{Sample and US overall population estimate (count) by race category and sample year}
+\label{racetabcount}
+\begin{tabular}{lrrrr}
+  \hline
+ & US pop 08 est & US overall 08 & US pop 09 est & US overall 09 \\ 
+  \hline
+NonHisp White &   3,808,887 & 169,422,614 &   3,754,561 & 169,785,832 \\ 
+  NonHisp Black/Afr Am &  1,311,653 & 29,556,004 &  1,217,090 & 30,065,688 \\ 
+  NonHisp Native Am/AK Native &    53,907 & 1,121,072 &    77,743 & 1,206,122 \\ 
+  NonHisp Native HI/Other Pac Isl &   4,371 & 913,131 &   7,035 & 827,249 \\ 
+  NonHisp Asian &    100,396 & 10,714,075 &     94,619 & 11,062,291 \\ 
+  NonHisp more than one race &   116,409 & 3,027,740 &   123,593 & 2,922,691 \\ 
+  Hispanic &  1,265,706 & 35,060,452 &  1,279,144 & 35,945,659 \\ 
+  Totals-race &   6,661,329 & 249,815,089 &   6,553,784 & 251,815,532 \\ 
+   \hline
+\end{tabular}
+\end{center}
+\end{table}
+\end{frame}
+
+\begin{frame}
+\frametitle{race percentages}
+% latex table generated in R 2.14.0 by xtable 1.6-0 package
+% Tue Jan 10 00:04:15 2012
+\begin{table}[tbp]
+\tiny
+\begin{center}
+\caption{Sample and US overall population estimate (percentage) by race category and sample year}
+\label{racetabpct}
+\begin{tabular}{lrrrr}
+  \hline
+ & US pop 08 est & US overall 08 & US pop 09 est & US overall 09 \\ 
+  \hline
+NonHisp White & 57 & 68 & 57 & 67 \\ 
+  NonHisp Black/Afr Am & 20 & 12 & 19 & 12 \\ 
+  NonHisp Native Am/AK Native & 1 & 0 & 1 & 0 \\ 
+  NonHisp Native HI/Other Pac Isl & 0 & 0 & 0 & 0 \\ 
+  NonHisp Asian & 2 & 4 & 1 & 4 \\ 
+  NonHisp more than one race & 2 & 1 & 2 & 1 \\ 
+  Hispanic & 19 & 14 & 20 & 14 \\ 
+  Totals-race & 101 & 99 & 100 & 98 \\ 
+   \hline
+\end{tabular}
+\end{center}
+\end{table}
+\end{frame}
+
+\subsubsection{Income}
+
+\begin{frame}
+\frametitle{Income}
+\begin{table}[tbp]
+\tiny
+\begin{center}
+\caption{Sample and US overall population estimate (count) by income category and sample year}
+\label{incometabcount}
+\begin{tabular}{lrrrr}
+  \hline
+ & US pop 08 est & US overall 08 & US pop 09 est & US overall 09 \\ 
+  \hline
+Less than \$20,000 &  2,097,598 & 41,859,341 &  1,899,941 & 43,952,148 \\ 
+  \$20,000 - \$49,999 &  2,519,495 & 80,865,436 &  2,607,335 & 82,059,222 \\ 
+  \$50,000 - \$74,999 &    988,920 & 46,430,232 &    705,663 & 43,583,196 \\ 
+  \$75,000 or More &  1,055,317 & 80,660,081 &  1,340,845 & 82,220,966 \\ 
+  Totals-income &   6,661,329 & 249,815,089 &   6,553,784 & 251,815,532 \\ 
+   \hline
+\end{tabular}
+\end{center}
+\end{table}
+\end{frame}
+% latex table generated in R 2.14.0 by xtable 1.6-0 package
+% Tue Jan 10 00:04:15 2012
+\begin{frame}
+\frametitle{income percentages}
+\begin{table}[tbp]
+\tiny
+\begin{center}
+  \caption{Sample and US overall population estimate (percentage) by income category and sample year}
+\label{incometabpct}
+\begin{tabular}{lrrrr}
+  \hline
+ & US pop 08 est & US overall 08 & US pop 09 est & US overall 09 \\ 
+  \hline
+Less than \$20,000 & 31 & 17 & 29 & 17 \\ 
+  \$20,000 - \$49,999 & 38 & 32 & 40 & 33 \\ 
+  \$50,000 - \$74,999 & 15 & 19 & 11 & 17 \\ 
+  \$75,000 or More & 16 & 32 & 20 & 33 \\ 
+  Totals-income & 100 & 100 & 100 & 100 \\ 
+   \hline
+\end{tabular}
+\end{center}
+\end{table}
+\end{frame}
+\subsubsection{Education}
+
+\begin{frame}
+\frametitle{Education}
+
+% latex table generated in R 2.14.0 by xtable 1.6-0 package
+% Tue Jan 10 00:04:15 2012
+\begin{table}[tbp]
+\tiny
+\begin{center}
+\caption{Sample and US overall population estimate (count) by education category and sample year}
+\label{educationtabcount}
+\begin{tabular}{lrrrr}
+  \hline
+ & US pop 08 est & US overall 08 & US pop 09 est & US overall 09 \\ 
+  \hline
+Less than high school  &  1,850,523 & 34,596,514 &  1,742,808 & 34,368,584 \\ 
+  High school graduate  &  2,211,974 & 70,618,194 &  1,960,976 & 70,353,181 \\ 
+  Some college  &  1,297,616 & 57,395,105 &  1,441,044 & 57,076,034 \\ 
+  College graduate  &    460,444 & 62,312,950 &    603,744 & 65,408,746 \\ 
+  12 to 17 year olds  &    840,772 & 24,892,326 &    805,213 & 24,608,987 \\ 
+  Totals-education &   6,661,329 & 249,815,089 &   6,553,784 & 251,815,532 \\ 
+   \hline
+\end{tabular}
+\end{center}
+\end{table}
+\end{frame}
+
+\begin{frame}
+\frametitle{Education percentages}
+% latex table generated in R 2.14.0 by xtable 1.6-0 package
+% Tue Jan 10 00:04:15 2012
+\begin{table}[tbp]
+\tiny
+\begin{center}
+\caption{Sample and US overall population estimate (percentage) by education category and sample year}
+\label{educationtabpct}
+\begin{tabular}{lrrrr}
+  \hline
+ & US pop 08 est & US overall 08 & US pop 09 est & US overall 09 \\ 
+  \hline
+Less than high school  & 28 & 14 & 27 & 14 \\ 
+  High school graduate  & 33 & 28 & 30 & 28 \\ 
+  Some college  & 19 & 23 & 22 & 23 \\ 
+  College graduate  & 7 & 25 & 9 & 26 \\ 
+  12 to 17 year olds  & 13 & 10 & 12 & 10 \\ 
+  Totals-education & 100 & 100 & 100 & 101 \\ 
+   \hline
+\end{tabular}
+\end{center}
+\end{table}
+\end{frame}
+
+\subsubsection{Gender}
+
+\begin{frame}
+\frametitle{Gender}
+% latex table generated in R 2.14.0 by xtable 1.6-0 package
+% Tue Jan 10 00:04:15 2012
+\begin{table}[tbp]
+\tiny
+\begin{center}
+\caption{Sample and US overall population estimate (count) by gender category and sample year}
+\label{gendertabcount}
+\begin{tabular}{lrrrr}
+  \hline
+ & US pop 08 est & US overall 08 & US pop 09 est & US overall 09 \\ 
+  \hline
+Male &   4,729,146 & 121,260,835 &   4,802,742 & 122,291,138 \\ 
+  Female &   1,932,184 & 128,554,254 &   1,751,043 & 129,524,394 \\ 
+  Totals-gender &   6,661,329 & 249,815,089 &   6,553,784 & 251,815,532 \\ 
+   \hline
+\end{tabular}
+\end{center}
+\end{table}
+\end{frame}
+
+\begin{frame}
+\frametitle{percentages}
+% latex table generated in R 2.14.0 by xtable 1.6-0 package
+% Tue Jan 10 00:04:15 2012
+\begin{table}[tbp]
+\tiny
+\begin{center}
+\caption{Sample and US overall population estimate (percentage) by gender category and sample year}
+\label{gendertabpct}
+\begin{tabular}{lrrrr}
+  \hline
+ & US pop 08 est & US overall 08 & US pop 09 est & US overall 09 \\ 
+  \hline
+Male & 71 & 49 & 73 & 49 \\ 
+  Female & 29 & 51 & 27 & 51 \\ 
+  Totals-gender & 100 & 100 & 100 & 100 \\ 
+   \hline
+\end{tabular}
+\end{center}
+\end{table}
+\end{frame}
+
+\subsubsection{Job status}
+
+\begin{frame}
+\frametitle{Job status}
+% latex table generated in R 2.14.0 by xtable 1.6-0 package
+% Tue Jan 10 00:04:15 2012
+\begin{table}[tbp]
+\tiny
+\begin{center}
+\caption{Sample and US overall population estimate (count) by job category and sample year}
+\label{jobtabcount}
+\begin{tabular}{lrrrr}
+  \hline
+ & US pop 08 est & US overall 08 & US pop 09 est & US overall 09 \\ 
+  \hline
+full-time job &   3,134,703 & 116,792,859 &   2,614,644 & 109,689,667 \\ 
+  part-time job &    728,318 & 29,002,761 &    774,445 & 30,088,759 \\ 
+  other &   2,549,886 &  92,053,503 &   3,164,695 & 112,037,107 \\ 
+  Totals-job &   6,412,908 & 237,849,123 &   6,553,784 & 251,815,532 \\ 
+   \hline
+\end{tabular}
+\end{center}
+\end{table}
+\end{frame}
+
+\begin{frame}
+\frametitle{Job status percentages}
+% latex table generated in R 2.14.0 by xtable 1.6-0 package
+% Tue Jan 10 00:04:15 2012
+\begin{table}[tbp]
+\tiny
+\begin{center}
+\caption{Sample and US overall population estimate (percentage) by job category and sample year}
+\label{jobtabpct}
+\begin{tabular}{lrrrr}
+  \hline
+ & US pop 08 est & US overall 08 & US pop 09 est & US overall 09 \\ 
+  \hline
+full-time job & 49 & 49 & 40 & 44 \\ 
+  part-time job & 11 & 12 & 12 & 12 \\ 
+  other & 40 & 39 & 48 & 44 \\ 
+  Totals-job & 100 & 100 & 100 & 100 \\ 
+   \hline
+\end{tabular}
+\end{center}
+\end{table}
+\end{frame}
+
+
+\subsubsection{Arrest}
+
+\begin{frame}
+\frametitle{Arrest}
+% latex table generated in R 2.14.0 by xtable 1.6-0 package
+% Tue Jan 10 00:04:15 2012l
+\begin{table}[tbp]
+\tiny
+\begin{center}
+\caption{Sample and US overall population estimate (count) by arrest category and sample year}
+\label{arresttabcount}
+\begin{tabular}{lrrrr}
+  \hline
+ & US pop 08 est & US overall 08 & US pop 09 est & US overall 09 \\ 
+  \hline
+no-arrests &  2,363,883 & 32,592,076 &  2,651,095 & 33,883,544 \\ 
+  recently-arrested & 2,956,699 & 7,263,581 & 2,563,911 & 6,784,203 \\ 
+  Totals-arrest &  5,320,582 & 39,855,658 &  5,215,006 & 40,667,748 \\ 
+   \hline
+\end{tabular}
+\end{center}
+\end{table}
+\end{frame}
+
+\begin{frame}
+\frametitle{Arrest percentages}
+% latex table generated in R 2.14.0 by xtable 1.6-0 package
+% Tue Jan 10 00:04:15 2012
+\begin{table}[tbp]
+\tiny
+\begin{center}
+\caption{Sample and US overall population estimate (percentage) by arrest category and sample year}
+\label{arresttabpct}
+\begin{tabular}{lrrrr}
+  \hline
+ & US pop 08 est & US overall 08 & US pop 09 est & US overall 09 \\ 
+  \hline
+no-arrests & 44 & 82 & 51 & 83 \\ 
+  recently-arrested & 56 & 18 & 49 & 17 \\ 
+  Totals-arrest & 100 & 100 & 100 & 100 \\ 
+   \hline
+\end{tabular}
+\end{center}
+\end{table}
+\end{frame}
+
+\subsubsection{Depression}
+
+\begin{frame}
+\frametitle{Depression}
+% latex table generated in R 2.14.0 by xtable 1.6-0 package
+% Tue Jan 10 00:04:15 2012
+\begin{table}[tbp]
+\tiny
+\begin{center}
+\caption{Sample andle US overall population estimate (count) by depression category and sample year}
+\label{depressiontabcount}
+\begin{tabular}{lrrrr}
+  \hline
+ & US pop 08 est & US overall 08 & US pop 09 est & US overall 09 \\ 
+  \hline
+No  &   5,722,468 & 230,170,994 &   5,627,200 & 230,878,009 \\ 
+  Yes  &    739,939 & 16,246,409 &    806,248 & 17,537,608 \\ 
+  Totals-depression &   6,462,408 & 246,417,402 &   6,433,448 & 248,415,617 \\ 
+   \hline
+\end{tabular}
+\end{center}
+\end{table}
+\end{frame}
+
+\begin{frame}
+\frametitle{Depression percentages}
+% latex table generated in R 2.14.0 by xtable 1.6-0 package
+% Tue Jan 10 00:04:15 2012
+\begin{table}[tbp]
+\tiny
+\begin{center}
+\caption{Sample and US overall population estimate (percentage) by depression category and sample year}
+\label{depressiontabpct}
+\begin{tabular}{lrrrr}
+  \hline
+ & US pop 08 est & US overall 08 & US pop 09 est & US overall 09 \\ 
+  \hline
+No  & 89 & 93 & 87 & 93 \\ 
+  Yes  & 11 & 7 & 13 & 7 \\ 
+  Totals-depression & 100 & 100 & 100 & 100 \\ 
+   \hline
+\end{tabular}
+\end{center}
+\end{table}
+\end{frame}
+
+\subsubsection{Suicide}
+
+\begin{frame}
+\frametitle{Suicide Ideation}
+% latex table generated in R 2.14.0 by xtable 1.6-0 package
+% Tue Jan 10 00:04:15 2012
+\begin{table}[tbp]
+\tiny
+\begin{center}
+\caption{Sample and US overall population estimate (count) by suicide category and sample year}
+\label{suicidetabcount}
+\begin{tabular}{lrrrr}
+  \hline
+ & US pop 08 est & US overall 08 & US pop 09 est & US overall 09 \\ 
+  \hline
+yes &   690,064 & 8,361,924 &   513,424 & 8,504,327 \\ 
+  no &   5,087,919 & 215,694,628 &   5,205,707 & 218,145,439 \\ 
+  Totals-suicide &   5,777,984 & 224,056,552 &   5,719,131 & 226,649,766 \\ 
+   \hline
+\end{tabular}
+\end{center}
+\end{table}
+\end{frame}
+
+\begin{frame}
+\frametitle{Suicide Ideation}
+% latex table generated in R 2.14.0 by xtable 1.6-0 package
+% Tue Jan 10 00:04:15 2012
+\begin{table}[tbp]
+\tiny
+\begin{center}
+\caption{Sample and US overall population estimate (percentage) by suicide category and sample year}
+\label{suicidetabpct}
+\begin{tabular}{lrrrr}
+  \hline
+ & US pop 08 est & US overall 08 & US pop 09 est & US overall 09 \\ 
+  \hline
+yes & 12 & 4 & 9 & 4 \\ 
+  no & 88 & 96 & 91 & 96 \\ 
+  Totals-suicide & 100 & 100 & 100 & 100 \\ 
+   \hline
+\end{tabular}
+\end{center}
+\end{table}
+\end{frame}
+\subsubsection{Work Hours}
+
+\begin{frame}
+\frametitle{work hours sample}
+% latex table generated in R 2.14.0 by xtable 1.6-0 package
+% Tue Jan 10 00:04:15 2012
+\begin{table}[tbp]
+\tiny
+\begin{center}
+\caption{Work hours reported for a population of estimated size}
+\label{wrkHrstabcount}
+\begin{tabular}{lrrrr}
+  \hline
+ & US pop 08 est & US 08 overall & US pop 09 est & US 09 overall \\ 
+  \hline
+count &   3,863,021 & 145,697,529 &   3,387,050 & 139,698,330 \\ 
+   \hline
+\end{tabular}
+\end{center}
+\end{table}
+\end{frame}
+
+\begin{frame}
+\frametitle{Work Hours values}
+% latex table generated in R 2.14.0 by xtable 1.6-0 package
+% Tue Jan 10 00:04:15 2012
+\begin{table}[tbp]
+\tiny
+\begin{center}
+\caption{Weighted average values of hours worked}
+\label{wrkHrstabavg}
+\begin{tabular}{lrrrr}
+  \hline
+ & US pop 08 est & US 08 overall & US pop 09 est & US 09 overall \\ 
+  \hline
+weighted average & 37.6 & 38.3 & 38.1 & 37.8 \\ 
+   \hline
+\end{tabular}
+\end{center}
+\end{table}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Work Hours standard deviation}
+ % latex table generated in R 2.14.0 by xtable 1.6-0 package
+ % Tue Jan 10 00:04:15 2012
+\begin{table}[tbp]
+\tiny
+\begin{center}
+\caption{Weighted sd of values of hours worked}
+\label{wrkHrstabpct}
+\begin{tabular}{lrrrr}
+  \hline
+ & US pop 08 est & US 08 overall & US pop 09 est & US 09 overall \\ 
+  \hline
+weighted sd & 14 & 14 & 14 & 14 \\ 
+   \hline
+\end{tabular}
+\end{center}
+\end{table}
+\end{frame}
+
+\subsection{Sample incidence and population prevelence}
+\begin{frame}
+\frametitle{Sample incidence}
+\begin{table}[tbp]
+\tiny
+\begin{center}
+\caption{Incidence Table}
+\label{tab1}
+\begin{tabular}{lrrrr}
+  \hline
+ & court & \%/sd & survey & \%/sd \\ 
+  \hline
+  12-17 years old &   1,373 & 30 &  35,547 & 32 \\ 
+  18-25 years old &   2,238 & 49 &  38,149 & 34 \\ 
+  26-34 years old &     483 & 11 &  11,201 & 10 \\ 
+  35-49 years old &     374 & 8 &  15,723 & 14 \\ 
+  50 or older &      90 & 2 &  10,891 & 10 \\ 
+  totals-age &   4,558 & 100 & 111,511 & 100 \\ 
+\hline
+  nonhisp white &   2,423 & 53 &  69,090 & 62 \\ 
+  nonhisp black/afr am &     818 & 18 &  14,366 & 13 \\ 
+  nonhisp native am/ak native &     150 & 3 &   1,678 & 2 \\ 
+  nonhisp native hi/other pac isl &      11 & 0 &     500 & 0 \\ 
+  nonhisp asian &      53 & 1 &   4,069 & 4 \\ 
+  nonhisp more than one race &     204 & 4 &   3,626 & 3 \\ 
+  hispanic &     899 & 20 &  18,182 & 16 \\ 
+  totals-race &   4,558 & 99 & 111,511 & 100 \\ 
+\hline
+  less than \$20,000 &   1,510 & 33 &  24,547 & 22 \\ 
+  \$20,000 - \$49,999 &   1,776 & 39 &  37,917 & 34 \\ 
+  \$50,000 - \$74,999 &     557 & 12 &  19,486 & 17 \\ 
+  \$75,000 or more &     715 & 16 &  29,561 & 27 \\ 
+  totals-income &   4,558 & 100 & 111,511 & 100 \\ 
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Sample incidence continued}
+\begin{table}[tbp]
+\tiny
+\begin{center}
+\caption{Incidence Table}
+\label{tab1}
+\begin{tabular}{lrrrr}
+  \hline
+ & court & \%/sd & survey & \%/sd \\ 
+  \hline
+  less than high school  &   1,138 & 25 &  13,135 & 12 \\ 
+  high school graduate  &   1,193 & 26 &  25,212 & 23 \\ 
+  some college  &     710 & 16 &  22,006 & 20 \\ 
+  college graduate  &     144 & 3 &  15,611 & 14 \\ 
+  12 to 17 year olds  &   1,373 & 30 &  35,547 & 32 \\ 
+  totals-education &   4,558 & 100 & 111,511 & 101 \\ 
+\hline
+  male &   3,123 & 69 &  53,487 & 48 \\ 
+  female &   1,435 & 31 &  58,024 & 52 \\ 
+  totals-gender &   4,558 & 100 & 111,511 & 100 \\ 
+\hline
+  full-time job &   1,388 & 32 &  36,103 & 35 \\ 
+  part-time job &     626 & 14 &  16,673 & 16 \\ 
+  other &   2,357 & 54 &  50,323 & 49 \\ 
+  totals-job &   4,371 & 100 & 103,099 & 100 \\ 
+  no-arrests &  1,174 & 35 & 11,158 & 68 \\ 
+  recently-arrested &  2,162 & 65 &  5,160 & 32 \\ 
+  totals-arrest &  3,336 & 100 & 16,318 & 100 \\ 
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Sample incidence continued}
+\begin{table}[tbp]
+\tiny
+\begin{center}
+\caption{Incidence Table}
+\label{tab1}
+\begin{tabular}{lrrrr}
+  \hline
+ & court & \%/sd & survey & \%/sd \\ 
+  \hline
+  no  &   3,926 & 90 & 102,387 & 94 \\ 
+  yes  &     453 & 10 &   6,612 & 6 \\ 
+  totals-depression &   4,379 & 100 & 108,999 & 100 \\ 
+  yes &    304 & 10 &  4,116 & 5 \\ 
+  no &  2,863 & 90 & 71,574 & 95 \\ 
+  totals-suicide &  3,167 & 100 & 75,690 & 100 \\ 
+  hrs worked & 34 & 14 & 35 & 14 \\ 
+   \hline
+\end{tabular}
+\end{center}
+\end{table}
+\end{frame}
+
+\begin{frame}
+\frametitle{Population prevelence}
+\begin{table}[tbp]
+\tiny
+\begin{center}
+\caption{Prevalence Table}
+\label{tab2}
+\begin{tabular}{lrrrr}
+  \hline
+ & court & \%/sd & survey & \%/sd \\ 
+  \hline
+12-17 years old &   1,645,985 & 12 &  49,501,313 & 10 \\ 
+  18-25 years old &   3,750,515 & 28 &  66,518,171 & 13 \\ 
+  26-34 years old &   3,180,817 & 24 &  71,848,735 & 14 \\ 
+  35-49 years old &   3,047,468 & 23 & 128,526,567 & 26 \\ 
+  50 or older &   1,590,329 & 12 & 185,235,834 & 37 \\ 
+  totals-age &  13,215,114 & 99 & 501,630,621 & 100 \\ 
+\hline
+  nonhisp white &   7,563,449 & 57 & 339,208,446 & 68 \\ 
+  nonhisp black/afr am &   2,528,743 & 19 &  59,621,692 & 12 \\ 
+  nonhisp native am/ak native &   131,650.4 & 1 &   2,327,195 & 0 \\ 
+  nonhisp native hi/other pac isl &   11,405.97 & 0 &   1,740,380 & 0 \\ 
+  nonhisp asian &   195,014.6 & 1 &  21,776,366 & 4 \\ 
+  nonhisp more than one race &   240,001.2 & 2 &   5,950,431 & 1 \\ 
+  hispanic &   2,544,850 & 19 &  71,006,111 & 14 \\ 
+  totals-race &  13,215,114 & 99 & 501,630,621 & 99 \\ 
+\hline
+  less than \$20,000 &   3,997,539 & 30 &  85,811,488 & 17 \\ 
+  \$20,000 - \$49,999 &   5,126,830 & 39 & 162,924,658 & 32 \\ 
+  \$50,000 - \$74,999 &   1,694,583 & 13 &  90,013,428 & 18 \\ 
+  \$75,000 or more &   2,396,162 & 18 & 162,881,047 & 32 \\ 
+  totals-income &  13,215,114 & 100 & 501,630,621 & 99 \\ 
+   \hline
+\end{tabular}
+\end{center}
+\end{table}
+\end{frame}
+
+\begin{frame}
+\frametitle{Population prevelence}
+\begin{table}[tbp]
+\tiny
+\begin{center}
+\caption{Prevalence Table}
+\label{tab2}
+\begin{tabular}{lrrrr}
+  \hline
+ & court & \%/sd & survey & \%/sd \\ 
+  \hline
+  less than high school  &   3,593,331 & 27 &  68,965,098 & 14 \\ 
+  high school graduate  &   4,172,950 & 32 & 140,971,375 & 28 \\ 
+  some college  &   2,738,660 & 21 & 114,471,139 & 23 \\ 
+  college graduate  &   1,064,188 & 8 & 127,721,696 & 25 \\ 
+  12 to 17 year olds  &   1,645,985 & 12 &  49,501,313 & 10 \\ 
+  totals-education &  13,215,114 & 100 & 501,630,621 & 100 \\ 
+\hline
+  male &   9,531,887 & 72 & 243,551,973 & 49 \\ 
+  female &   3,683,226 & 28 & 258,078,648 & 51 \\ 
+  totals-gender &  13,215,114 & 100 & 501,630,621 & 100 \\ 
+\hline
+  full-time job &   5,749,347 & 44 & 226,482,525 & 46 \\ 
+  part-time job &   1,502,763 & 12 &  59,091,520 & 12 \\ 
+  other &   5,714,581 & 44 & 204,090,609 & 42 \\ 
+  totals-job &  12,966,692 & 100 & 489,664,655 & 100 \\ 
+\hline
+  no-arrests &  5,014,978 & 48 & 66,475,620 & 83 \\ 
+  recently-arrested &  5,520,611 & 52 & 14,047,785 & 17 \\ 
+  totals-arrest & 10,535,588 & 100 & 80,523,405 & 100 \\ 
+   \hline
+\end{tabular}
+\end{center}
+\end{table}
+\end{frame}
+
+\begin{frame}
+\frametitle{Population prevelence}
+\begin{table}[tbp]
+\tiny
+\begin{center}
+\caption{Prevalence Table}
+\label{tab2}
+\begin{tabular}{lrrrr}
+  \hline
+ & court & \%/sd & survey & \%/sd \\ 
+  \hline
+  no  &  11,349,669 & 88 & 461,049,002 & 93 \\ 
+  yes  &   1,546,187 & 12 &  33,784,017 & 7 \\ 
+  totals-depression &  12,895,856 & 100 & 494,833,019 & 100 \\ 
+  yes &   1,203,488 & 10 &  16,866,251 & 4 \\ 
+  no &  10,293,627 & 90 & 433,840,067 & 96 \\ 
+  totals-suicide &  11,497,115 & 100 & 450,706,318 & 100 \\ 
+  hrs worked & 38 & 14 & 38 & 14 \\ 
+   \hline
+\end{tabular}
+\end{center}
+\end{table}
+\end{frame}
+
+\subsubsection{Logistic regression coefficients}
+
+\begin{frame}
+\frametitle{Logistic Regression}
+% latex table generated in R 2.14.0 by xtable 1.6-0 package
+% Tue Jan 10 00:04:18 2012
+\begin{table}[tbp]
+\tiny
+\begin{center}
+\caption{Logistic regression coefficients}
+\label{blrsummary}
+\begin{tabular}{lrrrr}
+  \hline
+ & Estimate & Std. Error & z value & Pr($>$$|$z$|$) \\ 
+  \hline
+(Intercept) & -3.40 & 1.04 & -3.25 & 0.00 \\ 
+  12-17 years old & -0.13 & 0.09 & -1.48 & 0.14 \\ 
+  26-34 years old & 0.25 & 0.06 & 4.32 & 0.00 \\ 
+  35-49 years old & 0.29 & 0.05 & 5.64 & 0.00 \\ 
+  50 or older & 0.17 & 0.07 & 2.46 & 0.01 \\ 
+\hline
+  nonhisp black/afr am & -1.13 & 0.08 & -13.53 & 0.00 \\ 
+  nonhisp native am/ak native & -0.45 & 0.18 & -2.45 & 0.01 \\ 
+  nonhisp native hi/other pac isl & -1.80 & 0.58 & -3.09 & 0.00 \\ 
+  nonhisp asian & -1.27 & 0.17 & -7.67 & 0.00 \\ 
+  nonhisp more than one race & -0.14 & 0.11 & -1.24 & 0.21 \\ 
+  hispanic & -0.68 & 0.06 & -10.48 & 0.00 \\ 
+\hline
+  less than \$20,000 & 0.26 & 0.06 & 4.24 & 0.00 \\ 
+  \$20,000 - \$49,999 & 0.16 & 0.05 & 3.12 & 0.00 \\ 
+  \$50,000 - \$74,999 & 0.02 & 0.06 & 0.29 & 0.77 \\ 
+  less than high school  & -0.11 & 0.08 & -1.49 & 0.14 \\ 
+  high school graduate  & -0.10 & 0.05 & -1.78 & 0.08 \\ 
+  some college  & 0.05 & 0.05 & 0.93 & 0.35 \\ 
+\hline
+  female & 1.12 & 0.04 & 25.57 & 0.00 \\ 
+\hline
+  under-court-supervision & 0.54 & 0.19 & 2.81 & 0.00 \\ 
+\hline
+  full-time job & 0.05 & 1.04 & 0.05 & 0.96 \\ 
+  part-time job & 0.09 & 1.04 & 0.08 & 0.93 \\ 
+  hrs worked & -0.01 & 0.00 & -2.96 & 0.00 \\ 
+\hline
+  recently-arrested & 0.48 & 0.05 & 9.81 & 0.00 \\ 
+   \hline
+\end{tabular}
+\end{center}
+\end{table}
+
+\end{frame}
+\subsubsection{Goodness of fit}
+
+\begin{frame}
+\frametitle{Goodness of fit}
+\begin{figure}
+\begin{centering}
+\includegraphics[width=6cm]{incTable-predVal}
+\caption{Histogram of predicted depression probabilities}
+\label{hist}
+\end{centering}
+\end{figure}
+\end{frame}
+
+\section{conclusions}
+\begin{frame}
+We noticed several wide disparities in demographic character of this sub population.  
+\begin{enumerate}
+\pause \item The population is young, poor, composed of racial minorities, less educated, poorer and more likely to be male than the average American.  
+\pause \item Those under court supervision have a statistically significant greater probability of reporting recent depression.  
+\pause \item This increases if the respondent has been arrested within the last 12 months.  
+\pause \item One mild protective factor is hours worked where more hours engaged in employment serves as a moderator of recent depression.
+\end{enumerate}
+\end{frame}
+
+\end{document}
+
+
+% 
