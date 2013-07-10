@@ -271,7 +271,6 @@ class SummaryStats(models.Model):
   area_id                       = models.FloatField('Foriegn key to table containing numbered area geometries', null=True)
   area_type                     = models.CharField('Descriptor of land area subdivision like ward, census tract, etc.', max_length=30, null=True)
   area_name                     = models.CharField('Name of area subdivision if applicable like Near North Side, Lakeview, etc.', max_length = 50, null=True)
-  geom                          = models.MultiPolygonField(null=True,srid=3435)
   ptype_sf                      = models.NullBooleanField('Single family property', default=False)
   ptype_2_4                     = models.NullBooleanField('Two to four family property', default=False)
   ptype_5                       = models.NullBooleanField('Five or more family property', default=False)
@@ -338,3 +337,14 @@ class CommunityAreas(models.Model):
     return unicode(self.area_number) + u'_' + unicode(self.area_name)
   class Meta:
     app_label = 'landbank_data'
+
+class PinAreaLookup(models.Model):
+  pin				= models.CharField('Property ID number', max_length=15, null=False)
+  ward_id			= models.IntegerField('Foreign key to landbank_data_wards', null=True)
+  community_area_id		= models.IntegerField('Foreign key to landbank_data_communityareas', null=True)
+  census_tract_id		= models.IntegerField('Foreign key to landbank_data_censustracts', null=True)
+  def __unicode__(self):
+    return unicode(self.pin)
+  class Meta:
+    app_label = 'landbank_data'
+
