@@ -339,10 +339,10 @@ class CommunityAreas(models.Model):
     app_label = 'landbank_data'
 
 class PinAreaLookup(models.Model):
-  pin				= models.CharField('Property ID number', max_length=15, null=False)
-  ward_id			= models.IntegerField('Foreign key to landbank_data_wards', null=True)
-  community_area_id		= models.IntegerField('Foreign key to landbank_data_communityareas', null=True)
-  census_tract_id		= models.IntegerField('Foreign key to landbank_data_censustracts', null=True)
+  pin				= models.CharField('Property ID number', max_length=15, null=False, db_index=True)
+  ward_id			= models.IntegerField('Foreign key to landbank_data_wards', null=True, db_index=True)
+  community_area_id		= models.IntegerField('Foreign key to landbank_data_communityareas', null=True, db_index=True)
+  census_tract_id		= models.IntegerField('Foreign key to landbank_data_censustracts', null=True, db_index=True)
   def __unicode__(self):
     return unicode(self.pin)
   class Meta:
