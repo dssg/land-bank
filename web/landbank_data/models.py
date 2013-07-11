@@ -257,7 +257,7 @@ class Scavenger(models.Model):
     app_label = 'landbank_data'
 
 class CensusTract(models.Model):
-  fips 				= models.CharField('Census tract ID', max_length=20, null=True)
+  fips 				= models.BigIntegerField('Census tract identifying FIPS number', null=True)
   commarea                      = models.IntegerField('Community area', null=False)
   loc                           = models.MultiPolygonField(null=False, srid=3435)
   objects                       = models.GeoManager()
@@ -268,7 +268,7 @@ class CensusTract(models.Model):
 
 class SummaryStats(models.Model):
   # identifying characteristics of geographic area and property type segment
-  area_id                       = models.FloatField('Foriegn key to table containing numbered area geometries', null=True)
+  area_number			= models.BigIntegerField('Number, if applicable, of the political area; wards 1-50, areas 1-77, census tract FIPS codes, etc. NOT a foreign key', db_index=True, null=True)
   area_type                     = models.CharField('Descriptor of land area subdivision like ward, census tract, etc.', max_length=30, null=True)
   area_name                     = models.CharField('Name of area subdivision if applicable like Near North Side, Lakeview, etc.', max_length = 50, null=True)
   ptype_sf                      = models.NullBooleanField('Single family property', default=False)
