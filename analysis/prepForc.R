@@ -1,5 +1,8 @@
-
-d <- read.table(file="~/Documents/chicago/dssg-landbank-project/analysis/testfc.csv",header=FALSE,sep=",",)
+if(sf==1) {
+    d <- read.table(file="~/Documents/chicago/dssg-landbank-project/analysis/all_prop_defaults_by_ca_over_time.csv",header=FALSE,sep=",",)
+} else {
+    d <- read.table(file="/home/evan/Documents/chicago/dssg-landbank-project/analysis/single_family_defaults_by_ca_over_time.csv",header = FALSE,sep = ",")
+}
 library("stringr")
 library("zoo")
 createString <- function(x){
