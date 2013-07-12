@@ -1,7 +1,7 @@
 #from django.conf.urls import patterns, include, url
 from django.conf.urls.defaults import *
 from tastypie.api import Api
-from landbank_data.api import ParcelResource
+from landbank_data.api import ParcelResource, AuctionResource, CashFinResource, ForeclosureResource, MortgageResource, ScavengerResource, TransactionResource
 
 # Uncomment the next two lines to enable the admin:
 # from django.contrib import admin
@@ -9,6 +9,12 @@ from landbank_data.api import ParcelResource
 
 v1_api = Api(api_name='v1')
 v1_api.register(ParcelResource())
+v1_api.register(AuctionResource())
+v1_api.register(CashFinResource())
+v1_api.register(ForeclosureResource())
+v1_api.register(MortgageResource())
+v1_api.register(ScavengerResource())
+v1_api.register(TransactionResource())
 
 urlpatterns = patterns('',
     # Examples:
