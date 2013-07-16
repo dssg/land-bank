@@ -14,6 +14,8 @@
 - Postgres 9.1
 - PostGIS
 - Python 2.7.x
+- Numpy  1.7.1
+- Sympy  0.7.2
 
 ####Setup
 - Install Postgres and PostGIS
