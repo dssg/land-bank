@@ -50,8 +50,8 @@ def load_cashfin(cashfin_file, verbose = False):
       ca_name = row[25].strip()
       place = row[26].strip()
       gisdate = row[27].strip()
-      try: 	ptype = int(row[28])
-      except:   ptype = None
+      try: 	ptype_id = int(row[28])
+      except:   ptype_id = None
       try:	residential = int(row[29])
       except:	residential = None
       loc       = None if row[20]=='' else Point((Decimal(row[21]), Decimal(row[20])))
@@ -84,7 +84,7 @@ def load_cashfin(cashfin_file, verbose = False):
 	,ca_name = ca_name\
 	,place = place\
 	,gisdate = gisdate\
-	,ptype = ptype\
+	,ptype_id = ptype_id\
 	,residential = residential\
         ,loc = loc\
         )
@@ -117,7 +117,7 @@ def load_cashfin(cashfin_file, verbose = False):
 	,ca_name = ca_name\
 	,place = place\
 	,gisdate = gisdate\
-	,ptype = ptype\
+	,ptype_id = ptype_id\
 	,residential = residential\
         ,loc = loc\
         )
