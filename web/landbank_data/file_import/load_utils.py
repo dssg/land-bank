@@ -22,3 +22,11 @@ def yy_to_yyyy(yy):
 		return 2000 + yy_num
 	else:
 		return 1900 + yy_num 
+
+# Takes a denormalized census tract number, e.g. '101' or '8002.11' and 
+# normalizes it to an 11-digit FIPS code for cook county, e.g.
+# '17031010100' or '17031800211', respectively
+illinois_state_code = '17'
+cook_county_code = '031'
+def tract_number_to_cook_fips(tract):
+	splits = tract.split(',', 1)
