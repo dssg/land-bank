@@ -1,0 +1,15 @@
+<h1>Land Bank PIN Search</h1>
+<h2>Property Details:</h2>
+{% if assessor %}
+    <ul>
+    <li>PIN: {{ assessor.pin }}</li>
+    <li>Address: {{ assessor.houseno}} {{ assessor.direction }} {{ assessor.street }}</li>
+    <li>Property type: {{ assessor.ptype }}</li>
+    <li>Assessed value: {{ assessor.current_total_assmt }}</li>
+    <li>Building square footage: {{ assessor.sqft_bldg}}</li>
+    </ul>
+{% else %}
+    <p>No property found by that PIN....</p>
+{% endif %}
+
+<!-- TODO: implement map, charts, community area context, etc... -->
