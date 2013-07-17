@@ -7,18 +7,20 @@ from django.db import models
 
 class Migration(SchemaMigration):
     def forwards(self, orm):
-        # Renaming column for 'Assessor.pt_type1_cat' to match new field type.
-        db.rename_column(u'landbank_data_assessor', 'pt_type1_cat', 'ptype_id')
-        # Changing field 'Auction.ptype'
-        db.alter_column(u'landbank_data_assessor', 'ptype_id', self.gf('django.db.models.fields.related.ForeignKey')(default=6, to=orm['landbank_data.PropertyTypes']))
 	# Renaming column for 'Assessor.ptype' to match new field name
         db.rename_column(u'landbank_data_assessor', 'ptype', 'ptype_desc')
+        # Renaming column for 'Assessor.pt_type1_cat' to match new field type.
+        db.rename_column(u'landbank_data_assessor', 'pt_type1_cat', 'ptype')
+        # Changing field 'Auction.ptype'
+        db.alter_column(u'landbank_data_assessor', 'ptype', self.gf('django.db.models.fields.related.ForeignKey')(default=6, to=orm['landbank_data.PropertyTypes']))
 
     def backwards(self, orm):
         # Renaming column for 'Auction.ptype' to match new field type.
-        db.rename_column(u'landbank_data_assessor', 'ptype_id', 'ptype')
+        db.rename_column(u'landbank_data_assessor', 'ptype', 'pt_type1_cat')
+        # Renaming column for 'Auction.ptype_desc' to match new field type.
+        db.rename_column(u'landbank_data_assessor', 'ptype_desc', 'ptype')
         # Changing field 'Auction.ptype'
-        db.alter_column(u'landbank_data_assessor', 'ptype', self.gf('django.db.models.fields.IntegerField')(null=True))
+        db.alter_column(u'landbank_data_assessor', 'pt_type1_cat', self.gf('django.db.models.fields.IntegerField')(null=True))
 
     models = {
         'landbank_data.assessor': {
@@ -46,7 +48,7 @@ class Migration(SchemaMigration):
             'pin': ('django.db.models.fields.CharField', [], {'max_length': '14', 'db_index': 'True'}),
             'place': ('django.db.models.fields.CharField', [], {'max_length': '100', 'null': 'True'}),
             'ptype_desc': ('django.db.models.fields.CharField', [], {'max_length': '100', 'null': 'True'}),
-            'ptype_id': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['landbank_data.PropertyTypes']"}),
+            'ptype': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['landbank_data.PropertyTypes']"}),
             'sqft_bldg': ('django.db.models.fields.FloatField', [], {'null': 'True'}),
             'sqft_land': ('django.db.models.fields.FloatField', [], {'null': 'True'}),
             'street': ('django.db.models.fields.CharField', [], {'max_length': '100', 'null': 'True'}),
