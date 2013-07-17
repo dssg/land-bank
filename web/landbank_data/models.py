@@ -223,7 +223,7 @@ class Assessor(models.Model):
   type_pt_5                     = models.IntegerField('5+ unit building', null=True)
   type_pt_nonres                = models.IntegerField('Non-residental building', null=True)
   type_pt_unknown               = models.IntegerField('Building of unknown type', null=True)
-  ptype_id                      = models.ForeignKey('PropertyTypes')
+  ptype                         = models.ForeignKey('PropertyTypes')
   estim_hunit                   = models.IntegerField('Estimated number of housing units based on sqft', null=True)
   lat_y                         = models.FloatField('Latitude', null=True)
   long_x                        = models.FloatField('Longitude', null=True)
