@@ -1,12 +1,25 @@
 <h1>Land Bank PIN Search</h1>
-<h2>Property Details:</h2>
 {% if assessor %}
+<img src="http://www.cookcountyassessor.com/ImageStreamer/StreamImage.aspx?pin={{ assessor.pin }}" style="max-width: 380px; height: auto;"/><br />
+<h2>Property Details:</h2>
     <ul>
     <li>PIN: {{ assessor.pin }}</li>
     <li>Address: {{ assessor.houseno}} {{ assessor.direction }} {{ assessor.street }}</li>
     <li>Property type: {{ assessor.ptype }}</li>
     <li>Assessed value: {{ assessor.current_total_assmt }}</li>
     <li>Building square footage: {{ assessor.sqft_bldg}}</li>
+    {% if ward %}
+        <li><b>Ward:</b></li>
+        <ul><li>{{ ward.ward }}</li><li>Alderman {{ ward.alderman }}</li></ul>
+    {% endif %}
+    {% if ca %}
+        <li><b>Community Area:</b></li>
+        <ul><li>{{ ca.area_number }}: {{ ca.area_name }}</li></ul>
+    {% endif %}
+    {% if tract %}
+        <li><b>Census Tract:</b></li>
+        <ul><li>{{ tract.fips }}</li></il>
+    {% endif %}
     </ul>
 {% else %}
     <p>No property found by that PIN....</p>
