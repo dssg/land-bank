@@ -1,8 +1,12 @@
-if(sf==1) {
-    d <- read.table(file="~/Documents/chicago/dssg-landbank-project/analysis/all_prop_defaults_by_ca_over_time.csv",header=FALSE,sep=",",)
-} else {
-    d <- read.table(file="/home/evan/Documents/chicago/dssg-landbank-project/analysis/single_family_defaults_by_ca_over_time.csv",header = FALSE,sep = ",")
-}
+switch(seriesFlag,
+       T1={d <- read.table(file="single_fam_mort_count_trans_by_qtr.csv",header = TRUE,sep=",")
+       },
+       T2={d <- read.table(file="/home/evan/Documents/chicago/dssg-landbank-project/analysis/single_family_defaults_by_ca_over_time.csv",header = FALSE,sep = ",")
+       },
+       T3={d <- read.table(file="single_fam_mort_median_trans_by_qtr.csv",header = TRUE,sep=",")
+       },
+        stop("Enter something that switches me")
+)
 library("stringr")
 library("zoo")
 createString <- function(x){
@@ -13,7 +17,15 @@ createString <- function(x){
 
 community_area <- str_trim(d[,1],side = "both")
 d<-data.frame(d[,2],community_area,d[,3])
-colnames(d)[c(1,3)] <- c("quarterly num","foreclosure")
+switch(seriesFlag,
+    T1={colnames(d)[c(1,3)] <- c("quarterly num","mortgage")
+    },
+    T2={colnames(d)[c(1,3)] <- c("quarterly num","foreclosure")
+    },
+    T3={colnames(d)[c(1,3)] <- c("quarterly num","mortgage_med_size")        
+    },
+        stop("Enter something that switches me")
+)
 head(d)
 dateStrings <- unlist(lapply(d[,1],createString))
 yyyyq_doc <- as.yearqtr(dateStrings)
@@ -29,5 +41,16 @@ head(d)
 ## >
 
 library(ggplot2)
-p <- ggplot(data=d[d$community_area=='Albany Park',], aes(yyyyq_doc_date,foreclosure))+geom_line()
+
+
+switch(seriesFlag,    
+    T1={p <- ggplot(data=d[d$community_area=='Albany Park',], aes(yyyyq_doc_date,mortgage))+geom_line()
+    },
+    T2={p <- ggplot(data=d[d$community_area=='Albany Park',], aes(yyyyq_doc_date,foreclosure))+geom_line()
+    },
+    T3={p <- ggplot(data=d[d$community_area=='Albany Park',], aes(yyyyq_doc_date,mortgage_med_size))+geom_line()
+    },
+    stop("Enter something that switches me")
+)
+
 print(p)
