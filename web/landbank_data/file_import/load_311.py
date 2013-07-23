@@ -3,20 +3,24 @@ from models import Vacancy311
 from decimal import Decimal
 from django.contrib.gis.geos import Point
 import datetime
+from pytz import timezone
 
 file_311 = '/mnt/ebs/data/311/311_Service_Requests_-_Vacant_and_Abandoned_Buildings_Reported.csv'
+
+cst=timezone('US/Central')
 
 def run(verbose = True):
   load_vacancyreport(file_311, verbose = verbose)
 
 def load_vacancyreport(file_311, verbose = False):
   with open(file_311,'r') as f:
-    reader = csv.reader(f)
+    reader = csv.reader(f, quoting=csv.QUOTE_MINIMAL)
     reader.next()
     for row in reader:
+      print row
       request_no   = row[1]
       request_date = None
-      try:    request_date = datetime.date.strptime(row[2], '%m/%d/%Y')
+      try: request_date = cst.localize(datetime.datetime.strptime(row[2], '%m/%d/%Y'))
       except: pass
       bldg_loc     = row[3][0:49]
       hazardous    = row[4][0:49]
