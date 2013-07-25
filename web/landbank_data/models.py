@@ -391,6 +391,19 @@ class CensusTract(models.Model):
   class Meta:
     app_label = 'landbank_data'
 
+class CmapPlan(models.Model):
+  name                          = models.CharField('CMAP LTA project name', max_length=200)
+  status                        = models.CharField('Project status', max_length=50)
+  study_area                    = models.CharField('Study area name', max_length=100)
+  short_descr                   = models.CharField('Short description', max_length=100)
+  url                           = models.CharField('Plan web site', max_length=200)
+  loc                           = models.MultiPolygonField(null=False, srid=3435)
+  objects                       = models.GeoManager()
+  def __unicode__(self):
+    return unicode(self.name)
+  class Meta:
+    app_label = 'landbank_data'
+
 class SummaryStats(models.Model):
   # identifying characteristics of geographic area and property type segment
   area_number			= models.BigIntegerField('Number, if applicable, of the political area; wards 1-50, areas 1-77, census tract FIPS codes, etc. NOT a foreign key', db_index=True, null=True)
