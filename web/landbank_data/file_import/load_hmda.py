@@ -6,11 +6,20 @@ loanapplication_file = '/mnt/ebs/data/hmda/hmda_cook_09_11.csv'
 def run(verbose = True):
   load_loanapplications(loanapplication_file, verbose = verbose)
 
+def convert_3val_boolean(value):
+  try: intval = int(value)
+  except: intval = 2
+  return False if intval is not 1 else True
+
 def load_loanapplications(scavenger_file, verbose = False):
   with open(loanapplication_file,'r') as f:
     reader = csv.reader(f, delimiter=",")
     #reader.next() # no header in this file
     #i = 0;
+    skip_lookup = False
+    if LoanApplication.objects.count() == 0:
+      skip_lookup = True
+
     for row in reader:
       #if (i==2):
         #break
@@ -20,9 +29,9 @@ def load_loanapplications(scavenger_file, verbose = False):
       loan_type			= int(row[3])
       property_type             = int(row[4])
       loan_purpose              = int(row[5])
-      owner_occ		        = None if row[6] == '' else bool(row[6])
+      owner_occ		        = convert_3val_boolean(row[6])
       loan_amt                  = int(row[7]) * 1000
-      preapproval_req           = None if row[8] == '' else bool(row[8])
+      preapproval_req           = convert_3val_boolean(row[8])
       action_type               = int(row[9])
       try:  fips                = long(row[11]+row[12]+row[13].replace(".",""))
       except: fips		= None
@@ -37,7 +46,7 @@ def load_loanapplications(scavenger_file, verbose = False):
       except: denial_reason3	= None
       try: rate_spread          = float(row[33])
       except: rate_spread	= None
-      try:  hoepa_status        = None if row[34] == '' else bool(row[34])
+      try:  hoepa_status        = None if row[34] == '' else bool(2 - int(row[34]))
       except: hopea_status      = None
       try:  lien_status         = int(row[35]) if int(row[35])>0 else None
       except: lien_status       = None
@@ -54,6 +63,8 @@ def load_loanapplications(scavenger_file, verbose = False):
       try: num_1_4              = int(row[43])
       except: num_1_4           = None
       try:
+        if skip_lookup:
+          raise Exception('no lookup')
         loanapp = LoanApplication.objects.get(\
           year              = year\
           ,respondent_id     = respondent_id\
