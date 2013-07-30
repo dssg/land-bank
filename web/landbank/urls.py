@@ -28,5 +28,6 @@ urlpatterns = patterns('',
     # Uncomment the next line to enable the admin:
     # url(r'^admin/', include(admin.site.urls)),
     (r'^pin/', include('landbank_data.urls')),
+    (r'^commarea/', 'landbank_data.views.commarea'),
     (r'api/', include(v1_api.urls)),
 )
