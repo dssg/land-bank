@@ -476,9 +476,9 @@ class CommunityAreas(models.Model):
 
 class PinAreaLookup(models.Model):
   pin				= models.CharField('Property ID number', max_length=15, null=False, db_index=True)
-  ward_id			= models.ForeignKey('Wards',null=True)
-  community_area_id		= models.ForeignKey('CommunityAreas',null=True)
-  census_tract_id		= models.ForeignKey('CensusTract',null=True)
+  ward				= models.ForeignKey('Wards',null=True)
+  community_area		= models.ForeignKey('CommunityAreas',null=True)
+  census_tract			= models.ForeignKey('CensusTract',null=True)
   def __unicode__(self):
     return unicode(self.pin)
   class Meta:
