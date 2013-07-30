@@ -14,8 +14,8 @@ createString <- function(x){
   
   return(createString)
 }
-
 community_area <- str_trim(d[,1],side = "both")
+d[d['PTYPE2011']=='SINGLE FAMILY',]
 d<-data.frame(d[,2],community_area,d[,3])
 switch(seriesFlag,
     T1={colnames(d)[c(1,3)] <- c("quarterly num","mortgage")

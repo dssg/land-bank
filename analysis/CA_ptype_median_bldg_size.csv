@@ -1,0 +1,630 @@
+CA_name,PTYPE2011,sqft_bldg_11
+                                        ,2-6 UNIT,3744.0
+                                        ,7+ UNIT,0.0
+                                        ,COMM/IND,0.0
+                                        ,CONDO,0.0
+                                        ,NON PROFIT,0.0
+                                        ,SINGLE FAMILY,2589.0
+                                        ,TOWN HOUSE,1882.0
+                                        ,VACANT LAND,0.0
+Albany Park                             ,2-6 UNIT,2597.0
+Albany Park                             ,7+ UNIT,0.0
+Albany Park                             ,COMM/IND,0.0
+Albany Park                             ,CONDO,0.0
+Albany Park                             ,NON PROFIT,0.0
+Albany Park                             ,SINGLE FAMILY,1275.0
+Albany Park                             ,TOWN HOUSE,1076.0
+Albany Park                             ,VACANT LAND,0.0
+Archer Heights                          ,2-6 UNIT,2338.0
+Archer Heights                          ,7+ UNIT,0.0
+Archer Heights                          ,COMM/IND,0.0
+Archer Heights                          ,CONDO,0.0
+Archer Heights                          ,NON PROFIT,0.0
+Archer Heights                          ,SINGLE FAMILY,1100.0
+Archer Heights                          ,VACANT LAND,0.0
+Armour Square                           ,2-6 UNIT,2657.0
+Armour Square                           ,7+ UNIT,0.0
+Armour Square                           ,COMM/IND,0.0
+Armour Square                           ,CONDO,0.0
+Armour Square                           ,NON PROFIT,0.0
+Armour Square                           ,SINGLE FAMILY,1752.5
+Armour Square                           ,TOWN HOUSE,1493.0
+Armour Square                           ,VACANT LAND,0.0
+Ashburn                                 ,2-6 UNIT,2923.0
+Ashburn                                 ,7+ UNIT,0.0
+Ashburn                                 ,COMM/IND,0.0
+Ashburn                                 ,CONDO,0.0
+Ashburn                                 ,NON PROFIT,0.0
+Ashburn                                 ,SINGLE FAMILY,1097.0
+Ashburn                                 ,TOWN HOUSE,1516.0
+Ashburn                                 ,VACANT LAND,0.0
+Auburn Gresham                          ,2-6 UNIT,2744.0
+Auburn Gresham                          ,7+ UNIT,0.0
+Auburn Gresham                          ,COMM/IND,0.0
+Auburn Gresham                          ,CONDO,0.0
+Auburn Gresham                          ,NON PROFIT,0.0
+Auburn Gresham                          ,SINGLE FAMILY,1175.0
+Auburn Gresham                          ,TOWN HOUSE,1008.0
+Auburn Gresham                          ,VACANT LAND,0.0
+Austin                                  ,2-6 UNIT,2421.5
+Austin                                  ,7+ UNIT,0.0
+Austin                                  ,COMM/IND,0.0
+Austin                                  ,CONDO,0.0
+Austin                                  ,NON PROFIT,0.0
+Austin                                  ,SINGLE FAMILY,1283.0
+Austin                                  ,TOWN HOUSE,1058.0
+Austin                                  ,VACANT LAND,0.0
+Avalon Park                             ,2-6 UNIT,2898.0
+Avalon Park                             ,7+ UNIT,0.0
+Avalon Park                             ,COMM/IND,0.0
+Avalon Park                             ,CONDO,0.0
+Avalon Park                             ,SINGLE FAMILY,1141.0
+Avalon Park                             ,TOWN HOUSE,1008.0
+Avalon Park                             ,VACANT LAND,0.0
+Avondale                                ,2-6 UNIT,2232.0
+Avondale                                ,7+ UNIT,0.0
+Avondale                                ,COMM/IND,0.0
+Avondale                                ,CONDO,0.0
+Avondale                                ,NON PROFIT,0.0
+Avondale                                ,SINGLE FAMILY,1155.0
+Avondale                                ,TOWN HOUSE,1565.0
+Avondale                                ,VACANT LAND,0.0
+Belmont Cragin                          ,2-6 UNIT,2310.0
+Belmont Cragin                          ,7+ UNIT,0.0
+Belmont Cragin                          ,COMM/IND,0.0
+Belmont Cragin                          ,CONDO,0.0
+Belmont Cragin                          ,NON PROFIT,0.0
+Belmont Cragin                          ,SINGLE FAMILY,1150.0
+Belmont Cragin                          ,TOWN HOUSE,1200.0
+Belmont Cragin                          ,VACANT LAND,0.0
+Beverly                                 ,2-6 UNIT,3141.0
+Beverly                                 ,7+ UNIT,0.0
+Beverly                                 ,COMM/IND,0.0
+Beverly                                 ,CONDO,0.0
+Beverly                                 ,NON PROFIT,0.0
+Beverly                                 ,SINGLE FAMILY,1600.0
+Beverly                                 ,TOWN HOUSE,1232.0
+Beverly                                 ,VACANT LAND,0.0
+Bridgeport                              ,2-6 UNIT,2400.0
+Bridgeport                              ,7+ UNIT,0.0
+Bridgeport                              ,COMM/IND,0.0
+Bridgeport                              ,CONDO,0.0
+Bridgeport                              ,NON PROFIT,0.0
+Bridgeport                              ,SINGLE FAMILY,1209.0
+Bridgeport                              ,TOWN HOUSE,1386.0
+Bridgeport                              ,VACANT LAND,0.0
+Brighton Park                           ,2-6 UNIT,1926.0
+Brighton Park                           ,7+ UNIT,0.0
+Brighton Park                           ,COMM/IND,0.0
+Brighton Park                           ,CONDO,0.0
+Brighton Park                           ,NON PROFIT,0.0
+Brighton Park                           ,SINGLE FAMILY,1040.0
+Brighton Park                           ,TOWN HOUSE,1747.0
+Brighton Park                           ,VACANT LAND,0.0
+Burnside                                ,2-6 UNIT,1848.0
+Burnside                                ,7+ UNIT,0.0
+Burnside                                ,COMM/IND,0.0
+Burnside                                ,SINGLE FAMILY,1040.0
+Burnside                                ,TOWN HOUSE,1392.0
+Burnside                                ,VACANT LAND,0.0
+Calumet Heights                         ,2-6 UNIT,2473.5
+Calumet Heights                         ,7+ UNIT,0.0
+Calumet Heights                         ,COMM/IND,0.0
+Calumet Heights                         ,CONDO,0.0
+Calumet Heights                         ,NON PROFIT,0.0
+Calumet Heights                         ,SINGLE FAMILY,1188.0
+Calumet Heights                         ,TOWN HOUSE,1388.0
+Calumet Heights                         ,VACANT LAND,0.0
+Chatham                                 ,2-6 UNIT,3048.0
+Chatham                                 ,7+ UNIT,0.0
+Chatham                                 ,COMM/IND,0.0
+Chatham                                 ,CONDO,0.0
+Chatham                                 ,SINGLE FAMILY,1128.0
+Chatham                                 ,TOWN HOUSE,1210.0
+Chatham                                 ,VACANT LAND,0.0
+Chicago Lawn                            ,2-6 UNIT,2509.0
+Chicago Lawn                            ,7+ UNIT,0.0
+Chicago Lawn                            ,COMM/IND,0.0
+Chicago Lawn                            ,CONDO,0.0
+Chicago Lawn                            ,SINGLE FAMILY,1116.0
+Chicago Lawn                            ,TOWN HOUSE,993.5
+Chicago Lawn                            ,VACANT LAND,0.0
+Clearing                                ,2-6 UNIT,2515.0
+Clearing                                ,7+ UNIT,0.0
+Clearing                                ,COMM/IND,0.0
+Clearing                                ,CONDO,0.0
+Clearing                                ,NON PROFIT,0.0
+Clearing                                ,SINGLE FAMILY,1073.0
+Clearing                                ,TOWN HOUSE,1761.0
+Clearing                                ,VACANT LAND,0.0
+Douglas                                 ,2-6 UNIT,2800.0
+Douglas                                 ,7+ UNIT,0.0
+Douglas                                 ,COMM/IND,0.0
+Douglas                                 ,CONDO,0.0
+Douglas                                 ,SINGLE FAMILY,1862.0
+Douglas                                 ,TOWN HOUSE,1707.0
+Douglas                                 ,VACANT LAND,0.0
+Dunning                                 ,2-6 UNIT,2572.0
+Dunning                                 ,7+ UNIT,0.0
+Dunning                                 ,COMM/IND,0.0
+Dunning                                 ,CONDO,0.0
+Dunning                                 ,NON PROFIT,0.0
+Dunning                                 ,SINGLE FAMILY,1179.0
+Dunning                                 ,TOWN HOUSE,1171.0
+Dunning                                 ,VACANT LAND,0.0
+East Garfield                           ,2-6 UNIT,2520.0
+East Garfield                           ,7+ UNIT,0.0
+East Garfield                           ,COMM/IND,0.0
+East Garfield                           ,CONDO,0.0
+East Garfield                           ,SINGLE FAMILY,1591.0
+East Garfield                           ,TOWN HOUSE,1260.0
+East Garfield                           ,VACANT LAND,0.0
+East Side                               ,2-6 UNIT,2250.0
+East Side                               ,7+ UNIT,0.0
+East Side                               ,COMM/IND,0.0
+East Side                               ,SINGLE FAMILY,1050.0
+East Side                               ,TOWN HOUSE,947.0
+East Side                               ,VACANT LAND,0.0
+Edgewater                               ,2-6 UNIT,2883.0
+Edgewater                               ,7+ UNIT,0.0
+Edgewater                               ,COMM/IND,0.0
+Edgewater                               ,CONDO,0.0
+Edgewater                               ,NON PROFIT,0.0
+Edgewater                               ,SINGLE FAMILY,1756.0
+Edgewater                               ,TOWN HOUSE,1230.0
+Edgewater                               ,VACANT LAND,0.0
+Edison Park                             ,2-6 UNIT,2851.0
+Edison Park                             ,7+ UNIT,0.0
+Edison Park                             ,COMM/IND,0.0
+Edison Park                             ,CONDO,0.0
+Edison Park                             ,SINGLE FAMILY,1332.0
+Edison Park                             ,TOWN HOUSE,1278.0
+Edison Park                             ,VACANT LAND,0.0
+Englewood                               ,2-6 UNIT,2352.0
+Englewood                               ,7+ UNIT,0.0
+Englewood                               ,COMM/IND,0.0
+Englewood                               ,CONDO,0.0
+Englewood                               ,SINGLE FAMILY,1065.0
+Englewood                               ,TOWN HOUSE,1036.0
+Englewood                               ,VACANT LAND,0.0
+Forest Glen                             ,2-6 UNIT,2611.0
+Forest Glen                             ,7+ UNIT,0.0
+Forest Glen                             ,COMM/IND,0.0
+Forest Glen                             ,CONDO,0.0
+Forest Glen                             ,NON PROFIT,0.0
+Forest Glen                             ,SINGLE FAMILY,1538.0
+Forest Glen                             ,TOWN HOUSE,1578.0
+Forest Glen                             ,VACANT LAND,0.0
+Fuller Park                             ,2-6 UNIT,2072.0
+Fuller Park                             ,7+ UNIT,10152.0
+Fuller Park                             ,COMM/IND,0.0
+Fuller Park                             ,CONDO,0.0
+Fuller Park                             ,SINGLE FAMILY,1000.0
+Fuller Park                             ,TOWN HOUSE,1118.0
+Fuller Park                             ,VACANT LAND,0.0
+Gage Park                               ,2-6 UNIT,2136.0
+Gage Park                               ,7+ UNIT,0.0
+Gage Park                               ,COMM/IND,0.0
+Gage Park                               ,CONDO,0.0
+Gage Park                               ,NON PROFIT,0.0
+Gage Park                               ,SINGLE FAMILY,1079.0
+Gage Park                               ,TOWN HOUSE,1409.0
+Gage Park                               ,VACANT LAND,0.0
+Garfield Ridge                          ,2-6 UNIT,2497.0
+Garfield Ridge                          ,7+ UNIT,0.0
+Garfield Ridge                          ,COMM/IND,0.0
+Garfield Ridge                          ,CONDO,0.0
+Garfield Ridge                          ,NON PROFIT,0.0
+Garfield Ridge                          ,SINGLE FAMILY,1056.0
+Garfield Ridge                          ,TOWN HOUSE,1206.0
+Garfield Ridge                          ,VACANT LAND,0.0
+Grand Boulevard                         ,2-6 UNIT,3345.0
+Grand Boulevard                         ,7+ UNIT,0.0
+Grand Boulevard                         ,COMM/IND,0.0
+Grand Boulevard                         ,CONDO,0.0
+Grand Boulevard                         ,SINGLE FAMILY,2245.0
+Grand Boulevard                         ,TOWN HOUSE,1265.0
+Grand Boulevard                         ,VACANT LAND,0.0
+Greater Grand Crossing                  ,2-6 UNIT,2448.0
+Greater Grand Crossing                  ,7+ UNIT,0.0
+Greater Grand Crossing                  ,COMM/IND,0.0
+Greater Grand Crossing                  ,CONDO,0.0
+Greater Grand Crossing                  ,NON PROFIT,0.0
+Greater Grand Crossing                  ,SINGLE FAMILY,1200.0
+Greater Grand Crossing                  ,TOWN HOUSE,1038.0
+Greater Grand Crossing                  ,VACANT LAND,0.0
+Hegewisch                               ,2-6 UNIT,2120.0
+Hegewisch                               ,7+ UNIT,0.0
+Hegewisch                               ,COMM/IND,0.0
+Hegewisch                               ,CONDO,0.0
+Hegewisch                               ,NON PROFIT,0.0
+Hegewisch                               ,SINGLE FAMILY,1068.0
+Hegewisch                               ,TOWN HOUSE,575.0
+Hegewisch                               ,VACANT LAND,0.0
+Hermosa                                 ,2-6 UNIT,2311.0
+Hermosa                                 ,7+ UNIT,0.0
+Hermosa                                 ,COMM/IND,0.0
+Hermosa                                 ,CONDO,0.0
+Hermosa                                 ,SINGLE FAMILY,1069.0
+Hermosa                                 ,VACANT LAND,0.0
+Humboldt Park                           ,2-6 UNIT,2310.0
+Humboldt Park                           ,7+ UNIT,0.0
+Humboldt Park                           ,COMM/IND,0.0
+Humboldt Park                           ,CONDO,0.0
+Humboldt Park                           ,SINGLE FAMILY,1020.0
+Humboldt Park                           ,TOWN HOUSE,1114.0
+Humboldt Park                           ,VACANT LAND,0.0
+Hyde Park                               ,2-6 UNIT,4240.0
+Hyde Park                               ,7+ UNIT,0.0
+Hyde Park                               ,COMM/IND,0.0
+Hyde Park                               ,CONDO,0.0
+Hyde Park                               ,NON PROFIT,0.0
+Hyde Park                               ,SINGLE FAMILY,2288.0
+Hyde Park                               ,TOWN HOUSE,1676.0
+Hyde Park                               ,VACANT LAND,0.0
+Irving Park                             ,2-6 UNIT,2300.0
+Irving Park                             ,7+ UNIT,0.0
+Irving Park                             ,COMM/IND,0.0
+Irving Park                             ,CONDO,0.0
+Irving Park                             ,NON PROFIT,0.0
+Irving Park                             ,SINGLE FAMILY,1260.0
+Irving Park                             ,TOWN HOUSE,1530.0
+Irving Park                             ,VACANT LAND,0.0
+Jefferson Park                          ,2-6 UNIT,2263.5
+Jefferson Park                          ,7+ UNIT,0.0
+Jefferson Park                          ,COMM/IND,0.0
+Jefferson Park                          ,CONDO,0.0
+Jefferson Park                          ,NON PROFIT,0.0
+Jefferson Park                          ,SINGLE FAMILY,1242.0
+Jefferson Park                          ,TOWN HOUSE,1089.0
+Jefferson Park                          ,VACANT LAND,0.0
+Kenwood                                 ,2-6 UNIT,3154.0
+Kenwood                                 ,7+ UNIT,0.0
+Kenwood                                 ,COMM/IND,0.0
+Kenwood                                 ,CONDO,0.0
+Kenwood                                 ,SINGLE FAMILY,2650.0
+Kenwood                                 ,TOWN HOUSE,1476.0
+Kenwood                                 ,VACANT LAND,0.0
+Lakeview                                ,2-6 UNIT,2931.0
+Lakeview                                ,7+ UNIT,0.0
+Lakeview                                ,COMM/IND,0.0
+Lakeview                                ,CONDO,0.0
+Lakeview                                ,NON PROFIT,0.0
+Lakeview                                ,SINGLE FAMILY,2366.0
+Lakeview                                ,TOWN HOUSE,1771.0
+Lakeview                                ,VACANT LAND,0.0
+Lincoln Park                            ,2-6 UNIT,3175.5
+Lincoln Park                            ,7+ UNIT,0.0
+Lincoln Park                            ,COMM/IND,0.0
+Lincoln Park                            ,CONDO,0.0
+Lincoln Park                            ,NON PROFIT,0.0
+Lincoln Park                            ,SINGLE FAMILY,2816.0
+Lincoln Park                            ,TOWN HOUSE,1608.0
+Lincoln Park                            ,VACANT LAND,0.0
+Lincoln Square                          ,2-6 UNIT,2700.0
+Lincoln Square                          ,7+ UNIT,0.0
+Lincoln Square                          ,COMM/IND,0.0
+Lincoln Square                          ,CONDO,0.0
+Lincoln Square                          ,NON PROFIT,0.0
+Lincoln Square                          ,SINGLE FAMILY,1580.0
+Lincoln Square                          ,TOWN HOUSE,1557.0
+Lincoln Square                          ,VACANT LAND,0.0
+Logan Square                            ,2-6 UNIT,2448.0
+Logan Square                            ,7+ UNIT,0.0
+Logan Square                            ,COMM/IND,0.0
+Logan Square                            ,CONDO,0.0
+Logan Square                            ,NON PROFIT,0.0
+Logan Square                            ,SINGLE FAMILY,1428.0
+Logan Square                            ,TOWN HOUSE,1728.0
+Logan Square                            ,VACANT LAND,0.0
+Loop                                    ,2-6 UNIT,6980.0
+Loop                                    ,7+ UNIT,0.0
+Loop                                    ,COMM/IND,0.0
+Loop                                    ,CONDO,0.0
+Loop                                    ,NON PROFIT,0.0
+Loop                                    ,SINGLE FAMILY,0.0
+Loop                                    ,TOWN HOUSE,1035.0
+Loop                                    ,VACANT LAND,0.0
+Lower West Side                         ,2-6 UNIT,2534.0
+Lower West Side                         ,7+ UNIT,0.0
+Lower West Side                         ,COMM/IND,0.0
+Lower West Side                         ,CONDO,0.0
+Lower West Side                         ,NON PROFIT,0.0
+Lower West Side                         ,SINGLE FAMILY,1040.0
+Lower West Side                         ,TOWN HOUSE,1351.0
+Lower West Side                         ,VACANT LAND,0.0
+McKinley Park                           ,2-6 UNIT,2112.0
+McKinley Park                           ,7+ UNIT,0.0
+McKinley Park                           ,COMM/IND,0.0
+McKinley Park                           ,CONDO,0.0
+McKinley Park                           ,SINGLE FAMILY,1045.0
+McKinley Park                           ,TOWN HOUSE,1584.0
+McKinley Park                           ,VACANT LAND,0.0
+Montclare                               ,2-6 UNIT,2354.0
+Montclare                               ,7+ UNIT,0.0
+Montclare                               ,COMM/IND,0.0
+Montclare                               ,CONDO,0.0
+Montclare                               ,NON PROFIT,0.0
+Montclare                               ,SINGLE FAMILY,1152.0
+Montclare                               ,TOWN HOUSE,1285.0
+Montclare                               ,VACANT LAND,0.0
+Morgan Park                             ,2-6 UNIT,2604.0
+Morgan Park                             ,7+ UNIT,0.0
+Morgan Park                             ,COMM/IND,0.0
+Morgan Park                             ,CONDO,0.0
+Morgan Park                             ,NON PROFIT,0.0
+Morgan Park                             ,SINGLE FAMILY,1195.0
+Morgan Park                             ,TOWN HOUSE,1212.0
+Morgan Park                             ,VACANT LAND,0.0
+Mount Greenwood                         ,2-6 UNIT,2550.0
+Mount Greenwood                         ,7+ UNIT,0.0
+Mount Greenwood                         ,COMM/IND,0.0
+Mount Greenwood                         ,CONDO,0.0
+Mount Greenwood                         ,NON PROFIT,0.0
+Mount Greenwood                         ,SINGLE FAMILY,1132.0
+Mount Greenwood                         ,TOWN HOUSE,1137.5
+Mount Greenwood                         ,VACANT LAND,0.0
+Near North Side                         ,2-6 UNIT,3861.0
+Near North Side                         ,7+ UNIT,0.0
+Near North Side                         ,COMM/IND,0.0
+Near North Side                         ,CONDO,0.0
+Near North Side                         ,NON PROFIT,0.0
+Near North Side                         ,SINGLE FAMILY,3153.0
+Near North Side                         ,TOWN HOUSE,2113.0
+Near North Side                         ,VACANT LAND,0.0
+Near South Side                         ,2-6 UNIT,8184.0
+Near South Side                         ,7+ UNIT,0.0
+Near South Side                         ,COMM/IND,0.0
+Near South Side                         ,CONDO,0.0
+Near South Side                         ,NON PROFIT,0.0
+Near South Side                         ,SINGLE FAMILY,2262.0
+Near South Side                         ,TOWN HOUSE,1970.0
+Near South Side                         ,VACANT LAND,0.0
+Near West Side                          ,2-6 UNIT,2916.0
+Near West Side                          ,7+ UNIT,0.0
+Near West Side                          ,COMM/IND,0.0
+Near West Side                          ,CONDO,0.0
+Near West Side                          ,NON PROFIT,0.0
+Near West Side                          ,SINGLE FAMILY,1600.0
+Near West Side                          ,TOWN HOUSE,1859.0
+Near West Side                          ,VACANT LAND,0.0
+New City                                ,2-6 UNIT,2160.0
+New City                                ,7+ UNIT,0.0
+New City                                ,COMM/IND,0.0
+New City                                ,CONDO,0.0
+New City                                ,NON PROFIT,0.0
+New City                                ,SINGLE FAMILY,1022.0
+New City                                ,TOWN HOUSE,1575.0
+New City                                ,VACANT LAND,0.0
+North Center                            ,2-6 UNIT,2408.0
+North Center                            ,7+ UNIT,0.0
+North Center                            ,COMM/IND,0.0
+North Center                            ,CONDO,0.0
+North Center                            ,NON PROFIT,0.0
+North Center                            ,SINGLE FAMILY,1838.5
+North Center                            ,TOWN HOUSE,2137.0
+North Center                            ,VACANT LAND,0.0
+North Cook                              ,2-6 UNIT,3120.0
+North Cook                              ,7+ UNIT,0.0
+North Cook                              ,COMM/IND,0.0
+North Cook                              ,CONDO,0.0
+North Cook                              ,NON PROFIT,0.0
+North Cook                              ,SINGLE FAMILY,1744.0
+North Cook                              ,TOWN HOUSE,1483.0
+North Cook                              ,VACANT LAND,0.0
+North Lawndale                          ,2-6 UNIT,2568.0
+North Lawndale                          ,7+ UNIT,0.0
+North Lawndale                          ,COMM/IND,0.0
+North Lawndale                          ,CONDO,0.0
+North Lawndale                          ,SINGLE FAMILY,1181.0
+North Lawndale                          ,TOWN HOUSE,1312.0
+North Lawndale                          ,VACANT LAND,0.0
+North Park                              ,2-6 UNIT,2804.0
+North Park                              ,7+ UNIT,0.0
+North Park                              ,COMM/IND,0.0
+North Park                              ,CONDO,0.0
+North Park                              ,SINGLE FAMILY,1554.5
+North Park                              ,TOWN HOUSE,1352.0
+North Park                              ,VACANT LAND,0.0
+Northwest Cook                          ,2-6 UNIT,4928.0
+Northwest Cook                          ,7+ UNIT,0.0
+Northwest Cook                          ,COMM/IND,0.0
+Northwest Cook                          ,CONDO,0.0
+Northwest Cook                          ,NON PROFIT,0.0
+Northwest Cook                          ,SINGLE FAMILY,1578.0
+Northwest Cook                          ,TOWN HOUSE,1430.0
+Northwest Cook                          ,VACANT LAND,0.0
+Norwood Park                            ,2-6 UNIT,2456.0
+Norwood Park                            ,7+ UNIT,0.0
+Norwood Park                            ,COMM/IND,0.0
+Norwood Park                            ,CONDO,0.0
+Norwood Park                            ,NON PROFIT,0.0
+Norwood Park                            ,SINGLE FAMILY,1208.0
+Norwood Park                            ,TOWN HOUSE,1131.0
+Norwood Park                            ,VACANT LAND,0.0
+O'Hare                                  ,2-6 UNIT,4025.0
+O'Hare                                  ,7+ UNIT,0.0
+O'Hare                                  ,COMM/IND,0.0
+O'Hare                                  ,CONDO,0.0
+O'Hare                                  ,NON PROFIT,
+O'Hare                                  ,SINGLE FAMILY,1373.0
+O'Hare                                  ,TOWN HOUSE,1434.0
+O'Hare                                  ,VACANT LAND,0.0
+Oakland                                 ,2-6 UNIT,2846.0
+Oakland                                 ,7+ UNIT,0.0
+Oakland                                 ,COMM/IND,0.0
+Oakland                                 ,CONDO,0.0
+Oakland                                 ,NON PROFIT,0.0
+Oakland                                 ,SINGLE FAMILY,2028.0
+Oakland                                 ,TOWN HOUSE,1748.0
+Oakland                                 ,VACANT LAND,0.0
+Portage Park                            ,2-6 UNIT,2412.0
+Portage Park                            ,7+ UNIT,0.0
+Portage Park                            ,COMM/IND,0.0
+Portage Park                            ,CONDO,0.0
+Portage Park                            ,NON PROFIT,0.0
+Portage Park                            ,SINGLE FAMILY,1252.0
+Portage Park                            ,TOWN HOUSE,1677.0
+Portage Park                            ,VACANT LAND,0.0
+Pullman                                 ,2-6 UNIT,2120.0
+Pullman                                 ,7+ UNIT,0.0
+Pullman                                 ,COMM/IND,0.0
+Pullman                                 ,SINGLE FAMILY,1082.0
+Pullman                                 ,TOWN HOUSE,1320.0
+Pullman                                 ,VACANT LAND,0.0
+Riverdale                               ,2-6 UNIT,2232.0
+Riverdale                               ,7+ UNIT,0.0
+Riverdale                               ,COMM/IND,0.0
+Riverdale                               ,SINGLE FAMILY,925.0
+Riverdale                               ,TOWN HOUSE,731.0
+Riverdale                               ,VACANT LAND,0.0
+Rogers Park                             ,2-6 UNIT,3412.5
+Rogers Park                             ,7+ UNIT,0.0
+Rogers Park                             ,COMM/IND,0.0
+Rogers Park                             ,CONDO,0.0
+Rogers Park                             ,SINGLE FAMILY,1826.5
+Rogers Park                             ,TOWN HOUSE,1251.0
+Rogers Park                             ,VACANT LAND,0.0
+Roseland                                ,2-6 UNIT,2400.0
+Roseland                                ,7+ UNIT,0.0
+Roseland                                ,COMM/IND,0.0
+Roseland                                ,CONDO,0.0
+Roseland                                ,NON PROFIT,0.0
+Roseland                                ,SINGLE FAMILY,1095.0
+Roseland                                ,TOWN HOUSE,1018.0
+Roseland                                ,VACANT LAND,0.0
+South Chicago                           ,2-6 UNIT,2280.0
+South Chicago                           ,7+ UNIT,0.0
+South Chicago                           ,COMM/IND,0.0
+South Chicago                           ,CONDO,0.0
+South Chicago                           ,NON PROFIT,0.0
+South Chicago                           ,SINGLE FAMILY,1200.0
+South Chicago                           ,TOWN HOUSE,1027.0
+South Chicago                           ,VACANT LAND,0.0
+South Cook                              ,2-6 UNIT,2640.0
+South Cook                              ,7+ UNIT,0.0
+South Cook                              ,COMM/IND,0.0
+South Cook                              ,CONDO,0.0
+South Cook                              ,NON PROFIT,0.0
+South Cook                              ,SINGLE FAMILY,1215.0
+South Cook                              ,TOWN HOUSE,1396.0
+South Cook                              ,VACANT LAND,0.0
+South Deering                           ,2-6 UNIT,2194.0
+South Deering                           ,7+ UNIT,0.0
+South Deering                           ,COMM/IND,0.0
+South Deering                           ,CONDO,0.0
+South Deering                           ,SINGLE FAMILY,1015.5
+South Deering                           ,TOWN HOUSE,981.0
+South Deering                           ,VACANT LAND,0.0
+South Lawndale                          ,2-6 UNIT,1950.0
+South Lawndale                          ,7+ UNIT,0.0
+South Lawndale                          ,COMM/IND,0.0
+South Lawndale                          ,CONDO,0.0
+South Lawndale                          ,NON PROFIT,0.0
+South Lawndale                          ,SINGLE FAMILY,913.0
+South Lawndale                          ,TOWN HOUSE,1750.0
+South Lawndale                          ,VACANT LAND,0.0
+South Shore                             ,2-6 UNIT,3119.0
+South Shore                             ,7+ UNIT,0.0
+South Shore                             ,COMM/IND,0.0
+South Shore                             ,CONDO,0.0
+South Shore                             ,NON PROFIT,0.0
+South Shore                             ,SINGLE FAMILY,1466.0
+South Shore                             ,TOWN HOUSE,1072.0
+South Shore                             ,VACANT LAND,0.0
+Southwest Cook                          ,2-6 UNIT,3536.0
+Southwest Cook                          ,7+ UNIT,0.0
+Southwest Cook                          ,COMM/IND,0.0
+Southwest Cook                          ,CONDO,0.0
+Southwest Cook                          ,NON PROFIT,0.0
+Southwest Cook                          ,SINGLE FAMILY,1377.0
+Southwest Cook                          ,TOWN HOUSE,1644.0
+Southwest Cook                          ,VACANT LAND,0.0
+Uptown                                  ,2-6 UNIT,3332.5
+Uptown                                  ,7+ UNIT,0.0
+Uptown                                  ,COMM/IND,0.0
+Uptown                                  ,CONDO,0.0
+Uptown                                  ,NON PROFIT,50852.0
+Uptown                                  ,SINGLE FAMILY,2254.0
+Uptown                                  ,TOWN HOUSE,1347.0
+Uptown                                  ,VACANT LAND,0.0
+Washingon Park                          ,2-6 UNIT,3419.0
+Washingon Park                          ,7+ UNIT,0.0
+Washingon Park                          ,COMM/IND,0.0
+Washingon Park                          ,CONDO,0.0
+Washingon Park                          ,SINGLE FAMILY,1359.0
+Washingon Park                          ,TOWN HOUSE,2340.0
+Washingon Park                          ,VACANT LAND,0.0
+Washington Heights                      ,2-6 UNIT,2754.0
+Washington Heights                      ,7+ UNIT,0.0
+Washington Heights                      ,COMM/IND,0.0
+Washington Heights                      ,CONDO,0.0
+Washington Heights                      ,SINGLE FAMILY,1105.5
+Washington Heights                      ,TOWN HOUSE,1006.0
+Washington Heights                      ,VACANT LAND,0.0
+West Cook                               ,2-6 UNIT,2463.0
+West Cook                               ,7+ UNIT,0.0
+West Cook                               ,COMM/IND,0.0
+West Cook                               ,CONDO,0.0
+West Cook                               ,NON PROFIT,0.0
+West Cook                               ,SINGLE FAMILY,1269.0
+West Cook                               ,TOWN HOUSE,1486.0
+West Cook                               ,VACANT LAND,0.0
+West Elsdon                             ,2-6 UNIT,2405.0
+West Elsdon                             ,7+ UNIT,0.0
+West Elsdon                             ,COMM/IND,0.0
+West Elsdon                             ,CONDO,0.0
+West Elsdon                             ,SINGLE FAMILY,1056.0
+West Elsdon                             ,TOWN HOUSE,2264.0
+West Elsdon                             ,VACANT LAND,0.0
+West Englewood                          ,2-6 UNIT,2274.0
+West Englewood                          ,7+ UNIT,0.0
+West Englewood                          ,COMM/IND,0.0
+West Englewood                          ,CONDO,0.0
+West Englewood                          ,NON PROFIT,0.0
+West Englewood                          ,SINGLE FAMILY,1018.0
+West Englewood                          ,TOWN HOUSE,1190.0
+West Englewood                          ,VACANT LAND,0.0
+West Garfield                           ,2-6 UNIT,2506.0
+West Garfield                           ,7+ UNIT,0.0
+West Garfield                           ,COMM/IND,0.0
+West Garfield                           ,CONDO,0.0
+West Garfield                           ,SINGLE FAMILY,1101.0
+West Garfield                           ,TOWN HOUSE,1240.0
+West Garfield                           ,VACANT LAND,0.0
+West Lawn                               ,2-6 UNIT,2303.0
+West Lawn                               ,7+ UNIT,0.0
+West Lawn                               ,COMM/IND,0.0
+West Lawn                               ,CONDO,0.0
+West Lawn                               ,SINGLE FAMILY,1068.0
+West Lawn                               ,VACANT LAND,0.0
+West Pullman                            ,2-6 UNIT,2150.0
+West Pullman                            ,7+ UNIT,0.0
+West Pullman                            ,COMM/IND,0.0
+West Pullman                            ,CONDO,0.0
+West Pullman                            ,SINGLE FAMILY,1059.0
+West Pullman                            ,TOWN HOUSE,731.0
+West Pullman                            ,VACANT LAND,0.0
+West Ridge                              ,2-6 UNIT,3220.0
+West Ridge                              ,7+ UNIT,0.0
+West Ridge                              ,COMM/IND,0.0
+West Ridge                              ,CONDO,0.0
+West Ridge                              ,NON PROFIT,0.0
+West Ridge                              ,SINGLE FAMILY,1578.0
+West Ridge                              ,TOWN HOUSE,1280.0
+West Ridge                              ,VACANT LAND,0.0
+West Town                               ,2-6 UNIT,2800.0
+West Town                               ,7+ UNIT,0.0
+West Town                               ,COMM/IND,0.0
+West Town                               ,CONDO,0.0
+West Town                               ,NON PROFIT,0.0
+West Town                               ,SINGLE FAMILY,1785.0
+West Town                               ,TOWN HOUSE,1722.0
+West Town                               ,VACANT LAND,0.0
+Woodlawn                                ,2-6 UNIT,2674.0
+Woodlawn                                ,7+ UNIT,0.0
+Woodlawn                                ,COMM/IND,0.0
+Woodlawn                                ,CONDO,0.0
+Woodlawn                                ,SINGLE FAMILY,1540.0
+Woodlawn                                ,TOWN HOUSE,1346.0
+Woodlawn                                ,VACANT LAND,0.0
