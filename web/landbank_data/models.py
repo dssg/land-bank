@@ -383,7 +383,6 @@ class Scavenger(models.Model):
 
 class CensusTract(models.Model):
   fips 				= models.BigIntegerField('Census tract identifying FIPS number', null=True)
-  commarea                      = models.IntegerField('Community area', null=False)
   loc                           = models.MultiPolygonField(null=False, srid=3435)
   objects                       = models.GeoManager()
   def __unicode__(self):

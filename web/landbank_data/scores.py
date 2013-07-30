@@ -1,6 +1,6 @@
 from models import CrimeIncident, Assessor, Vacancy311
-import datetime
-import csv
+from django.db import connection, transaction
+import datetime, csv
 from pytz import timezone
 
 cst = timezone('US/Central')
@@ -30,13 +30,27 @@ def nuisance(pin, radius_ft=200.0, time_yr=1.0):
   for complaint in complaints:
     retval += 1
 
-  return retval
+  cursor = connection.cursor()
+  cursor.execute('SELECT count(*) FROM landbank_data_crimedist WHERE score < %s', [retval])
+  row = cursor.fetchone()
+  return int(round(float(row[0])/100))
 
 
-def test_nuisance_score():
+def update_nuisance_distribution():
+  cursor = connection.cursor()
+  cursor.execute('DROP TABLE IF EXISTS landbank_data_crimedist')
+  cursor.execute('CREATE TABLE landbank_data_crimedist (score INTEGER)')
+  myparcels = Assessor.objects.filter(long_x__isnull=False).filter(place__exact=('Chicago')).order_by('?')[:10000]
+  for parcel in myparcels:
+    cursor.execute('INSERT INTO landbank_data_crimedist VALUES (%s)',\
+                   [nuisance(parcel.pin)])
+
+  transaction.commit_unless_managed()
+
+def write_nuisance_csv():
   with open('/home/tplagge/nuisance_mc.csv','w') as f:
-    csvwriter = csv.writer(f)
     myparcels = Assessor.objects.filter(long_x__isnull=False).filter(place__exact=('Chicago')).order_by('?')[:10000]
+    w = csv.writer(f)
     for parcel in myparcels:
       row = [parcel.long_x, parcel.lat_y, nuisance(parcel.pin)]
-      csvwriter.writerow(row)
+      w.writerow(row)
