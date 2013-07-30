@@ -1,11 +1,13 @@
 <h1>Land Bank PIN Search</h1>
 {% if assessor %}
-<img src="http://www.cookcountyassessor.com/ImageStreamer/StreamImage.aspx?pin={{ assessor.pin }}" style="max-width: 380px; height: auto;"/><br />
+<table border=0 cellpadding=10><tr><td>
+<img src="http://www.cookcountyassessor.com/ImageStreamer/StreamImage.aspx?pin={{ assessor.pin }}" style="max-width: 500px; height: auto;"/><br />
+</td><td>
 <h2>Property Details:</h2>
     <ul>
     <li>PIN: {{ assessor.pin }}</li>
     <li>Address: {{ assessor.houseno}} {{ assessor.direction }} {{ assessor.street }}</li>
-    <li>Property type: {{ assessor.ptype }}</li>
+    <li>Property type: {{ assessor.ptype_desc }}</li>
     <li>Assessed value: {{ assessor.current_total_assmt }}</li>
     <li>Building square footage: {{ assessor.sqft_bldg}}</li>
     {% if ward %}
@@ -24,5 +26,5 @@
 {% else %}
     <p>No property found by that PIN....</p>
 {% endif %}
-
+</td></tr></table>
 <!-- TODO: implement map, charts, community area context, etc... -->
