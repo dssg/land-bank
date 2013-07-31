@@ -523,4 +523,24 @@ class Brownfield(models.Model):
     return unicode(self.pin)
   class Meta:
     app_label = 'landbank_data'
-   
+
+class AreaPlotCache(models.Model):
+  area_type	= models.CharField('ward, tract or community area',max_length=30, null=True)
+  area_id	= models.IntegerField('Foreign key to the wards, censustract or communityareas table depending on area_type', null=True)
+  json_str	= models.TextField('JSON string of data needed for charts/plots/graphs about this area', null=False, default='')
+  def __unicode__(self):
+    return unicode(self.area_type) + u' id:' + unicode(self.area_id)
+  class Meta:
+    app_label = 'landbank_data'
+
+class TractScores(models.Model):
+  census_tract	= models.ForeignKey('CensusTract')
+  stability	= models.IntegerField('Housing stability indicator based on Walker & Winston LISC paper', null=True)
+  nuisance	= models.IntegerField('Nuisance score from 311, crime, etc.', null=True)
+  demand	= models.IntegerField('Amount of demand for housing', null=True)
+  impact	= models.IntegerField('Amount of impact property could have', null=True)
+  def __unicode__(self):
+    return unicode(self.census_tract)
+  class Meta:
+    app_label = 'landbank_data'
+
