@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, render_to_response
 from django.template import RequestContext
-from landbank_data.models import Assessor, PinAreaLookup, CommunityAreas, CensusTract, Wards, Transaction
+from landbank_data.models import Assessor, PinAreaLookup, CommunityAreas, CensusTract, Wards, Transaction, TractScores
 import datetime
 import numpy as np
 from pytz import timezone
@@ -28,7 +28,12 @@ def pin(request, search_pin=None):
     except:
         tract = None
 
-    return render(request, 'landbank_data/pin.html', {'assessor': search_assessor, 'ward': ward, 'ca': ca, 'tract': tract})
+    try:
+        score = TractScores.objects.get(census_tract_id=lookup.census_tract_id)
+    except:
+        score = None
+
+    return render(request, 'landbank_data/pin.html', {'assessor': search_assessor, 'ward': ward, 'ca': ca, 'tract': tract, 'score': score})
 
 def commarea(request, search_commarea=None):
   cas = [i.area_number for i in CommunityAreas.objects.all()]
