@@ -6,17 +6,38 @@ drop table tract_stability cascade;
 drop table tract_stability_normalized;
 
 create view tract_stability_raw_values as
-select f.fips, value.med, highcost.pct_subprime, ownveloc.owner_velocity, investveloc.investor_velocity, ownerpct.owner_pct
+select f.fips
+    ,case when txns.med is null then case when mort.med is null then loans.med else mort.med end else txns.med end
+    ,case when highcost.pct_subprime is null then 0.0 else highcost.pct_subprime end
+    ,case when ownveloc.owner_velocity is null then 0.0 else ownveloc.owner_velocity end
+    ,case when investveloc.investor_velocity is null then 0.0 else investveloc.investor_velocity end
+    ,case when ownerpct.owner_pct is null then 0.0 else ownerpct.owner_pct end
 from landbank_data_censustract f
 left join
+(select fips, median(txn.amount_prime) med
+    from landbank_data_pinarealookup pal, landbank_data_censustract ct, landbank_data_transaction txn
+    where pal.census_tract_id=ct.id
+    and txn.pin=pal.pin
+    and txn.yeard=2009
+    and txn.ptype_id in (1,2,3)
+    group by fips) txns on (f.fips=txns.fips)
+left join
+(select ct.fips, median(mort_amt) med
+    from landbank_data_pinarealookup pal, landbank_data_censustract ct, landbank_data_mortgage mort
+    where pal.census_tract_id=ct.id
+    and mort.pin=pal.pin
+    and mort.ptype_id in (1,2,3)
+    and mort.yeard=2009
+    group by ct.fips) mort on (f.fips=mort.fips)
+left join
 (select fips, median(loan_amt) med
-    from landbank_data_loanapplication
-    where fips is not null
+    from landbank_data_loanapplication loans
+    where loans.fips is not null
     and action_type=1
     and loan_purpose=1
     and property_type=1
     and year=2009
-    group by fips) value on (f.fips=value.fips)
+    group by loans.fips) loans on (f.fips=loans.fips)
 left join
     (select fips, count(rate_spread)::float/count(*)::float as pct_subprime
     from landbank_data_loanapplication
@@ -26,7 +47,7 @@ left join
     and property_type=1
     and year=2009
     group by fips) highcost on (f.fips=highcost.fips)
-left join 
+left join
     (select loans.fips
         ,sum(case when loans.owner_occ=true then 1 else 0 end)::float / census.owner_occ::float as owner_velocity
     from landbank_data_loanapplication loans, landbank_data_censustractoccupancy census
@@ -64,11 +85,6 @@ left join
     and property_type=1
     and year=2009
     group by fips) ownerpct on (f.fips=ownerpct.fips)
-where value.med is not null
-    and highcost.pct_subprime is not null
-    and ownveloc.owner_velocity is not null
-    and investveloc.investor_velocity is not null
-    and ownerpct.owner_pct is not null;
 
 create view tract_stability_aggregates as
 select
@@ -115,33 +131,10 @@ left join
     from tract_stability_raw_values, tract_stability_aggregates) q
 on ct.fips = q.fips;
 
-select q.fips,
-    0.6 * q.value
-  - 0.4 * highcost
-  + 0.3 * ownveloc
-  + 0.1 * investveloc
-  + 0.2 * ownerpct
-    as stability_score
+select ct.fips
     ,ct.loc
-into tract_stability
-from
-landbank_data_censustract ct
-left join 
-    (select fips
-        ,(med-med_u)/med_s as value
-        ,(pct_subprime-pct_subprime_u)/pct_subprime_s highcost
-        ,(owner_velocity-owner_velocity_u)/owner_velocity_s ownveloc
-        ,(investor_velocity-investor_velocity_u)/investor_velocity_s investveloc
-        ,(owner_pct-owner_pct_u)/owner_pct_s ownerpct
-    from tract_stability_raw_values, tract_stability_aggregates) q
-on ct.fips = q.fips;
-
-select fips, (stability_score-ss_min)/(ss_max-ss_min) 
-from tract_stability,
-(select max(stability_score) ss_max, min(stability_score) ss_min from tract_stability) ssmm
-
-select ct.fips, ct.loc
     ,((stability_score-ss_min)/(ss_max-ss_min))*100.0 norm_score 
+    ,true as uses_hmda
 into tract_stability_normalized
 from landbank_data_censustract ct
     left join tract_stability ts
