@@ -64,15 +64,22 @@
         <div class="col-lg-4">
 	    <h2>Property Scores</h2>
             {% if tract and score %}
-	        <div class="row"><div class="col-8">Economic Impact:</div><div class="col-4">79</div></div>
-	        <div class="row"><div class="col-8">Housing Stability:</div><div class="col-4">53</div></div>
-	        <div class="row"><div class="col-8">Demand:</div><div class="col-4">31</div></div>
-	        <div class="row"><div class="col-8">Nuisance:</div><div class="col-4">95</div></div>
+                <div class="list-group list-group-flush">
+                    <a href="#" class="list-group-item">Impact
+                        <span class="badge">{% if score.impact %}{{ score.impact }}{% else %}N/A{% endif %}</span>
+                    </a><a href="#" class="list-group-item">Stability
+                        <span class="badge">{% if score.stability %}{{ score.stability }}{% else %}N/A{% endif %}</span>
+                    </a><a href="#" class="list-group-item">Demand
+                        <span class="badge">{% if score.demand %}{{ score.demand }}{% else %}N/A{% endif %}</span>
+                    </a><a href="#" class="list-group-item">Nuisance
+                        <span class="badge">{% if score.nuisance %}{{ score.nuisance }}{% else %}N/A{% endif %}</span>
+                    </a>
+                </div>
             {% else %}
                 <span class="unavailable">No scores available.</span>
             {% endif %}
         </div>
-        <div class="col-lg-8">Area charts & graphs go here..
+        <div class="col-lg-8">Area charts &amp; graphs go here..
             <div id="map-canvas"></div>
 	</div>
     </div>
