@@ -1,4 +1,5 @@
 from django.contrib.gis.db import models
+from django_pandas.managers import DataFrameManager
 
 class LoanApplication(models.Model):
   year              = models.IntegerField('2009, 2010, 2011', null=True)
@@ -362,6 +363,7 @@ class Assessor(models.Model):
   gisdate                       = models.CharField('GIS file reference date', max_length=100, null=True)
   loc                           = models.PointField(null=True,srid=3435)
   objects                       = models.GeoManager()
+  df_objects                    = DataFrameManager()
   def __unicode__(self):
     return unicode(self.pin)
   class Meta:
@@ -476,9 +478,9 @@ class CommunityAreas(models.Model):
 
 class PinAreaLookup(models.Model):
   pin				= models.CharField('Property ID number', max_length=15, null=False, db_index=True)
-  ward_id			= models.ForeignKey('Wards',null=True)
-  community_area_id		= models.ForeignKey('CommunityAreas',null=True)
-  census_tract_id		= models.ForeignKey('CensusTract',null=True)
+  ward				= models.ForeignKey('Wards',null=True)
+  community_area		= models.ForeignKey('CommunityAreas',null=True)
+  census_tract			= models.ForeignKey('CensusTract',null=True)
   def __unicode__(self):
     return unicode(self.pin)
   class Meta:
