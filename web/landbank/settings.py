@@ -3,6 +3,7 @@ import sys
 PROJECT_ROOT = os.path.dirname(__file__)
 sys.path.insert(0, os.path.join(PROJECT_ROOT, "../landbank_data"))
 sys.path.insert(0, os.path.join(PROJECT_ROOT, "../landbank_data/file_import"))
+sys.path.insert(0, os.path.join(PROJECT_ROOT, "../landbank_data/analysis"))
 # Django settings for landbank project.
 
 DEBUG = True
@@ -127,6 +128,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.gis',
     'django_extensions',
+    'django_pandas',
     'django_nvd3',
     'south',
     'tastypie',
