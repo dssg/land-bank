@@ -401,6 +401,20 @@ class CensusTractOccupancy(models.Model):
   class Meta:
     app_label = 'landbank_data'
 
+class CensusTractIncome(models.Model):
+  fips				= models.BigIntegerField('Census tract identifying FIPS number', null=True)
+  inc_lt_10			= models.FloatField('Percent of tract households earning <$10k annual gross', null=True)
+  inc_10_15			= models.FloatField('Percent of tract households earning >=$10k and <$15k annual gross', null=True)
+  inc_15_25			= models.FloatField('Percent of tract households earning >=$15k and <$25k annual gross', null=True)
+  inc_25_35			= models.FloatField('Percent of tract households earning >=$25k and <$35k annual gross', null=True)
+  inc_35_50			= models.FloatField('Percent of tract households earning >=$35k and <$50k annual gross', null=True)
+  inc_50_75			= models.FloatField('Percent of tract households earning >=$50k and <$75k annual gross', null=True)
+  inc_75_100			= models.FloatField('Percent of tract households earning >=$75k and <$100k annual gross', null=True)
+  inc_100_150			= models.FloatField('Percent of tract households earning >=$100k and <$150k annual gross', null=True)
+  inc_150_200			= models.FloatField('Percent of tract households earning >=$150k and <$200k annual gross', null=True)
+  inc_gt_200			= models.FloatField('Percent of tract households earning >$200k annual gross', null=True)
+  med_inc			= models.IntegerField('Median household annual gross income', null=True)
+
 class CmapPlan(models.Model):
   name                          = models.CharField('CMAP LTA project name', max_length=200)
   status                        = models.CharField('Project status', max_length=50)
