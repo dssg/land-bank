@@ -1,5 +1,3 @@
--- Creates views and table required to feed stability index to TileMill, etc.
-
 drop view tract_stability_raw_values cascade;
 drop view tract_stability_means_stddevs cascade;
 drop table tract_stability cascade;
@@ -134,7 +132,6 @@ on ct.fips = q.fips;
 select ct.fips
     ,ct.loc
     ,((stability_score-ss_min)/(ss_max-ss_min))*100.0 norm_score 
-    ,true as uses_hmda
 into tract_stability_normalized
 from landbank_data_censustract ct
     left join tract_stability ts
@@ -142,3 +139,9 @@ from landbank_data_censustract ct
     (select max(stability_score) ss_max, min(stability_score) ss_min 
     from tract_stability) ssmm
 order by norm_score desc;
+
+
+insert into landbank_data_tractscores (census_tract_id, stability)
+(select ct.id census_tract_id, tsn.norm_score stability
+from tract_stability_normalized tsn, landbank_data_censustract ct
+where tsn.fips=ct.fips);

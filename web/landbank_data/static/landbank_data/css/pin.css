@@ -3,9 +3,6 @@
   padding-right: 15px;
 }
 
-h4 {
-  margin-top: 25px;
-}
 .row {
   margin-bottom: 20px;
 }
@@ -16,6 +13,10 @@ h4 {
 [class*="col-lg-"] {
   padding-top: 15px;
   padding-bottom: 15px;
-  background-color: rgba(185,74,72,.15);
-  border: 1px solid rgba(185,74,72,.2);
+  background-color: rgba(141,198,62,.15);
+  border: 1px solid rgba(95,135,39,.2);
+}
+.unavailable {
+  color: #999999;
+  font-style:italic;
 }
