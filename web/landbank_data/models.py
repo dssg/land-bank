@@ -414,6 +414,10 @@ class CensusTractIncome(models.Model):
   inc_150_200			= models.FloatField('Percent of tract households earning >=$150k and <$200k annual gross', null=True)
   inc_gt_200			= models.FloatField('Percent of tract households earning >$200k annual gross', null=True)
   med_inc			= models.IntegerField('Median household annual gross income', null=True)
+  def __unicode__(self):
+    return unicode(self.fips)
+  class Meta:
+    app_label = 'landbank_data'
 
 class CmapPlan(models.Model):
   name                          = models.CharField('CMAP LTA project name', max_length=200)
