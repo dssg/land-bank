@@ -414,6 +414,7 @@ class CensusTractIncome(models.Model):
   inc_150_200			= models.FloatField('Percent of tract households earning >=$150k and <$200k annual gross', null=True)
   inc_gt_200			= models.FloatField('Percent of tract households earning >$200k annual gross', null=True)
   med_inc			= models.IntegerField('Median household annual gross income', null=True)
+  med_house_txn_2011		= models.IntegerField('Median transaction amount for SF, condo and 2-4 fam homes in 2011', null=True)
   def __unicode__(self):
     return unicode(self.fips)
   class Meta:
