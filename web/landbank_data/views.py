@@ -43,9 +43,9 @@ def commarea(request, search_commarea=None):
   #  sfhs.append(np.median([i.amount_prime for i in \
   #    Transaction.objects.filter(ca_num__exact=ca).\
   #    filter(date_doc__lte=oneyearago).filter(ptype=1)]))
-  bins = [100,200,300,400,500]
+  bins = [ 1.07497143,  1.23947429,  1.40397714,  1.56848,     1.73298286,  1.89748571,  2.06198857,  2.22649143,  2.39099429,  2.55549714,  2.72]
   #sfh_vals, bins = np.histogram(sfhs,bins=mybins)
-  sfh_vals = [1,2,3,2,1]
+  sfh_vals = [1,0, 1513, 1215, 0,    0,    0,    0,    0,  427]
   data = []
   for b,v in zip(bins,sfh_vals):
     data.append({'x':b, 'y':v})
