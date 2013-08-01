@@ -1,9 +1,7 @@
+<!DOCTYPE html>
 <head>
-</head>
-<body>
-    <h1>Median prices by community area</h1>
-    <script src="http://d3js.org/d3.v3.min.js"></script>
-    <script>
+<script type="text/javascript">
+
 var data = {{ data|safe }};
 
 var margin = {top: 20, right: 20, bottom: 40, left: 50},
@@ -67,6 +65,12 @@ var svg = d3.select("body").append("svg")
       .attr("height", function(d) { return height - y(d.y); });
 
     </script>
+</head>
+<body>
+    <h1>Median prices by community area</h1>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+
+
 </body>
 
 
