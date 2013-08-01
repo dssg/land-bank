@@ -401,6 +401,20 @@ class CensusTractOccupancy(models.Model):
   class Meta:
     app_label = 'landbank_data'
 
+class CensusTractIncome(models.Model):
+  fips				= models.BigIntegerField('Census tract identifying FIPS number', null=True)
+  inc_lt_10			= models.FloatField('Percent of tract households earning <$10k annual gross', null=True)
+  inc_10_15			= models.FloatField('Percent of tract households earning >=$10k and <$15k annual gross', null=True)
+  inc_15_25			= models.FloatField('Percent of tract households earning >=$15k and <$25k annual gross', null=True)
+  inc_25_35			= models.FloatField('Percent of tract households earning >=$25k and <$35k annual gross', null=True)
+  inc_35_50			= models.FloatField('Percent of tract households earning >=$35k and <$50k annual gross', null=True)
+  inc_50_75			= models.FloatField('Percent of tract households earning >=$50k and <$75k annual gross', null=True)
+  inc_75_100			= models.FloatField('Percent of tract households earning >=$75k and <$100k annual gross', null=True)
+  inc_100_150			= models.FloatField('Percent of tract households earning >=$100k and <$150k annual gross', null=True)
+  inc_150_200			= models.FloatField('Percent of tract households earning >=$150k and <$200k annual gross', null=True)
+  inc_gt_200			= models.FloatField('Percent of tract households earning >$200k annual gross', null=True)
+  med_inc			= models.IntegerField('Median household annual gross income', null=True)
+
 class CmapPlan(models.Model):
   name                          = models.CharField('CMAP LTA project name', max_length=200)
   status                        = models.CharField('Project status', max_length=50)
@@ -523,4 +537,24 @@ class Brownfield(models.Model):
     return unicode(self.pin)
   class Meta:
     app_label = 'landbank_data'
-   
+
+class AreaPlotCache(models.Model):
+  area_type	= models.CharField('ward, tract or community area',max_length=30, null=True)
+  area_id	= models.IntegerField('Foreign key to the wards, censustract or communityareas table depending on area_type', null=True)
+  json_str	= models.TextField('JSON string of data needed for charts/plots/graphs about this area', null=False, default='')
+  def __unicode__(self):
+    return unicode(self.area_type) + u' id:' + unicode(self.area_id)
+  class Meta:
+    app_label = 'landbank_data'
+
+class TractScores(models.Model):
+  census_tract	= models.ForeignKey('CensusTract')
+  stability	= models.IntegerField('Housing stability indicator based on Walker & Winston LISC paper', null=True)
+  nuisance	= models.IntegerField('Nuisance score from 311, crime, etc.', null=True)
+  demand	= models.IntegerField('Amount of demand for housing', null=True)
+  impact	= models.IntegerField('Amount of impact property could have', null=True)
+  def __unicode__(self):
+    return unicode(self.census_tract)
+  class Meta:
+    app_label = 'landbank_data'
+
