@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <head>
     <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+
 </head>
 <body>
 
@@ -66,8 +68,11 @@ var svg = d3.select("body").append("svg")
       .attr("class", "bar")
       .attr("x", function(d) { return x(d.x)} )
       .attr("width", x.rangeBand())
-      .attr("y", function(d) { return y(d.y)} )
-      .attr("fill", "steelblue")
+      .attr("y", function(d) { return y(d.y)} )      
+      .attr("fill", function(d) {
+      return "rgb(0, 0, " + ((d.y*255)
+      /d3.max($.map(data,function(d){ return d.y; }))) + ")";
+      })
       .attr("height", function(d) { return height - y(d.y); });
 
     </script>
