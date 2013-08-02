@@ -1,9 +1,11 @@
+<!DOCTYPE html>
 <head>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
 </head>
 <body>
-    <h1>Median prices by community area</h1>
-    <script src="http://d3js.org/d3.v3.min.js"></script>
-    <script>
+
+<script type="text/javascript">
+
 var data = {{ data|safe }};
 
 var margin = {top: 20, right: 20, bottom: 40, left: 50},
@@ -32,6 +34,8 @@ var svg = d3.select("body").append("svg")
 
 
   x.domain(data.map(function(d) { return d.x; }));
+
+//  x.domain([0, d3.max(data, function(d) { return d.x; })]);
   y.domain([0, d3.max(data, function(d) { return d.y; })]);
 
   svg.append("g")
@@ -67,6 +71,7 @@ var svg = d3.select("body").append("svg")
       .attr("height", function(d) { return height - y(d.y); });
 
     </script>
+    <h1>Median prices by community area</h1>
 </body>
 
 
