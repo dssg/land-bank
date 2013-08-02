@@ -72,7 +72,7 @@ def commarea(request, search_commarea=None):
               427]
   data = []
   for b,v in zip(bins,sfh_vals):
-    data.append({'x':b, 'y':v})
+    data.append({'x': round(b,2), 'y':v})
 
   print data
   return render_to_response('commarea2.html', {'data': json.dumps(data)},\

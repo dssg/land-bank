@@ -1,0 +1,48 @@
+<<<<<<< HEAD
+=======
+
+<style type="text/css" media="screen">
+.axis path, .axis line {
+   fill: none;
+   stroke: black; 
+   shape-rendering: crispEdges;
+ }
+ .axis text {
+    font-family: sans-serif;
+    font-size: 11px;
+    }
+div.bar {
+   display: inline-block;
+   width: 20px;
+   height: 75px;
+   margin-right: 2px;
+   /* We'll override height later */
+   background-color: teal;
+}
+
+
+
+</style>
+>>>>>>> tags
+<<<<<<< HEAD
+      .attr("transform", "rotate(-90)")
+      .attr("y", 0-margin.left)
+      .attr("x", 0-(height/2))
+      .attr("dy", "1em")
+      .style("text-anchor", "middle")
+      .text("Count");
+
+  svg.selectAll(".bar")
+      .data(data)
+    .enter().append("rect")
+      .attr("class", "bar")
+      .attr("x", function(d) { return x(d.x)} )
+      .attr("width", x.rangeBand())
+      .attr("y", function(d) { return y(d.y)} )      
+      .attr("fill", function(d) {
+      return "rgb(0, 0, " + ((d.y*255)
+      /d3.max($.map(data,function(d){ return d.y; }))) + ")";
+      })
+      .attr("height", function(d) { return height - y(d.y); });
+
+=======
