@@ -1,9 +1,9 @@
--- Creates views and table required to feed stability index to TileMill, etc.
-
 drop view tract_stability_raw_values cascade;
 drop view tract_stability_means_stddevs cascade;
 drop table tract_stability cascade;
 drop table tract_stability_normalized;
+truncate table landbank_data_tractscores;
+alter sequence landbank_data_tractscores_id_seq restart;
 
 create view tract_stability_raw_values as
 select f.fips
@@ -14,12 +14,14 @@ select f.fips
     ,case when ownerpct.owner_pct is null then 0.0 else ownerpct.owner_pct end
 from landbank_data_censustract f
 left join
-(select fips, median(txn.amount_prime) med
-    from landbank_data_pinarealookup pal, landbank_data_censustract ct, landbank_data_transaction txn
-    where pal.census_tract_id=ct.id
-    and txn.pin=pal.pin
-    and txn.yeard=2009
-    and txn.ptype_id in (1,2,3)
+(select fips, median(adj_amt) med
+from (select fips, txn.buyer, txn.buyer_type, txn.ptype_id, txn.amount_prime::float/count(*)::float as adj_amt
+        from landbank_data_pinarealookup pal, landbank_data_censustract ct, landbank_data_transaction txn
+        where pal.census_tract_id=ct.id
+        and txn.pin=pal.pin
+        and txn.yeard=2009
+        and txn.ptype_id in (1,2,3)
+        group by fips, txn.buyer, txn.buyer_type, txn.ptype_id, txn.amount_prime) adj_txns
     group by fips) txns on (f.fips=txns.fips)
 left join
 (select ct.fips, median(mort_amt) med
@@ -134,7 +136,6 @@ on ct.fips = q.fips;
 select ct.fips
     ,ct.loc
     ,((stability_score-ss_min)/(ss_max-ss_min))*100.0 norm_score 
-    ,true as uses_hmda
 into tract_stability_normalized
 from landbank_data_censustract ct
     left join tract_stability ts
@@ -142,3 +143,8 @@ from landbank_data_censustract ct
     (select max(stability_score) ss_max, min(stability_score) ss_min 
     from tract_stability) ssmm
 order by norm_score desc;
+
+insert into landbank_data_tractscores (census_tract_id, stability)
+(select ct.id census_tract_id, tsn.norm_score stability
+from tract_stability_normalized tsn, landbank_data_censustract ct
+where tsn.fips=ct.fips);
