@@ -1,49 +1,119 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="">
-<meta name="author" content="">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
 
-<title>Grid Template for Bootstrap</title>
+    <title>CCLBA Analytics Tool - Pin Search</title>
 
-<!-- Bootstrap core CSS -->
-<link href="/static/landbank_data/css/bootstrap.css" rel="stylesheet">
-
-<!-- Custom styles for this template -->
-<link href="/static/landbank_data/css/pin.css" rel="stylesheet">
+    <link href="/static/landbank_data/css/bootstrap.css" rel="stylesheet">
+    <link href="/static/landbank_data/css/pin.css" rel="stylesheet">
 </head>
-
 <body>
-<h1>Land Bank PIN Search</h1>
-{% if assessor %}
-<table border=0 cellpadding=10><tr><td>
-<img src="http://www.cookcountyassessor.com/ImageStreamer/StreamImage.aspx?pin={{ assessor.pin }}" style="max-width: 500px; height: auto;"/><br />
-</td><td>
-<h2>Property Details:</h2>
-    <ul>
-    <li>PIN: {{ assessor.pin }}</li>
-    <li>Address: {{ assessor.houseno}} {{ assessor.direction }} {{ assessor.street }}</li>
-    <li>Property type: {{ assessor.ptype_desc }}</li>
-    <li>Assessed value: {{ assessor.current_total_assmt }}</li>
-    <li>Building square footage: {{ assessor.sqft_bldg}}</li>
-    {% if ward %}
-        <li><b>Ward:</b></li>
-        <ul><li>{{ ward.ward }}</li><li>Alderman {{ ward.alderman }}</li></ul>
-    {% endif %}
-    {% if ca %}
-        <li><b>Community Area:</b></li>
-        <ul><li>{{ ca.area_number }}: {{ ca.area_name }}</li></ul>
-    {% endif %}
-    {% if tract %}
-        <li><b>Census Tract:</b></li>
-        <ul><li>{{ tract.fips }}</li></il>
-    {% endif %}
-    </ul>
-{% else %}
-    <p>No property found by that PIN....</p>
-{% endif %}
-</td></tr></table>
+    <div class="container">
+    <h1>Land Bank PIN Search</h1>
+    <div class="row">
+        <div class="col-lg-4">
+        <h2>Property Details</h2>
+        {% if assessor %}
+            <img src="http://www.cookcountyassessor.com/ImageStreamer/StreamImage.aspx?pin={{ assessor.pin }}" class="img-responsive" /> 
+            <br />
+            <div class="row">
+                <div class="col-5">PIN</div><div class="col-7">{{ assessor.pin }}</div>
+            </div><div class="row">
+                <div class="col-5">Address</div><div class="col-7">
+		    {% if assessor.street %}
+			{{ assessor.houseno}} {{ assessor.direction }} {{ assessor.street }}
+		    {% else %}
+			<span class="unavailable">Unavailable</span>
+		    {% endif %}
+		</div>
+            </div><div class="row">
+                <div class="col-5">Property type</div>
+		<div class="col-7">
+                    {% if assessor.ptype_desc %}
+			{{ assessor.ptype_desc}}
+		    {% else %}
+			<span class="unavailable">Unavailable</span>
+		    {% endif %}
+		</div>
+            </div><div class="row">
+                <div class="col-5">Assessed value</div><div class="col-7">
+		    {% if assessor.current_total_assmt %}
+			{{ assessor.current_total_assmt }}
+		    {% else %}
+			<span class="unavailable">Unavailable</span>
+		    {% endif %}
+		</div>
+            </div><div class="row">
+                <div class="col-5">Building area</div><div class="col-7">
+		    {% if assessor.sqft_bldg %}
+			{{ assessor.sqft_bldg }} sq. ft.
+		    {% else %}
+			<span class="unavailable">Unavailable</span>
+		    {% endif %}
+		</div>
+            </div><div class="row">
+                <div class="col-5">Land area</div><div class="col-7">
+		    {% if assessor.sqft_land %}
+			{{ assessor.sqft_land }} sq. ft.
+		    {% else %}
+			<span class="unavailable">Unavailable</span>
+		    {% endif %}
+		</div>
+            </div>
+            <div class="row"><div class="col-5">Ward</div><div class="col-7">
+                {% if ward %}
+                    {{ ward.ward }}: {{ ward.alderman }}
+                {% else %}
+                    <span class="unavailable">Unavailable</span>
+                {% endif %}
+            </div></div>
+            <div class="row"><div class="col-5">Community Area</div><div class="col-7">
+                {% if ca %}
+                    {{ ca.area_number }}: {{ ca.area_name }}
+                {% else %}
+                    <span class="unavailable">Unavailable</span>
+                {% endif %}
+            </div></div>
+            <div class="row"><div class="col-5">Census Tract</div><div class="col-7">
+                {% if tract %}
+                    {{ tract.fips }}
+                {% else %}
+                    <span class="unavailable">Unavailable</span>
+                {% endif %}
+            </div></div>
+        {% else %}
+            <p class="unavailable">No property found by that PIN....</p>
+        {% endif %}
+        </div>
+        <div class="col-lg-8">Google Map goes here...</div>
+    </div>
+    <div class="row">
+        <div class="col-lg-4">
+	    <h2>Property Scores</h2>
+            {% if tract and score %}
+                <div class="list-group list-group-flush">
+                    <a href="#" class="list-group-item">Impact
+                        <span class="badge">{% if score.impact %}{{ score.impact }}{% else %}N/A{% endif %}</span>
+                    </a><a href="#" class="list-group-item">Stability
+                        <span class="badge">{% if score.stability %}{{ score.stability }}{% else %}N/A{% endif %}</span>
+                    </a><a href="#" class="list-group-item">Affordability
+                        <span class="badge">{% if score.affordability >= 0 %}{{ score.affordability }}{% else %}N/A{% endif %}</span>
+                    </a><a href="#" class="list-group-item">Nuisance
+                        <span class="badge">{% if score.nuisance %}{{ score.nuisance }}{% else %}N/A{% endif %}</span>
+                    </a>
+                </div>
+            {% else %}
+                <span class="unavailable">No scores available.</span>
+            {% endif %}
+        </div>
+        <div class="col-lg-8">Area charts &amp; graphs go here..
+            <div id="map-canvas"></div>
+	</div>
+    </div>
+    </div>
 </body>
 </html>
