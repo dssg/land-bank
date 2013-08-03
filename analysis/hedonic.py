@@ -21,7 +21,7 @@ def get_data():
     cur.execute('''
       SELECT t.pin pin, t.amount_prime amt, a.sqft_bldg sqft, 
              t.date_doc dd, ST_X(t.loc) x, ST_Y(t.loc) y,
-             a.garage_desc garage, a.year_built yb
+             a.garage_desc garage, a.year_built yb, a.ext_desc ext
       FROM landbank_data_transaction t
       JOIN landbank_data_assessor a
       ON t.pin=a.pin
@@ -31,9 +31,6 @@ def get_data():
       AND t.seller_type='I'
       AND a.sqft_bldg > 0
       AND extract(year from date_doc)=2012
-      AND a.garage_desc is not null
-      AND a.garage_desc != ''
-      AND a.year_built is not null
     ''')
 
     # Unpack the results.
@@ -45,7 +42,8 @@ def get_data():
     x    = np.array([float(i[4]) for i in res])
     y    = np.array([float(i[5]) for i in res])
     garage = np.array([i[6] for i in res])
-    year_built = np.array([int(i[7]) for i in res])
+    year_built = np.array([i[7] for i in res])
+    ext = np.array([i[8] for i in res])
   
     # Store them in the cached file.
     with open('/home/tplagge/hedonic_data.pkl','wb') as f:
@@ -57,6 +55,7 @@ def get_data():
       cPickle.dump(y, f)
       cPickle.dump(garage, f)
       cPickle.dump(year_built, f)
+      cPickle.dump(ext, f)
   else:
     # Just read the data in from the cached file.
     f=open('/home/tplagge/hedonic_data.pkl','rb')
@@ -68,7 +67,8 @@ def get_data():
     y           = cPickle.load(f)
     garage      = cPickle.load(f)
     year_built  = cPickle.load(f)
-  return pins, amt, sqft, dd, x, y, garage, year_built
+    ext         = cPickle.load(f)
+  return pins, amt, sqft, dd, x, y, garage, year_built, ext
 
 def calc_weight_matrix(x,y,dd,pins):
   '''Calculate the 1/distance weight matrix for the spatial
@@ -90,13 +90,14 @@ def calc_weight_matrix(x,y,dd,pins):
     W[i, sort_indices] = theseweights
   return sps.csc_matrix(W)
 
-def calc_prop_vector(sqft, ngarage, yrbuilt):
+def calc_prop_vector(sqft, ngarage, yrbuilt, ext):
   '''Make a vector out of the property characteristics we care about.'''
   N = sqft.size
-  X = np.ones((N,4))
+  X = np.ones((N,5))
   X[:,1] = sqft
-  X[:,2] = np.array([float(i[0]) if (i[0] in ['1','2','3','4']) else 0 for i in ngarage])
-  X[:,3] = [float(i) - 1900 for i in yrbuilt]
+  X[:,2] = np.array([float(i[0]) if (i!=None and len(i)>0 and i[0] in ['1','2','3','4']) else 0 for i in ngarage])
+  X[:,3] = [float(i) - 1900 if i!=None else 0 for i in yrbuilt]
+  X[:,4] = [1 if i=='Masonry' else 0 for i in ext]
   return X
 
 def calc_logl(params, Y, X, W, XTXinv):
@@ -108,10 +109,10 @@ def calc_logl(params, Y, X, W, XTXinv):
   # log(price) = S beta X + S error
   # S = (1 - lambda W)^(-1) 
 
-  c_int, c_sqft, c_garage, c_year, lam, var = params
+  c_int, c_sqft, c_garage, c_yrbuilt, c_ext, lam, var = params
   if c_int > max(Y): return -np.inf
   if var < 0: return -np.inf
-  beta = np.array([c_int, c_sqft, c_garage, c_year])
+  beta = np.array([c_int, c_sqft, c_garage, c_yrbuilt, c_ext])
   N = len(Y)
 
   # Compute 1 - lambda W
@@ -135,7 +136,7 @@ def calc_logl(params, Y, X, W, XTXinv):
 
   # Print debugging messages
   print chisq, -0.5 * logdet
-  print c_int, c_sqft, c_garage, c_year, lam, var, logl
+  print c_int, c_sqft, c_garage, c_yrbuilt, lam, var, logl
 
   # Return the result unless it's nan.
   if np.isnan(logl): return -np.inf
@@ -143,15 +144,16 @@ def calc_logl(params, Y, X, W, XTXinv):
 
 if __name__=='__main__':
   
-  pins, amt, sqft, dd, x, y, garage, year_built = get_data()
-  X = calc_prop_vector(sqft, garage, year_built)
+  pins, amt, sqft, dd, x, y, garage, year_built, ext = get_data()
+  X = calc_prop_vector(sqft, garage, year_built, ext)
   W = calc_weight_matrix(x,y,dd,pins)
   Y = np.log(np.array(amt))
   XTXinv = scipy.linalg.inv(np.dot(X.T,X))
 
-  ndim = 6
+  ndim = 7
   nwalkers = 50
-  p0 = [(np.random.rand(ndim)+0.5)*np.array([11.0,0.0006,0.1,.1,.1,0.35]) for i in xrange(nwalkers)]
+  p0 = [(np.random.rand(ndim)+0.5)*\
+    np.array([11.0,0.0006,0.01,0.01,0.01,0.1,0.35]) for i in xrange(nwalkers)]
   sampler = emcee.EnsembleSampler(nwalkers, ndim, calc_logl, \
             args=[Y, X, W, XTXinv],a=3,threads=3)
   print 'Burning in'
