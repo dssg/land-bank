@@ -29,5 +29,6 @@ urlpatterns = patterns('',
     # url(r'^admin/', include(admin.site.urls)),
     (r'^pin/', include('landbank_data.urls')),
     (r'^commarea/', 'landbank_data.views.commarea'),
+    (r'^map/(?P<ca_number>[0-9]+)/$', 'landbank_data.views.map'),     
     (r'api/', include(v1_api.urls)),
 )

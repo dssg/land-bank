@@ -6,6 +6,17 @@ import numpy as np
 from pytz import timezone
 import json
 
+def map(request, ca_number=1):
+    #ca = CommunityAreas.objects.filter(pk__lte=10)
+    ca = CommunityAreas.objects.get(area_number=ca_number)
+    ca.geom.transform(4326)
+    ca_list = []
+    ca_list.append(ca)
+    #for c in ca:
+        #c.geom.transform(4326)
+        #ca_list.append(c)
+    return render(request, 'landbank_data/map.html', {'object_list': ca_list})
+
 def pin(request, search_pin=None):
     try:		          search_assessor = Assessor.objects.get(pin=search_pin)
     except Assessor.DoesNotExist: search_assessor = None
