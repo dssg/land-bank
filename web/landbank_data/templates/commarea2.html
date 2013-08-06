@@ -2,23 +2,36 @@
 <head>
     <script src="http://d3js.org/d3.v3.min.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-
+    <style type="text/css">
+	.axis path,
+        .axis line {
+	   fill: none;
+	   stroke: black; 
+	   shape-rendering: crispEdges;
+	 }
+	 .axis text {
+	    font-family: sans-serif;
+	    font-size: 11px;
+	    }
+    </style>	 
 </head>
 <body>
 <script type="text/javascript">
 
-var data = {{ data|safe }};
+var data = {{ histData | safe }};
 
-var margin = {top: 20, right: 20, bottom: 40, left: 80},
+var gdata = data.land_psf
+
+var margin = { top: 20, right: 20, bottom: 60, left: 80},
     width = 460 - margin.left - margin.right,
-    height = 300 - margin.top - margin.bottom;
+    height = 320 - margin.top - margin.bottom;
 
 var xScale = d3.scale.ordinal()
-    .domain(data.map(function(d) { return d.x; }))
+    .domain(gdata.map(function(d) { return d.x ; }))
     .rangeRoundBands([0, width], .05);
 
 var yScale = d3.scale.linear()
-    .domain([0, d3.max(data, function(d) { return d.y; })])
+    .domain([0, d3.max(gdata, function(d) { return d.y; })])
     .range([height, 0]);
 
 var xAxis = d3.svg.axis()
@@ -26,6 +39,9 @@ var xAxis = d3.svg.axis()
     .orient("bottom")
     .ticks(10);
 
+var format2dec = d3.format("3.2f");
+
+    xAxis.tickFormat(format2dec);
 
 var yAxis = d3.svg.axis()
     .scale(yScale)
@@ -43,7 +59,7 @@ svg.append("g")
     .attr("transform", "translate(0," + height + ")")
     .call(xAxis)
     .append("text")
-    .attr("y",margin.bottom)
+    .attr("y",margin.bottom/2)
     .attr("x",width/2)
     .style("text-anchor", "middle")
     .text("Land Value psf") ;
@@ -60,11 +76,11 @@ svg.append("g")
     .style("text-anchor", "middle")
     .text("Count");
 
-var maxData=d3.max(data);
+var maxData=d3.max(gdata);
 //print "maxData =" + maxData;
 
 svg.selectAll(".bar")
-    .data(data)
+    .data(gdata)
     .enter()
     .append("rect")
     .attr("class", "bar")
@@ -75,11 +91,12 @@ svg.selectAll(".bar")
     .attr("fill", function(d) {
 	return "rgb(0, 0, "+ Math.round((255*d.y)/
 					d3.max(
-	$.map(data,function(d){ return d.y; })))  + ")";
-    });
+	$.map(gdata,function(d){ return d.y; })))  + ")";
+    })
+    .attr("opacity", "0.4");
 
 svg.selectAll(".bar text")
-    .data(data)
+    .data(gdata)
     .enter()
     .append("text")
     .text(function(d) { return d.y; })
@@ -97,7 +114,12 @@ svg.selectAll(".bar text")
 //	return (+height + margin.top - yScale(d.y) + 14);
 
     </script>
-    <h3 style="text-align:center;width:460px" >Median prices by community area</h3>
+    <h3 style="text-align:center;width:460px" >
+      <div id="lpsf">land psf</div>
+      <div id="bpsf">building psf</div>
+      <div id="lmsf">land median sf</div>
+      <div id="bmsf">building median sf</div>
+    </h3>
 
 </body>
 
