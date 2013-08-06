@@ -14,6 +14,9 @@ def load_foreclosures(forc_file, verbose = False):
     reader = csv.reader(f, delimiter="\t")
     reader.next()
     #i = 0;
+    skip_lookup = False
+    if Foreclosure.objects.count() == 0
+      skip_lookup = True
     for row in reader:
       #if (i==10):
         #break
@@ -61,6 +64,8 @@ def load_foreclosures(forc_file, verbose = False):
       except:	adj_yd = None
       loc = None if row[18]=='' else Point((Decimal(row[19]), Decimal(row[18])),srid=4326).transform(3435)
       try:
+        if skip_lookup:
+          raise Exception('no lookup')
         forc = Foreclosure.objects.get(\
         pin = pin\
 	,filing_date   = filing_date\

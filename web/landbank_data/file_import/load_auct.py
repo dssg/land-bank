@@ -13,6 +13,9 @@ def load_auctions(auction_file, verbose = False):
   with open(auction_file,'r') as f:
     reader = csv.reader(f, delimiter="\t")
     reader.next()
+    skip_lookup = False
+    if Auction.objects.count() == 0:
+      skip_lookup = True
     #i = 0;
     for row in reader:
       #if (i==10):
@@ -59,6 +62,8 @@ def load_auctions(auction_file, verbose = False):
       except: adj_yd = None
       loc       = None if row[19]=='' else Point((Decimal(row[20]), Decimal(row[19])))
       try:
+        if skip_lookup:
+          raise Exception('no lookup')
         auction = Auction.objects.get(\
         pin = pin\
         ,doc = doc\

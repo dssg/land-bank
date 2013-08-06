@@ -14,6 +14,9 @@ def load_cashfin(cashfin_file, verbose = False):
     reader = csv.reader(f, delimiter="\t")
     reader.next()
     #i = 0;
+    skip_lookup = False
+    if CashFin.objects.count() == 0:
+      skip_lookup = True
     for row in reader:
       #if (i==10):
         #break
@@ -56,6 +59,8 @@ def load_cashfin(cashfin_file, verbose = False):
       except:	residential = None
       loc       = None if row[20]=='' else Point((Decimal(row[21]), Decimal(row[20])))
       try:
+        if skip_lookup:
+          raise Exception('no lookup')
         cashfin =  CashFin.objects.get(\
         pin = pin\
         ,doc = doc\
