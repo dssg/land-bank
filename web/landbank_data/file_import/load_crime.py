@@ -39,6 +39,9 @@ def run(verbose = True):
     s = SocrataClient(chicago_host, crime_view, crime_file)
     header,data = s.get_data_from_file()
   cst = timezone('US/Central')
+  skip_lookup = False
+  if CrimeIncident.objects.count() == 0:
+    skip_lookup = True
   for row in data:
     crimeid   = row[0]
     caseno    = '-' if row[1].strip()=='' else row[1]
@@ -56,8 +59,9 @@ def run(verbose = True):
     commarea  = None if row[13].strip()=='' else int(row[13])
     fbicode   = row[14][:14]
     loc       = None if row[15].strip()=='' else Point((Decimal(row[15]), Decimal(row[16])))
-   
     try:
+      if skip_lookup:
+        raise Exception('no lookup')
       crime  = CrimeIncident.objects.get(\
         crimeid    = crimeid,\
         caseno     = caseno,\

@@ -13,6 +13,9 @@ def load_assessors(assessor_file, verbose = False):
   with open(assessor_file,'r') as f:
     reader = csv.reader(f, delimiter=",")
     reader.next()
+    skip_lookup = False
+    if Assessor.objects.count() == 0:
+      skip_lookup = True
     #i = 0;
     for row in reader:
       #if (i==10):

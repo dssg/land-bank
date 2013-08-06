@@ -12,6 +12,9 @@ def run(verbose = True):
   csvreader = csv.reader(f)
   cst = timezone('US/Central')
   header = csvreader.next()
+  skip_lookup = False
+  if Brownfield.objects.count() == 0:
+    skip_lookup = True
   for row in csvreader:
     pins        = '' if row[12] == '' else row[12].replace('-','').replace(';',',')
     recipient   = row[0]
@@ -26,6 +29,8 @@ def run(verbose = True):
        print('Found bad PIN: '+pin)
        pin=None
      try:
+      if skip_lookup:
+       raise Exception('no lookup')
       brownfield  = Brownfield.objects.get(\
         pin         = pin,\
         recipient   = recipient,\
