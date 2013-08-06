@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, render_to_response
 from django.template import RequestContext
-from landbank_data.models import Assessor, PinAreaLookup, CommunityAreas, CensusTract, Wards, Transaction, TractScores
+from landbank_data.models import Assessor, PinAreaLookup, CommunityAreas, CensusTract, Wards, Transaction, TractScores, AreaPlotCache
 import datetime
 import numpy as np
 from pytz import timezone
@@ -44,33 +44,14 @@ def commarea(request, search_commarea=None):
   #  sfhs.append(np.median([i.amount_prime for i in \
   #    Transaction.objects.filter(ca_num__exact=ca).\
   #    filter(date_doc__lte=oneyearago).filter(ptype=1)]))
-  bins = [ 1.07497143,
-           1.23947429,
-           1.40397714,
-           1.56848,
-           1.73298286,
-           1.89748571,
-           2.06198857,
-           2.22649143,
-           2.39099429,
-           2.55549714,
-           2.72]
-  #sfh_vals, bins = np.histogram(sfhs,bins=mybins)
-  sfh_vals = [1,
-              0,
-              1513,
-              1215,
-              0,
-              0,
-              0,
-              0,
-              0,
-              427]
-  data = []
-  for b,v in zip(bins,sfh_vals):
-    data.append({'x': round(b,2), 'y':v})
+ 
+ # data = []
+ #  for b,v in zip(bins,sfh_vals):
+ #   data.append({'x': round(b,2), 'y':v})
 
-  print data
-  return render_to_response('commarea2.html', {'data': json.dumps(data)},\
+  apc = AreaPlotCache.objects.get(pk=25)
+  
+#  print data
+  return render_to_response('commarea2.html', {'histData': apc.json_str},\
                             context_instance=RequestContext(request))
 
