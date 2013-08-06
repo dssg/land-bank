@@ -17,6 +17,9 @@ def run(verbose = True):
   load_vacancyreport(files_usps, verbose = verbose)
 
 def load_vacancyreport(files_usps, verbose = False):
+  skip_lookup = False
+  if VacancyUSPS.objects.count() == 0:
+    skip_lookup = True
   for i in range(len(files_usps)):
     f = open(files_usps[i], 'r')
     reader = csv.reader(f)
@@ -82,6 +85,8 @@ def load_vacancyreport(files_usps, verbose = False):
       pqns_is_bus  = None if row[55]=='' else int(float(row[55]))
       pqns_is_oth  = None if row[56]=='' else int(float(row[56]))
       try:
+        if skip_lookup:
+          raise Exception('no lookup')
         vacancyreport = VacancyUSPS.objects.get(\
           year         = year         ,\
           quarter      = quarter      ,\

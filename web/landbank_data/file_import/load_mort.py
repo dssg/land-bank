@@ -14,6 +14,9 @@ def load_mortgages(mortgage_file, verbose = False):
     reader = csv.reader(f, delimiter="\t")
     reader.next()
     #i = 0;
+    skip_lookup = False
+    if Mortgage.objects.count() == 0:
+      skip_lookup = True
     for row in reader:
       #if (i==10):
         #break
@@ -62,6 +65,8 @@ def load_mortgages(mortgage_file, verbose = False):
       except:	adj_yd = None
       loc       = None if row[21]=='' else Point((Decimal(row[22]), Decimal(row[21])))
       try:
+        if skip_lookup:
+          raise Exception('no lookup')
         mortgage =  Mortgage.objects.get(\
         pin = pin\
         ,doc = doc\

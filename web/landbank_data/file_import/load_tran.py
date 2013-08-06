@@ -14,6 +14,9 @@ def load_transactions(transaction_file, verbose = False):
     reader = csv.reader(f, delimiter="\t")
     reader.next()
     #i = 0;
+    skip_lookup = False
+    if Transaction.objects.count() == 0:
+      skip_lookup = True
     for row in reader:
       #if (i==10):
         #break
@@ -66,6 +69,8 @@ def load_transactions(transaction_file, verbose = False):
       except:	adj_yd = None
       loc       = None if row[22]=='' else Point((Decimal(row[23]), Decimal(row[22])),srid=4326).transform(3435)
       try:
+        if skip_lookup:
+          raise Exception('no lookup')
         transaction =  Transaction.objects.get(\
         pin = pin\
 	,amount_prime = amount_prime\
