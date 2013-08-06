@@ -1,0 +1,16 @@
+<h2>Property Scores</h2>
+{% if tract and score %}
+    <div class="list-group list-group-flush">
+        <a href="#" class="list-group-item">Impact
+            <span class="badge">{% if score.impact %}{{ score.impact }}{% else %}N/A{% endif %}</span>
+        </a><a href="#" class="list-group-item">Stability
+            <span class="badge">{% if score.stability %}{{ score.stability }}{% else %}N/A{% endif %}</span>
+        </a><a href="#" class="list-group-item">Affordability
+            <span class="badge">{% if score.affordability >= 0 %}{{ score.affordability }}{% else %}N/A{% endif %}</span>
+        </a><a href="#" class="list-group-item">Nuisance
+            <span class="badge">{% if score.nuisance %}{{ score.nuisance }}{% else %}N/A{% endif %}</span>
+        </a>
+    </div>
+{% else %}
+    <span class="unavailable">No scores available.</span>
+{% endif %}
