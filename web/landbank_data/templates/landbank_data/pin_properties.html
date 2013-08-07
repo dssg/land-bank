@@ -7,7 +7,7 @@
     </div><div class="row">
         <div class="col-5">Address</div><div class="col-7">
             {% if assessor.street %}
-                {{ assessor.houseno}} {{ assessor.direction }} {{ assessor.street }}
+                {{ assessor.houseno}} {{ assessor.direction|title }} {{ assessor.street|title }}
             {% else %}
                 <span class="unavailable">Unavailable</span>
             {% endif %}
@@ -16,7 +16,7 @@
         <div class="col-5">Property type</div>
         <div class="col-7">
             {% if assessor.ptype_desc %}
-                {{ assessor.ptype_desc}}
+                {{ assessor.ptype_desc|title }}
             {% else %}
                 <span class="unavailable">Unavailable</span>
             {% endif %}
@@ -48,14 +48,14 @@
     </div>
     <div class="row"><div class="col-5">Ward</div><div class="col-7">
         {% if ward %}
-            {{ ward.ward }}: {{ ward.alderman }}
+            {{ ward.ward }}: {{ ward.alderman|title }}
         {% else %}
             <span class="unavailable">Unavailable</span>
         {% endif %}
     </div></div>
     <div class="row"><div class="col-5">Community Area</div><div class="col-7">
         {% if ca %}
-            {{ ca.area_number }}: {{ ca.area_name }}
+            {{ ca.area_number }}: {{ ca.area_name|title }}
         {% else %}
             <span class="unavailable">Unavailable</span>
         {% endif %}
