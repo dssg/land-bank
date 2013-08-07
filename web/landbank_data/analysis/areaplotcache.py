@@ -67,40 +67,20 @@ def save_hist_data_from_properties(properties, area_type_label, area_fk_id, area
     sf['Msqft_bldg_11']=(10 ** (-3))*sf['sqft_bldg']
     ap_land_psf=sf['land_assmt_11_psf'].map(lambda x: x if x != np.inf else np.nan)
     ap_bldg_psf=sf['bldg_assmt_11_psf'].map(lambda x: x if x != np.inf else np.nan)
-    fig = plt.figure()
-    
-    fig.suptitle(area_name,fontsize=14)
-    ax=fig.add_subplot(221)
-    n_land_psf, bins_land_psf, patches = ax.hist(ap_land_psf[ap_land_psf.notnull()].T, bins = 10, normed=False, facecolor='red', alpha=0.4)
-    ax.set_xlabel('$')
-    ax.set_ylabel('Count')
-    ax.set_title('Land PSF and Size Dist')
-    ax.grid(True)
-    ax=fig.add_subplot(222)
+
+    # Building histogram data
+    ap_land_psf_data=ap_land_psf[ap_land_psf.notnull()].T
+    n_land_psf, bins_land_psf = np.histogram(ap_land_psf_data, bins = np.linspace(0,np.max(ap_land_psf_data,axis=None),11))
     to_hist = ap_bldg_psf.T.values
     to_hist = to_hist[np.logical_not(np.isnan(to_hist))]
-    n_bldg_psf, bins_bldg_psf, patches = ax.hist(to_hist, bins = 10, normed=False, facecolor='red', alpha=0.4)
-    ax.set_xlabel('$')
-    ax.grid(True)
-    ax.set_title('Building PSF and Size Dist')
-    ax=fig.add_subplot(223)
-    ax.set_xlabel('10^3 ft^2')
-    ax.set_ylabel('count')
-    n_land_msf, bins_land_msf, patches = ax.hist(sf['Msqft_land_11'][ap_land_psf.notnull()].T, bins = 10, normed=False, facecolor='blue', alpha=0.4)
-    ax.grid(True)
-    ax=fig.add_subplot(224)
-    ax.set_xlabel('10^3 ft^2')
-    n_bldg_msf, bins_bldg_msf, patches = ax.hist(sf['Msqft_bldg_11'][ap_land_psf.notnull()].T, bins = 10, normed=False, facecolor='blue', alpha=0.4)
-    ax.grid(True)
-    fig.set_size_inches(7,5)
-    fig.tight_layout()
-    fig.subplots_adjust(top=0.85)
+    n_bldg_psf, bins_bldg_psf = np.histogram(to_hist, bins = np.linspace(0,np.max(to_hist),11))
+    Msqft_land_data =sf['Msqft_land_11'][ap_land_psf.notnull()].T
+    Msqft_bldg_data =sf['Msqft_bldg_11'][ap_bldg_psf.notnull()].T
+    n_land_msf, bins_land_msf = np.histogram(Msqft_land_data, bins = np.linspace(0,np.max(Msqft_land_data,axis=None),11))
+    n_bldg_msf, bins_bldg_msf = np.histogram(Msqft_bldg_data, bins = np.linspace(0,np.max(Msqft_bldg_data,axis=None),11))
+
     hist_data=build_dict(area_name,n_land_psf,bins_land_psf,n_bldg_psf,bins_bldg_psf,n_land_msf,bins_land_msf,n_bldg_msf,bins_bldg_msf)
-    # Calculate plot data for this community area based on properties[] list
-    # ...
-    # Set plot data with this method to create/update the json_str field
     key_name = 'histData'
-    #value = json.dumps(hist_data, indent=4, separators=(',', ':'))
     plot_title = area_name
     set_or_update_plot(area_type_label, area_fk_id, key_name, hist_data, plot_title)
 
