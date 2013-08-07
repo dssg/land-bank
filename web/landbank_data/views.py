@@ -6,6 +6,9 @@ import numpy as np
 from pytz import timezone
 import json
 
+def base_map(request):
+    return render(request, 'landbank_data/base_map.html', {})
+
 def map(request, ca_number=1):
     #ca = CommunityAreas.objects.filter(pk__lte=10)
     ca = CommunityAreas.objects.get(area_number=ca_number)
