@@ -10,9 +10,9 @@
 		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBroCTXbMjlkQTtTjuICn2sMKtM7IssVp0&sensor=false">
 		</script>
 		<script type="text/javascript"
-		src="wax/dist/wax.g.min.js">
+		src="/static/landbank_data/wax/dist/wax.g.min.js">
 		</script>
-		<link href="wax/theme/controls.css" rel="stylesheet" type="text/css" />
+		<link href="/static/landbank_data/wax/theme/controls.css" rel="stylesheet" type="text/css" />
 		<script src='http://api.tiles.mapbox.com/mapbox.js/v1.3.1/mapbox.js'></script>
 		<link href='http://api.tiles.mapbox.com/mapbox.js/v1.3.1/mapbox.css' rel='stylesheet' />
 	</head>
@@ -26,9 +26,10 @@
 		      zoom: 8,
 		      mapTypeId: google.maps.MapTypeId.ROADMAP });
 		
-		google.maps.event.addListener(m, 'zoom_changed', function(){console.log('hooray!') } )
+		google.maps.event.addListener(m, 'zoom_changed', function() { 
+                        console.log('zoom: '+m.zoom); 
 			if(m.zoom==15) {
-			var url_1 = 'http://a.tiles.mapbox.com/v3/salice412.base_layer8_2.json'
+			var url_1 = 'http://a.tiles.mapbox.com/v3/salice412.base_layer8_2.json';
 			var base_pina1 = {
 				tilejson: '2.0.0',
 				tiles: [
@@ -36,11 +37,11 @@
 				"http://b.tiles.mapbox.com/v3/salice412.base_layer8_2/{z}/{x}/{y}.png",
 				"http://c.tiles.mapbox.com/v3/salice412.base_layer8_2/{z}/{x}/{y}.png",
 				"http://d.tiles.mapbox.com/v3/salice412.base_layer8_2/{z}/{x}/{y}.png"
-				]}
-			var base_pina1_layer = new wax.g.connector(base_pina1)
-			m.overlayMapTypes.insertAt(0,base_pina1_layer)	
+				]};
+			var base_pina1_layer = new wax.g.connector(base_pina1);
+			m.overlayMapTypes.insertAt(0,base_pina1_layer);
 
-			var url_2 = 'http://a.tiles.mapbox.com/v3/salice412.base_pina2.json'
+			var url_2 = 'http://a.tiles.mapbox.com/v3/salice412.base_pina2.json';
 			var base_pina2 = {
 				tilejson: '2.0.0',
 				tiles: [
@@ -48,12 +49,12 @@
 				"http://b.tiles.mapbox.com/v3/salice412.base_pina2/{z}/{x}/{y}.png",
 				"http://c.tiles.mapbox.com/v3/salice412.base_pina2/{z}/{x}/{y}.png",
 				"http://d.tiles.mapbox.com/v3/salice412.base_pina2/{z}/{x}/{y}.png"
-				]}
-			var base_pina2_layer = new wax.g.connector(base_pina2)
-			m.overlayMapTypes.insertAt(0,base_pina2_layer)
+				]};
+			var base_pina2_layer = new wax.g.connector(base_pina2);
+			m.overlayMapTypes.insertAt(0,base_pina2_layer);
 
 
-			var url_3 = 'http://a.tiles.mapbox.com/v3/salice412.base_pina3.json'
+			var url_3 = 'http://a.tiles.mapbox.com/v3/salice412.base_pina3.json';
 			var base_pina3 = {
 				tilejson: '2.0.0',
 				tiles: [
@@ -61,12 +62,12 @@
 				"http://b.tiles.mapbox.com/v3/salice412.base_pina3/{z}/{x}/{y}.png",
 				"http://c.tiles.mapbox.com/v3/salice412.base_pina3/{z}/{x}/{y}.png",
 				"http://d.tiles.mapbox.com/v3/salice412.base_pina3/{z}/{x}/{y}.png"
-				]}
-			var base_pina3_layer = new wax.g.connector(base_pina3)
-			m.overlayMapTypes.insertAt(0,base_pina3_layer)
+				]};
+			var base_pina3_layer = new wax.g.connector(base_pina3);
+			m.overlayMapTypes.insertAt(0,base_pina3_layer);
 
 
-			var url_4 = 'http://a.tiles.mapbox.com/v3/salice412.base_pina4.json'
+			var url_4 = 'http://a.tiles.mapbox.com/v3/salice412.base_pina4.json';
 			var base_pina4 = {
 				tilejson: '2.0.0',
 				tiles: [
@@ -74,12 +75,12 @@
 				"http://b.tiles.mapbox.com/v3/salice412.base_pina4/{z}/{x}/{y}.png",
 				"http://c.tiles.mapbox.com/v3/salice412.base_pina4/{z}/{x}/{y}.png",
 				"http://d.tiles.mapbox.com/v3/salice412.base_pina4/{z}/{x}/{y}.png"
-				]}
-			var base_pina4_layer = new wax.g.connector(base_pina4)
-			m.overlayMapTypes.insertAt(0,base_pina4_layer)
+				]};
+			var base_pina4_layer = new wax.g.connector(base_pina4);
+			m.overlayMapTypes.insertAt(0,base_pina4_layer);
 
 
-			var url_5 = 'http://a.tiles.mapbox.com/v3/salice412.base_pina5.json'
+			var url_5 = 'http://a.tiles.mapbox.com/v3/salice412.base_pina5.json';
 			var base_pina5 = {
 				tilejson: '2.0.0',
 				tiles: [
@@ -87,12 +88,12 @@
 				"http://b.tiles.mapbox.com/v3/salice412.base_pina5/{z}/{x}/{y}.png",
 				"http://c.tiles.mapbox.com/v3/salice412.base_pina5/{z}/{x}/{y}.png",
 				"http://d.tiles.mapbox.com/v3/salice412.base_pina5/{z}/{x}/{y}.png"
-				]}
-			var base_pina5_layer = new wax.g.connector(base_pina5)
-			m.overlayMapTypes.insertAt(0,base_pina5_layer)
+				]};
+			var base_pina5_layer = new wax.g.connector(base_pina5);
+			m.overlayMapTypes.insertAt(0,base_pina5_layer);
 
 
-			var url_6 = 'http://a.tiles.mapbox.com/v3/salice412.base_pina6.json'
+			var url_6 = 'http://a.tiles.mapbox.com/v3/salice412.base_pina6.json';
 			var base_pina6 = {
 				tilejson: '2.0.0',
 				tiles: [
@@ -100,12 +101,12 @@
 				"http://b.tiles.mapbox.com/v3/salice412.base_pina6/{z}/{x}/{y}.png",
 				"http://c.tiles.mapbox.com/v3/salice412.base_pina6/{z}/{x}/{y}.png",
 				"http://d.tiles.mapbox.com/v3/salice412.base_pina6/{z}/{x}/{y}.png"
-				]}
-			var base_pina6_layer = new wax.g.connector(base_pina6)
-			m.overlayMapTypes.insertAt(0,base_pina6_layer)
+				]};
+			var base_pina6_layer = new wax.g.connector(base_pina6);
+			m.overlayMapTypes.insertAt(0,base_pina6_layer);
 
 
-			var url_7 = 'http://a.tiles.mapbox.com/v3/salice412.base_pina7.json'
+			var url_7 = 'http://a.tiles.mapbox.com/v3/salice412.base_pina7.json';
 			var base_pina7 = {
 				tilejson: '2.0.0',
 				tiles: [
@@ -113,12 +114,12 @@
 				"http://b.tiles.mapbox.com/v3/salice412.base_pina7/{z}/{x}/{y}.png",
 				"http://c.tiles.mapbox.com/v3/salice412.base_pina7/{z}/{x}/{y}.png",
 				"http://d.tiles.mapbox.com/v3/salice412.base_pina7/{z}/{x}/{y}.png"
-				]}
-			var base_pina7_layer = new wax.g.connector(base_pina7)
-			m.overlayMapTypes.insertAt(0,base_pina7_layer)
+				]};
+			var base_pina7_layer = new wax.g.connector(base_pina7);
+			m.overlayMapTypes.insertAt(0,base_pina7_layer);
 
 
-			var url_8 = 'http://a.tiles.mapbox.com/v3/salice412.base_pina8.json'
+			var url_8 = 'http://a.tiles.mapbox.com/v3/salice412.base_pina8.json';
 			var base_pina8 = {
 				tilejson: '2.0.0',
 				tiles: [
@@ -126,12 +127,12 @@
 				"http://b.tiles.mapbox.com/v3/salice412.base_pina8/{z}/{x}/{y}.png",
 				"http://c.tiles.mapbox.com/v3/salice412.base_pina8/{z}/{x}/{y}.png",
 				"http://d.tiles.mapbox.com/v3/salice412.base_pina8/{z}/{x}/{y}.png"
-				]}
-			var base_pina8_layer = new wax.g.connector(base_pina8)
-			m.overlayMapTypes.insertAt(0,base_pina8_layer)
+				]};
+			var base_pina8_layer = new wax.g.connector(base_pina8);
+			m.overlayMapTypes.insertAt(0,base_pina8_layer);
 
 
-			var url_9 = 'http://a.tiles.mapbox.com/v3/salice412.base_pina9.json'
+			var url_9 = 'http://a.tiles.mapbox.com/v3/salice412.base_pina9.json';
 			var base_pina9 = {
 				tilejson: '2.0.0',
 				tiles: [
@@ -139,12 +140,12 @@
 				"http://b.tiles.mapbox.com/v3/salice412.base_pina9/{z}/{x}/{y}.png",
 				"http://c.tiles.mapbox.com/v3/salice412.base_pina9/{z}/{x}/{y}.png",
 				"http://d.tiles.mapbox.com/v3/salice412.base_pina9/{z}/{x}/{y}.png"
-				]}
-			var base_pina9_layer = new wax.g.connector(base_pina9)
-			m.overlayMapTypes.insertAt(0,base_pina9_layer)
+				]};
+			var base_pina9_layer = new wax.g.connector(base_pina9);
+			m.overlayMapTypes.insertAt(0,base_pina9_layer);
 
 
-			var url_10 = 'http://a.tiles.mapbox.com/v3/salice412.base_pina10.json'
+			var url_10 = 'http://a.tiles.mapbox.com/v3/salice412.base_pina10.json';
 			var base_pina10 = {
 				tilejson: '2.0.0',
 				tiles: [
@@ -152,12 +153,12 @@
 				"http://b.tiles.mapbox.com/v3/salice412.base_pina10/{z}/{x}/{y}.png",
 				"http://c.tiles.mapbox.com/v3/salice412.base_pina10/{z}/{x}/{y}.png",
 				"http://d.tiles.mapbox.com/v3/salice412.base_pina10/{z}/{x}/{y}.png"
-				]}
-			var base_pina10_layer = new wax.g.connector(base_pina10)
-			m.overlayMapTypes.insertAt(0,base_pina10_layer)
+				]};
+			var base_pina10_layer = new wax.g.connector(base_pina10);
+			m.overlayMapTypes.insertAt(0,base_pina10_layer);
 
 
-			var url_11 = 'http://a.tiles.mapbox.com/v3/salice412.base_pina11.json'
+			var url_11 = 'http://a.tiles.mapbox.com/v3/salice412.base_pina11.json';
 			var base_pina11 = {
 				tilejson: '2.0.0',
 				tiles: [
@@ -165,12 +166,12 @@
 				"http://b.tiles.mapbox.com/v3/salice412.base_pina11/{z}/{x}/{y}.png",
 				"http://c.tiles.mapbox.com/v3/salice412.base_pina11/{z}/{x}/{y}.png",
 				"http://d.tiles.mapbox.com/v3/salice412.base_pina11/{z}/{x}/{y}.png"
-				]}
-			var base_pina11_layer = new wax.g.connector(base_pina11)
-			m.overlayMapTypes.insertAt(0,base_pina11_layer)
+				]};
+			var base_pina11_layer = new wax.g.connector(base_pina11);
+			m.overlayMapTypes.insertAt(0,base_pina11_layer);
 
 
-			var url_12 = 'http://a.tiles.mapbox.com/v3/salice412.base_pina12.json'
+			var url_12 = 'http://a.tiles.mapbox.com/v3/salice412.base_pina12.json';
 			var base_pina12 = {
 				tilejson: '2.0.0',
 				tiles: [
@@ -178,12 +179,12 @@
 				"http://b.tiles.mapbox.com/v3/salice412.base_pina12/{z}/{x}/{y}.png",
 				"http://c.tiles.mapbox.com/v3/salice412.base_pina12/{z}/{x}/{y}.png",
 				"http://d.tiles.mapbox.com/v3/salice412.base_pina12/{z}/{x}/{y}.png"
-				]}
-			var base_pina12_layer = new wax.g.connector(base_pina12)
-			m.overlayMapTypes.insertAt(0,base_pina12_layer)
+				]};
+			var base_pina12_layer = new wax.g.connector(base_pina12);
+			m.overlayMapTypes.insertAt(0,base_pina12_layer);
 
 
-			var url_13 = 'http://a.tiles.mapbox.com/v3/salice412.base_pina13.json'
+			var url_13 = 'http://a.tiles.mapbox.com/v3/salice412.base_pina13.json';
 			var base_pina13 = {
 				tilejson: '2.0.0',
 				tiles: [
@@ -191,12 +192,12 @@
 				"http://b.tiles.mapbox.com/v3/salice412.base_pina13/{z}/{x}/{y}.png",
 				"http://c.tiles.mapbox.com/v3/salice412.base_pina13/{z}/{x}/{y}.png",
 				"http://d.tiles.mapbox.com/v3/salice412.base_pina13/{z}/{x}/{y}.png"
-				]}
-			var base_pina13_layer = new wax.g.connector(base_pina13)
-			m.overlayMapTypes.insertAt(0,base_pina13_layer)
+				]};
+			var base_pina13_layer = new wax.g.connector(base_pina13);
+			m.overlayMapTypes.insertAt(0,base_pina13_layer);
 
 
-			var url_14 = 'http://a.tiles.mapbox.com/v3/salice412.base_pina14.json'
+			var url_14 = 'http://a.tiles.mapbox.com/v3/salice412.base_pina14.json';
 			var base_pina14 = {
 				tilejson: '2.0.0',
 				tiles: [
@@ -204,12 +205,12 @@
 				"http://b.tiles.mapbox.com/v3/salice412.base_pina14/{z}/{x}/{y}.png",
 				"http://c.tiles.mapbox.com/v3/salice412.base_pina14/{z}/{x}/{y}.png",
 				"http://d.tiles.mapbox.com/v3/salice412.base_pina14/{z}/{x}/{y}.png"
-				]}
-			var base_pina14_layer = new wax.g.connector(base_pina14)
-			m.overlayMapTypes.insertAt(0,base_pina14_layer)
+				]};
+			var base_pina14_layer = new wax.g.connector(base_pina14);
+			m.overlayMapTypes.insertAt(0,base_pina14_layer);
 
 
-			var url_15 = 'http://a.tiles.mapbox.com/v3/salice412.base_pina15.json'
+			var url_15 = 'http://a.tiles.mapbox.com/v3/salice412.base_pina15.json';
 			var base_pina15 = {
 				tilejson: '2.0.0',
 				tiles: [
@@ -217,12 +218,12 @@
 				"http://b.tiles.mapbox.com/v3/salice412.base_pina15/{z}/{x}/{y}.png",
 				"http://c.tiles.mapbox.com/v3/salice412.base_pina15/{z}/{x}/{y}.png",
 				"http://d.tiles.mapbox.com/v3/salice412.base_pina15/{z}/{x}/{y}.png"
-				]}
-			var base_pina15_layer = new wax.g.connector(base_pina15)
-			m.overlayMapTypes.insertAt(0,base_pina15_layer)
+				]};
+			var base_pina15_layer = new wax.g.connector(base_pina15);
+			m.overlayMapTypes.insertAt(0,base_pina15_layer);
 
 
-			var url_16 = 'http://a.tiles.mapbox.com/v3/salice412.base_pina16.json'
+			var url_16 = 'http://a.tiles.mapbox.com/v3/salice412.base_pina16.json';
 			var base_pina16 = {
 				tilejson: '2.0.0',
 				tiles: [
@@ -230,12 +231,12 @@
 				"http://b.tiles.mapbox.com/v3/salice412.base_pina16/{z}/{x}/{y}.png",
 				"http://c.tiles.mapbox.com/v3/salice412.base_pina16/{z}/{x}/{y}.png",
 				"http://d.tiles.mapbox.com/v3/salice412.base_pina16/{z}/{x}/{y}.png"
-				]}
-			var base_pina16_layer = new wax.g.connector(base_pina16)
-			m.overlayMapTypes.insertAt(0,base_pina16_layer)
+				]};
+			var base_pina16_layer = new wax.g.connector(base_pina16);
+			m.overlayMapTypes.insertAt(0,base_pina16_layer);
 
 
-			var url_17 = 'http://a.tiles.mapbox.com/v3/salice412.base_pina17.json'
+			var url_17 = 'http://a.tiles.mapbox.com/v3/salice412.base_pina17.json';
 			var base_pina17 = {
 				tilejson: '2.0.0',
 				tiles: [
@@ -243,12 +244,12 @@
 				"http://b.tiles.mapbox.com/v3/salice412.base_pina17/{z}/{x}/{y}.png",
 				"http://c.tiles.mapbox.com/v3/salice412.base_pina17/{z}/{x}/{y}.png",
 				"http://d.tiles.mapbox.com/v3/salice412.base_pina17/{z}/{x}/{y}.png"
-				]}
-			var base_pina17_layer = new wax.g.connector(base_pina17)
-			m.overlayMapTypes.insertAt(0,base_pina17_layer)
+				]};
+			var base_pina17_layer = new wax.g.connector(base_pina17);
+			m.overlayMapTypes.insertAt(0,base_pina17_layer);
 
 
-			var url_18 = 'http://a.tiles.mapbox.com/v3/salice412.base_pina18.json'
+			var url_18 = 'http://a.tiles.mapbox.com/v3/salice412.base_pina18.json';
 			var base_pina18 = {
 				tilejson: '2.0.0',
 				tiles: [
@@ -256,12 +257,12 @@
 				"http://b.tiles.mapbox.com/v3/salice412.base_pina18/{z}/{x}/{y}.png",
 				"http://c.tiles.mapbox.com/v3/salice412.base_pina18/{z}/{x}/{y}.png",
 				"http://d.tiles.mapbox.com/v3/salice412.base_pina18/{z}/{x}/{y}.png"
-				]}
-			var base_pina18_layer = new wax.g.connector(base_pina18)
-			m.overlayMapTypes.insertAt(0,base_pina18_layer)
+				]};
+			var base_pina18_layer = new wax.g.connector(base_pina18);
+			m.overlayMapTypes.insertAt(0,base_pina18_layer);
 
 
-			var url_19 = 'http://a.tiles.mapbox.com/v3/salice412.base_pina19.json'
+			var url_19 = 'http://a.tiles.mapbox.com/v3/salice412.base_pina19.json';
 			var base_pina19 = {
 				tilejson: '2.0.0',
 				tiles: [
@@ -269,12 +270,12 @@
 				"http://b.tiles.mapbox.com/v3/salice412.base_pina19/{z}/{x}/{y}.png",
 				"http://c.tiles.mapbox.com/v3/salice412.base_pina19/{z}/{x}/{y}.png",
 				"http://d.tiles.mapbox.com/v3/salice412.base_pina19/{z}/{x}/{y}.png"
-				]}
-			var base_pina19_layer = new wax.g.connector(base_pina19)
-			m.overlayMapTypes.insertAt(0,base_pina19_layer)
+				]};
+			var base_pina19_layer = new wax.g.connector(base_pina19);
+			m.overlayMapTypes.insertAt(0,base_pina19_layer);
 
 
-			var url_20 = 'http://a.tiles.mapbox.com/v3/salice412.base_pina20.json'
+			var url_20 = 'http://a.tiles.mapbox.com/v3/salice412.base_pina20.json';
 			var base_pina20 = {
 				tilejson: '2.0.0',
 				tiles: [
@@ -282,12 +283,12 @@
 				"http://b.tiles.mapbox.com/v3/salice412.base_pina20/{z}/{x}/{y}.png",
 				"http://c.tiles.mapbox.com/v3/salice412.base_pina20/{z}/{x}/{y}.png",
 				"http://d.tiles.mapbox.com/v3/salice412.base_pina20/{z}/{x}/{y}.png"
-				]}
-			var base_pina20_layer = new wax.g.connector(base_pina20)
-			m.overlayMapTypes.insertAt(0,base_pina20_layer)
+				]};
+			var base_pina20_layer = new wax.g.connector(base_pina20);
+			m.overlayMapTypes.insertAt(0,base_pina20_layer);
 
 
-			var url_21 = 'http://a.tiles.mapbox.com/v3/salice412.base_pina21.json'
+			var url_21 = 'http://a.tiles.mapbox.com/v3/salice412.base_pina21.json';
 			var base_pina21 = {
 				tilejson: '2.0.0',
 				tiles: [
@@ -295,12 +296,12 @@
 				"http://b.tiles.mapbox.com/v3/salice412.base_pina21/{z}/{x}/{y}.png",
 				"http://c.tiles.mapbox.com/v3/salice412.base_pina21/{z}/{x}/{y}.png",
 				"http://d.tiles.mapbox.com/v3/salice412.base_pina21/{z}/{x}/{y}.png"
-				]}
-			var base_pina21_layer = new wax.g.connector(base_pina21)
-			m.overlayMapTypes.insertAt(0,base_pina21_layer)
+				]};
+			var base_pina21_layer = new wax.g.connector(base_pina21);
+			m.overlayMapTypes.insertAt(0,base_pina21_layer);
 
 
-			var url_22 = 'http://a.tiles.mapbox.com/v3/salice412.base_pina22.json'
+			var url_22 = 'http://a.tiles.mapbox.com/v3/salice412.base_pina22.json';
 			var base_pina22 = {
 				tilejson: '2.0.0',
 				tiles: [
@@ -308,12 +309,12 @@
 				"http://b.tiles.mapbox.com/v3/salice412.base_pina22/{z}/{x}/{y}.png",
 				"http://c.tiles.mapbox.com/v3/salice412.base_pina22/{z}/{x}/{y}.png",
 				"http://d.tiles.mapbox.com/v3/salice412.base_pina22/{z}/{x}/{y}.png"
-				]}
-			var base_pina22_layer = new wax.g.connector(base_pina22)
-			m.overlayMapTypes.insertAt(0,base_pina22_layer)
+				]};
+			var base_pina22_layer = new wax.g.connector(base_pina22);
+			m.overlayMapTypes.insertAt(0,base_pina22_layer);
 
 
-			var url_23 = 'http://a.tiles.mapbox.com/v3/salice412.base_pina23.json'
+			var url_23 = 'http://a.tiles.mapbox.com/v3/salice412.base_pina23.json';
 			var base_pina23 = {
 				tilejson: '2.0.0',
 				tiles: [
@@ -321,12 +322,12 @@
 				"http://b.tiles.mapbox.com/v3/salice412.base_pina23/{z}/{x}/{y}.png",
 				"http://c.tiles.mapbox.com/v3/salice412.base_pina23/{z}/{x}/{y}.png",
 				"http://d.tiles.mapbox.com/v3/salice412.base_pina23/{z}/{x}/{y}.png"
-				]}
-			var base_pina23_layer = new wax.g.connector(base_pina23)
-			m.overlayMapTypes.insertAt(0,base_pina23_layer)
+				]};
+			var base_pina23_layer = new wax.g.connector(base_pina23);
+			m.overlayMapTypes.insertAt(0,base_pina23_layer);
 
 
-			var url_24 = 'http://a.tiles.mapbox.com/v3/salice412.base_pina24.json'
+			var url_24 = 'http://a.tiles.mapbox.com/v3/salice412.base_pina24.json';
 			var base_pina24 = {
 				tilejson: '2.0.0',
 				tiles: [
@@ -334,12 +335,12 @@
 				"http://b.tiles.mapbox.com/v3/salice412.base_pina24/{z}/{x}/{y}.png",
 				"http://c.tiles.mapbox.com/v3/salice412.base_pina24/{z}/{x}/{y}.png",
 				"http://d.tiles.mapbox.com/v3/salice412.base_pina24/{z}/{x}/{y}.png"
-				]}
-			var base_pina24_layer = new wax.g.connector(base_pina24)
-			m.overlayMapTypes.insertAt(0,base_pina24_layer)
+				]};
+			var base_pina24_layer = new wax.g.connector(base_pina24);
+			m.overlayMapTypes.insertAt(0,base_pina24_layer);
 
 
-			var url_25 = 'http://a.tiles.mapbox.com/v3/salice412.base_pina25.json'
+			var url_25 = 'http://a.tiles.mapbox.com/v3/salice412.base_pina25.json';
 			var base_pina25 = {
 				tilejson: '2.0.0',
 				tiles: [
@@ -347,12 +348,12 @@
 				"http://b.tiles.mapbox.com/v3/salice412.base_pina25/{z}/{x}/{y}.png",
 				"http://c.tiles.mapbox.com/v3/salice412.base_pina25/{z}/{x}/{y}.png",
 				"http://d.tiles.mapbox.com/v3/salice412.base_pina25/{z}/{x}/{y}.png"
-				]}
-			var base_pina25_layer = new wax.g.connector(base_pina25)
-			m.overlayMapTypes.insertAt(0,base_pina25_layer)
+				]};
+			var base_pina25_layer = new wax.g.connector(base_pina25);
+			m.overlayMapTypes.insertAt(0,base_pina25_layer);
 
 
-			var url_26 = 'http://a.tiles.mapbox.com/v3/salice412.base_pina26.json'
+			var url_26 = 'http://a.tiles.mapbox.com/v3/salice412.base_pina26.json';
 			var base_pina26 = {
 				tilejson: '2.0.0',
 				tiles: [
@@ -360,12 +361,12 @@
 				"http://b.tiles.mapbox.com/v3/salice412.base_pina26/{z}/{x}/{y}.png",
 				"http://c.tiles.mapbox.com/v3/salice412.base_pina26/{z}/{x}/{y}.png",
 				"http://d.tiles.mapbox.com/v3/salice412.base_pina26/{z}/{x}/{y}.png"
-				]}
-			var base_pina26_layer = new wax.g.connector(base_pina26)
-			m.overlayMapTypes.insertAt(0,base_pina26_layer)
+				]};
+			var base_pina26_layer = new wax.g.connector(base_pina26);
+			m.overlayMapTypes.insertAt(0,base_pina26_layer);
 
 
-			var url_27 = 'http://a.tiles.mapbox.com/v3/salice412.base_pina27.json'
+			var url_27 = 'http://a.tiles.mapbox.com/v3/salice412.base_pina27.json';
 			var base_pina27 = {
 				tilejson: '2.0.0',
 				tiles: [
@@ -373,12 +374,12 @@
 				"http://b.tiles.mapbox.com/v3/salice412.base_pina27/{z}/{x}/{y}.png",
 				"http://c.tiles.mapbox.com/v3/salice412.base_pina27/{z}/{x}/{y}.png",
 				"http://d.tiles.mapbox.com/v3/salice412.base_pina27/{z}/{x}/{y}.png"
-				]}
-			var base_pina27_layer = new wax.g.connector(base_pina27)
-			m.overlayMapTypes.insertAt(0,base_pina27_layer)
+				]};
+			var base_pina27_layer = new wax.g.connector(base_pina27);
+			m.overlayMapTypes.insertAt(0,base_pina27_layer);
 
 
-			var url_28 = 'http://a.tiles.mapbox.com/v3/salice412.base_pina28.json'
+			var url_28 = 'http://a.tiles.mapbox.com/v3/salice412.base_pina28.json';
 			var base_pina28 = {
 				tilejson: '2.0.0',
 				tiles: [
@@ -386,12 +387,12 @@
 				"http://b.tiles.mapbox.com/v3/salice412.base_pina28/{z}/{x}/{y}.png",
 				"http://c.tiles.mapbox.com/v3/salice412.base_pina28/{z}/{x}/{y}.png",
 				"http://d.tiles.mapbox.com/v3/salice412.base_pina28/{z}/{x}/{y}.png"
-				]}
-			var base_pina28_layer = new wax.g.connector(base_pina28)
-			m.overlayMapTypes.insertAt(0,base_pina28_layer)
+				]};
+			var base_pina28_layer = new wax.g.connector(base_pina28);
+			m.overlayMapTypes.insertAt(0,base_pina28_layer);
 
 
-			var url_29 = 'http://a.tiles.mapbox.com/v3/salice412.base_pina29.json'
+			var url_29 = 'http://a.tiles.mapbox.com/v3/salice412.base_pina29.json';
 			var base_pina29 = {
 				tilejson: '2.0.0',
 				tiles: [
@@ -399,12 +400,12 @@
 				"http://b.tiles.mapbox.com/v3/salice412.base_pina29/{z}/{x}/{y}.png",
 				"http://c.tiles.mapbox.com/v3/salice412.base_pina29/{z}/{x}/{y}.png",
 				"http://d.tiles.mapbox.com/v3/salice412.base_pina29/{z}/{x}/{y}.png"
-				]}
-			var base_pina29_layer = new wax.g.connector(base_pina29)
-			m.overlayMapTypes.insertAt(0,base_pina29_layer)
+				]};
+			var base_pina29_layer = new wax.g.connector(base_pina29);
+			m.overlayMapTypes.insertAt(0,base_pina29_layer);
 
 
-			var url_30 = 'http://a.tiles.mapbox.com/v3/salice412.base_pina30.json'
+			var url_30 = 'http://a.tiles.mapbox.com/v3/salice412.base_pina30.json';
 			var base_pina30 = {
 				tilejson: '2.0.0',
 				tiles: [
@@ -412,12 +413,12 @@
 				"http://b.tiles.mapbox.com/v3/salice412.base_pina30/{z}/{x}/{y}.png",
 				"http://c.tiles.mapbox.com/v3/salice412.base_pina30/{z}/{x}/{y}.png",
 				"http://d.tiles.mapbox.com/v3/salice412.base_pina30/{z}/{x}/{y}.png"
-				]}
-			var base_pina30_layer = new wax.g.connector(base_pina30)
-			m.overlayMapTypes.insertAt(0,base_pina30_layer)
+				]};
+			var base_pina30_layer = new wax.g.connector(base_pina30);
+			m.overlayMapTypes.insertAt(0,base_pina30_layer);
 
 
-			var url_31 = 'http://a.tiles.mapbox.com/v3/salice412.base_pina31.json'
+			var url_31 = 'http://a.tiles.mapbox.com/v3/salice412.base_pina31.json';
 			var base_pina31 = {
 				tilejson: '2.0.0',
 				tiles: [
@@ -425,12 +426,12 @@
 				"http://b.tiles.mapbox.com/v3/salice412.base_pina31/{z}/{x}/{y}.png",
 				"http://c.tiles.mapbox.com/v3/salice412.base_pina31/{z}/{x}/{y}.png",
 				"http://d.tiles.mapbox.com/v3/salice412.base_pina31/{z}/{x}/{y}.png"
-				]}
-			var base_pina31_layer = new wax.g.connector(base_pina31)
-			m.overlayMapTypes.insertAt(0,base_pina31_layer)
+				]};
+			var base_pina31_layer = new wax.g.connector(base_pina31);
+			m.overlayMapTypes.insertAt(0,base_pina31_layer);
 
 
-			var url_32 = 'http://a.tiles.mapbox.com/v3/salice412.base_pina32.json'
+			var url_32 = 'http://a.tiles.mapbox.com/v3/salice412.base_pina32.json';
 			var base_pina32 = {
 				tilejson: '2.0.0',
 				tiles: [
@@ -438,12 +439,12 @@
 				"http://b.tiles.mapbox.com/v3/salice412.base_pina32/{z}/{x}/{y}.png",
 				"http://c.tiles.mapbox.com/v3/salice412.base_pina32/{z}/{x}/{y}.png",
 				"http://d.tiles.mapbox.com/v3/salice412.base_pina32/{z}/{x}/{y}.png"
-				]}
-			var base_pina32_layer = new wax.g.connector(base_pina32)
-			m.overlayMapTypes.insertAt(0,base_pina32_layer)
+				]};
+			var base_pina32_layer = new wax.g.connector(base_pina32);
+			m.overlayMapTypes.insertAt(0,base_pina32_layer);
 
 
-			var url_33 = 'http://a.tiles.mapbox.com/v3/salice412.base_pina33.json'
+			var url_33 = 'http://a.tiles.mapbox.com/v3/salice412.base_pina33.json';
 			var base_pina33 = {
 				tilejson: '2.0.0',
 				tiles: [
@@ -451,10 +452,11 @@
 				"http://b.tiles.mapbox.com/v3/salice412.base_pina33/{z}/{x}/{y}.png",
 				"http://c.tiles.mapbox.com/v3/salice412.base_pina33/{z}/{x}/{y}.png",
 				"http://d.tiles.mapbox.com/v3/salice412.base_pina33/{z}/{x}/{y}.png"
-				]}
-			var base_pina33_layer = new wax.g.connector(base_pina33)
-			m.overlayMapTypes.insertAt(0,base_pina33_layer)
-			}	
+				]};
+			var base_pina33_layer = new wax.g.connector(base_pina33);
+			m.overlayMapTypes.insertAt(0,base_pina33_layer);
+			}
+			} );
 	</script>
 	</body>	
 	
