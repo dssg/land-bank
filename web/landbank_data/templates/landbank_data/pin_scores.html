@@ -1,4 +1,4 @@
-<h2>Property Scores</h2>
+<h3>Property Scores</h3>
 {% if tract and score %}
     <div class="list-group list-group-flush">
         <a href="#" class="list-group-item">Impact
@@ -9,6 +9,9 @@
             <span class="badge">{% if score.affordability >= 0 %}{{ score.affordability }}{% else %}N/A{% endif %}</span>
         </a><a href="#" class="list-group-item">Nuisance
             <span class="badge">{% if score.nuisance %}{{ score.nuisance }}{% else %}N/A{% endif %}</span>
+        </a><a href="#" class="list-group-item">Vacancy
+            <span class="badge">{% if vacancy %}{{ vacancy }}{% else %}N/A{% endif %}</span>
+        {% if brown %}</a><a href="#" class="list-group-item">NOTE: Brownfield property{% endif %}
         </a>
     </div>
 {% else %}
