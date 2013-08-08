@@ -1,27 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <title>CCLBA Analytics Tool - Pin Search</title>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <style type="text/css">
+        .axis path,
+        .axis line {
+           fill: none;
+           stroke: black; 
+           shape-rendering: crispEdges;
+         }   
+         .axis text {
+            font-family: sans-serif;
+            font-size: 11px;
+            color: #000000;
+            }   
+    </style> 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>CCLBA Analytics Tool - Pin Search</title>
-
     <link href="/static/landbank_data/css/bootstrap.css" rel="stylesheet">
     <link href="/static/landbank_data/css/pin.css" rel="stylesheet">
     <link href="/static/landbank_data/css/map.css" rel="stylesheet">
-    {% include "landbank_data/map_head.html" %}
+
+    <style type="text/css">
+        #map-base { height: 100%; }
+    </style> 
+    <script type="text/javascript"
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBroCTXbMjlkQTtTjuICn2sMKtM7IssVp0&sensor=false">
+    </script>
+    <script type="text/javascript"
+    src="/static/landbank_data/wax/dist/wax.g.min.js">
+    </script>
+    <link href="/static/landbank_data/wax/theme/controls.css" rel="stylesheet" type="text/css" />
+    <script src='http://api.tiles.mapbox.com/mapbox.js/v1.3.1/mapbox.js'></script>
+    <link href='http://api.tiles.mapbox.com/mapbox.js/v1.3.1/mapbox.css' rel='stylesheet' />
+
 </head>
 <body>
     <div class="container">
-    <h1>Land Bank PIN Search</h1>
+    <!-- <h1>Land Bank PIN Search</h1> -->
     <div class="row">
         <div class="col-lg-4">
 	    {% include "landbank_data/pin_properties.html" %}
         </div>
         <div class="col-lg-8">
-	    {% include "landbank_data/map.html" %}
+	    {% include "landbank_data/base_map_body.html" %}
 	</div>
     </div>
     <div class="row">

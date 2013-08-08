@@ -37,12 +37,29 @@ def pin(request, search_pin=None):
     try:      score = TractScores.objects.get(census_tract_id=lookup.census_tract_id)
     except:   score = None
 
+    try:
+      apc = AreaPlotCache.objects.filter(area_type__exact='Community Area').filter(area_id__exact=ca.id)[:1][0]
+      histData = apc.json_str
+    except:   histData = '""'
+
+    # Todo: debug this; doesn't seem to work
+    try:      brown = Brownfield.objects.get(pin=bigint(lookup.pin))
+    except:   brown = None
+
+    #try:      vacancy = VacancyUSPS.objects.get(fips=tract.fips)
+    #except:   vacancy = None
+    # Do this later...
+    vacancy = 32
+
     return render(request, 'landbank_data/pin.html', {\
 	 'assessor': search_assessor\
 	,'ward': ward\
 	,'ca': ca\
 	,'tract': tract\
 	,'score': score\
+        ,'brown': brown\
+        ,'vacancy': vacancy\
+        ,'histData': histData\
 	})
 
 def commarea(request, search_commarea=None):
