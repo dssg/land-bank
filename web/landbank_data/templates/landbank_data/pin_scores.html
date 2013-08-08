@@ -10,7 +10,7 @@
         </a><a href="#" class="list-group-item">Nuisance
             <span class="badge">{% if score.nuisance %}{{ score.nuisance }}{% else %}N/A{% endif %}</span>
         </a><a href="#" class="list-group-item">Vacancy
-            <span class="badge">{% if vacancy %}{{ vacancy }}{% else %}N/A{% endif %}</span>
+            <span class="badge">{% if score.vacancy %}{{ score.vacancy }}{% else %}N/A{% endif %}</span>
         {% if brown %}</a><a href="#" class="list-group-item">NOTE: Brownfield property{% endif %}
         </a>
     </div>
