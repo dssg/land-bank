@@ -46,11 +46,6 @@ def pin(request, search_pin=None):
     try:      brown = Brownfield.objects.get(pin=bigint(lookup.pin))
     except:   brown = None
 
-    #try:      vacancy = VacancyUSPS.objects.get(fips=tract.fips)
-    #except:   vacancy = None
-    # Do this later...
-    vacancy = 32
-
     return render(request, 'landbank_data/pin.html', {\
 	 'assessor': search_assessor\
 	,'ward': ward\
@@ -58,7 +53,6 @@ def pin(request, search_pin=None):
 	,'tract': tract\
 	,'score': score\
         ,'brown': brown\
-        ,'vacancy': vacancy\
         ,'histData': histData\
 	})
 
