@@ -27,9 +27,10 @@ urlpatterns = patterns('',
 
     # Uncomment the next line to enable the admin:
     # url(r'^admin/', include(admin.site.urls)),
-    (r'^pin/', include('landbank_data.urls')),
-    (r'^commarea/', 'landbank_data.views.commarea'),
-    (r'^map/(?P<ca_number>[0-9]+)/$', 'landbank_data.views.map'),     
-    (r'^base_map/', 'landbank_data.views.base_map'),
-    (r'api/', include(v1_api.urls)),
+    url(r'^pin/', include('landbank_data.urls')),
+    url(r'^commarea/', 'landbank_data.views.commarea'),
+    url(r'^map/(?P<ca_number>[0-9]+)/$', 'landbank_data.views.map'),     
+    url(r'^base_map/', 'landbank_data.views.base_map'),
+    url(r'api/', include(v1_api.urls)),
+    url(r'^$', 'landbank_data.views.home', name='home'),
 )

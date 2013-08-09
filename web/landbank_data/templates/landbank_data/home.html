@@ -1,0 +1,46 @@
+{% extends "landbank_data/base.html" %}
+
+{% block head %}
+<style>
+    html, body, #map-canvas {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+    }
+</style>
+<!-- Skyler's google API key; <25k requests/day -->
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDI19ju3HG5k6WRMU4mYyTJNv_YIWHUqxA&sensor=false"></script>
+
+<script>
+var map;
+var chicagoLatLng = new google.maps.LatLng(41.85, -87.65);
+function initialize() {
+  var mapOptions = {
+    zoom: 11,
+    center: chicagoLatLng,
+    mapTypeId: google.maps.MapTypeId.ROADMAP,
+    streetViewControl: false,
+    mapTypeControl: false,
+    panControl: false,
+    zoomControl: false,
+    //draggable: false,
+    //scrollwheel: false,
+    //disableDoubleClickZoom: true
+  };
+  map = new google.maps.Map(document.getElementById('map-canvas'),
+      mapOptions);
+}
+google.maps.event.addDomListener(window, 'resize', function() {
+    map.setCenter(chicagoLatLng);
+});
+google.maps.event.addDomListener(window, 'load', initialize);
+</script>
+{% endblock %}
+
+{% block topnav %}
+<!-- TODO: add home page controls here -->
+{% endblock %}
+
+{% block content %}
+<div id="map-canvas"></div>
+{% endblock %}

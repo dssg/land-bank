@@ -6,6 +6,9 @@ import numpy as np
 from pytz import timezone
 import json
 
+def home(request):
+    return render(request, 'landbank_data/home.html', {})
+
 def base_map(request):
     return render(request, 'landbank_data/base_map.html', {})
 
