@@ -10,10 +10,10 @@ class Migration(SchemaMigration):
     def forwards(self, orm):
 
         # Changing field 'PinAreaLookup.ward_id'
-        db.alter_column(u'landbank_data_pinarealookup', 'ward_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['landbank_data.Wards'], null=True))
+        db.alter_column(u'landbank_data_pinarealookup', 'ward_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['landbank_data.Ward'], null=True))
 
         # Changing field 'PinAreaLookup.community_area_id'
-        db.alter_column(u'landbank_data_pinarealookup', 'community_area_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['landbank_data.CommunityAreas'], null=True))
+        db.alter_column(u'landbank_data_pinarealookup', 'community_area_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['landbank_data.CommunityArea'], null=True))
 
         # Changing field 'PinAreaLookup.census_tract_id'
         db.alter_column(u'landbank_data_pinarealookup', 'census_tract_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['landbank_data.CensusTract'], null=True))
@@ -145,8 +145,8 @@ class Migration(SchemaMigration):
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'loc': ('django.contrib.gis.db.models.fields.MultiPolygonField', [], {'srid': '3435'})
         },
-        'landbank_data.communityareas': {
-            'Meta': {'object_name': 'CommunityAreas'},
+        'landbank_data.communityarea': {
+            'Meta': {'object_name': 'CommunityArea'},
             'area_name': ('django.db.models.fields.CharField', [], {'max_length': '80', 'null': 'True'}),
             'area_number': ('django.db.models.fields.IntegerField', [], {'null': 'True'}),
             'geom': ('django.contrib.gis.db.models.fields.MultiPolygonField', [], {'srid': '3435'}),
@@ -259,10 +259,10 @@ class Migration(SchemaMigration):
         'landbank_data.pinarealookup': {
             'Meta': {'object_name': 'PinAreaLookup'},
             'census_tract_id': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['landbank_data.CensusTract']", 'null': 'True'}),
-            'community_area_id': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['landbank_data.CommunityAreas']", 'null': 'True'}),
+            'community_area_id': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['landbank_data.CommunityArea']", 'null': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'pin': ('django.db.models.fields.CharField', [], {'max_length': '15', 'db_index': 'True'}),
-            'ward_id': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['landbank_data.Wards']", 'null': 'True'})
+            'ward_id': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['landbank_data.Ward']", 'null': 'True'})
         },
         'landbank_data.propertytypes': {
             'Meta': {'object_name': 'PropertyTypes'},
@@ -420,8 +420,8 @@ class Migration(SchemaMigration):
             'res_vacant': ('django.db.models.fields.IntegerField', [], {}),
             'year': ('django.db.models.fields.IntegerField', [], {})
         },
-        'landbank_data.wards': {
-            'Meta': {'object_name': 'Wards'},
+        'landbank_data.ward': {
+            'Meta': {'object_name': 'Ward'},
             'address': ('django.db.models.fields.CharField', [], {'max_length': '39', 'null': 'True'}),
             'alderman': ('django.db.models.fields.CharField', [], {'max_length': '60', 'null': 'True'}),
             'data_admin': ('django.db.models.fields.FloatField', [], {'null': 'True'}),

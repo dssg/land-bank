@@ -1,4 +1,4 @@
-from models import CommunityAreas as CA, Wards as W, CensusTract as CT, AreaPlotCache as Cache, Assessor, PinAreaLookup as PAL
+from models import CommunityArea as CA, Ward as W, CensusTract as CT, AreaPlotCache as Cache, Assessor, PinAreaLookup as PAL
 import json
 import numpy as np
 import pandas as pd

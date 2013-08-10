@@ -8,8 +8,8 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding model 'Wards'
-        db.create_table(u'landbank_data_wards', (
+        # Adding model 'Ward'
+        db.create_table(u'landbank_data.ward', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('data_admin', self.gf('django.db.models.fields.FloatField')(null=True)),
             ('perimeter', self.gf('django.db.models.fields.FloatField')(null=True)),
@@ -25,7 +25,7 @@ class Migration(SchemaMigration):
             ('shape_len', self.gf('django.db.models.fields.FloatField')(null=True)),
             ('geom', self.gf('django.contrib.gis.db.models.fields.MultiPolygonField')(srid=3435)),
         ))
-        db.send_create_signal('landbank_data', ['Wards'])
+        db.send_create_signal('landbank_data', ['Ward'])
 
         # Adding field 'SummaryStats.count'
         db.add_column(u'landbank_data_summarystats', 'count',
@@ -49,8 +49,8 @@ class Migration(SchemaMigration):
 
 
     def backwards(self, orm):
-        # Deleting model 'Wards'
-        db.delete_table(u'landbank_data_wards')
+        # Deleting model 'Ward'
+        db.delete_table(u'landbank_data.ward')
 
         # Deleting field 'SummaryStats.count'
         db.delete_column(u'landbank_data_summarystats', 'count')
@@ -324,8 +324,8 @@ class Migration(SchemaMigration):
             'yeard': ('django.db.models.fields.IntegerField', [], {'null': 'True'}),
             'yq_doc': ('django.db.models.fields.IntegerField', [], {'null': 'True'})
         },
-        'landbank_data.wards': {
-            'Meta': {'object_name': 'Wards'},
+        'landbank_data.ward': {
+            'Meta': {'object_name': 'Ward'},
             'address': ('django.db.models.fields.CharField', [], {'max_length': '39', 'null': 'True'}),
             'alderman': ('django.db.models.fields.CharField', [], {'max_length': '60', 'null': 'True'}),
             'data_admin': ('django.db.models.fields.FloatField', [], {'null': 'True'}),
