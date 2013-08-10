@@ -24,9 +24,14 @@ def map(request, ca_number=1):
     return render(request, 'landbank_data/map.html', {'object_list': ca_list})
 
 def pin(request, search_pin=None):
-    try:		          search_assessor = Assessor.objects.get(pin=search_pin)
-    except Assessor.DoesNotExist: search_assessor = None
-    else:		          lookup = PinAreaLookup.objects.get(pin=search_pin)
+    try: 
+      search_assessor = Assessor.objects.get(pin=search_pin)
+      mapcenter       = {'lon': search_assessor.long_x, 'lat': search_assessor.lat_y}
+    except Assessor.DoesNotExist: 
+      search_assessor = None
+      mapcenter       = {'lon': -87.65, 'lat': 41.85}
+    else:  
+      lookup = PinAreaLookup.objects.get(pin=search_pin)
 
     try:      ward = Wards.objects.get(pk=lookup.ward_id)
     except:   ward = None
@@ -41,7 +46,9 @@ def pin(request, search_pin=None):
     except:   score = None
 
     try:
-      apc = AreaPlotCache.objects.filter(area_type__exact='Community Area').filter(area_id__exact=ca.id)[:1][0]
+      apc = AreaPlotCache.objects.\
+        filter(area_type__exact='Community Area').\
+        filter(area_id__exact=ca.id)[:1][0]
       histData = apc.json_str
     except:   histData = '""'
 
@@ -56,6 +63,7 @@ def pin(request, search_pin=None):
 	,'tract': tract\
 	,'score': score\
         ,'brown': brown\
+        ,'mapcenter': mapcenter\
         ,'histData': histData\
 	})
 
