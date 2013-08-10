@@ -7,12 +7,15 @@ from CensusTractCharacteristics import CensusTractCharacteristics
 from CensusTractIncome import CensusTractIncome
 from CensusTractOccupancy import CensusTractOccupancy
 from CensusTract import CensusTract
+from CensusBlock import CensusBlock
+from CensusBlockPopulation import CensusBlockPopulation
 from CmapPlan import CmapPlan
 from CommunityArea import CommunityArea
 from CrimeIncident import CrimeIncident
 from Foreclosure import Foreclosure
 from LoanApplication import LoanApplication
 from Mortgage import Mortgage
+from Municipality import Municipality
 from PinAreaLookup import PinAreaLookup
 from PropertyTypes import PropertyTypes
 from Scavenger import Scavenger
