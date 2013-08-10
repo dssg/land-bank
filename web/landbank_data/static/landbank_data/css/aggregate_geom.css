@@ -1,0 +1,27 @@
+.container {
+  margin-top: 20px;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.row {
+  margin-bottom: 20px;
+}
+.row .row {
+  margin-top: 10px;
+  margin-bottom: 0;
+}
+[class*="col-lg-"] {
+  padding-top: 5px;
+  padding-bottom: 5px;
+/*
+  background-color: rgba(141,198,62,.15);
+  border: 1px solid rgba(95,135,39,.2);
+*/
+  background-color: rgba(173,216,230,.55);
+  border: 1px solid rgba(173,216,230,.7);
+}
+.unavailable {
+  color: #999999;
+  font-style:italic;
+}

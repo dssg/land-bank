@@ -1,6 +1,8 @@
 from django.shortcuts import render, get_object_or_404, render_to_response
 from django.template import RequestContext
-from landbank_data.models import Assessor, PinAreaLookup, CommunityAreas, CensusTract, Wards, Transaction, TractScores, AreaPlotCache
+from landbank_data.models import \
+  Assessor, PinAreaLookup, CommunityAreas, \
+  CensusTract, Wards, Transaction, TractScores, AreaPlotCache
 import datetime
 import numpy as np
 from pytz import timezone
@@ -68,26 +70,27 @@ def pin(request, search_pin=None):
 	})
 
 def commarea(request, search_commarea=None):
-  cas = [i.area_number for i in CommunityAreas.objects.all()]
-  sfhs = []
-  cst = timezone('US/Central')
-  oneyearago = cst.localize(datetime.datetime.now() - \
-                            datetime.timedelta(days=365))
+  commarea = get_object_or_404(CommunityAreas,area_number=search_commarea)
 
-  #for ica, ca in enumerate(cas):
-  #  # Only do the first ten because it's slow!
-  #  if ica==10: break
-  #  sfhs.append(np.median([i.amount_prime for i in \
-  #    Transaction.objects.filter(ca_num__exact=ca).\
-  #    filter(date_doc__lte=oneyearago).filter(ptype=1)]))
- 
- # data = []
- #  for b,v in zip(bins,sfh_vals):
- #   data.append({'x': round(b,2), 'y':v})
-
-  apc = AreaPlotCache.objects.get(pk=25)
+  apc = AreaPlotCache.objects.\
+    filter(area_type__exact='Community Area').\
+    filter(area_id__exact=commarea.id)[0]
+  outline = commarea.geom
+  outline.transform(4326)
+  mapcenter_centroid = outline.centroid
+  mapcenter = {'lon': mapcenter_centroid[0], 'lat': mapcenter_centroid[1]}
+  proplist = [\
+    {'key': 'Type', 'val': 'Chicago community area'},\
+    {'key': 'Number', 'val': commarea.area_number}\
+  ]
   
 #  print data
-  return render_to_response('commarea2.html', {'histData': apc.json_str},\
-                            context_instance=RequestContext(request))
+  return render_to_response('aggregate_geom.html', {\
+    'histData': apc.json_str,\
+    'title': commarea.area_name.title(),\
+    'proplist': proplist,\
+    'mapcenter': mapcenter,\
+    'outline': outline
+    },\
+    context_instance=RequestContext(request))
 
