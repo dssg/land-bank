@@ -2,7 +2,8 @@ from django.shortcuts import render, get_object_or_404, render_to_response
 from django.template import RequestContext
 from landbank_data.models import \
   Assessor, PinAreaLookup, CommunityArea, \
-  CensusTract, Ward, Transaction, TractScores, AreaPlotCache
+  CensusTract, Ward, Transaction, TractScores, AreaPlotCache,\
+  Population
 import datetime
 import numpy as np
 from pytz import timezone
@@ -71,6 +72,7 @@ def pin(request, search_pin=None):
 
 def commarea(request, search_commarea=None):
   commarea = get_object_or_404(CommunityArea,area_number=search_commarea)
+  pop = Population.objects.get(area_name=commarea.area_name.upper(),area_type='Community Area').pop
 
   apc = AreaPlotCache.objects.\
     filter(area_type__exact='Community Area').\
@@ -81,7 +83,8 @@ def commarea(request, search_commarea=None):
   mapcenter = {'lon': mapcenter_centroid[0], 'lat': mapcenter_centroid[1]}
   proplist = [\
     {'key': 'Type', 'val': 'Chicago community area'},\
-    {'key': 'Number', 'val': commarea.area_number}\
+    {'key': 'Number', 'val': commarea.area_number},\
+    {'key': 'Population', 'val': pop}
   ]
   
 #  print data
