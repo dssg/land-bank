@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <title>CCLBA Analytics Tool - Pin Search</title>
@@ -18,7 +17,6 @@
             }   
     </style> 
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="description" content="">
     <meta name="author" content="">
 
@@ -26,18 +24,7 @@
     <link href="/static/landbank_data/css/pin.css" rel="stylesheet">
     <link href="/static/landbank_data/css/map.css" rel="stylesheet">
 
-    <style type="text/css">
-        #map-base { height: 100%; }
-    </style> 
-    <script type="text/javascript"
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBroCTXbMjlkQTtTjuICn2sMKtM7IssVp0&sensor=false">
-    </script>
-    <script type="text/javascript"
-    src="/static/landbank_data/wax/dist/wax.g.min.js">
-    </script>
-    <link href="/static/landbank_data/wax/theme/controls.css" rel="stylesheet" type="text/css" />
-    <script src='http://api.tiles.mapbox.com/mapbox.js/v1.3.1/mapbox.js'></script>
-    <link href='http://api.tiles.mapbox.com/mapbox.js/v1.3.1/mapbox.css' rel='stylesheet' />
+    {% include "landbank_data/base_map_head.html" %}
 
 </head>
 <body>

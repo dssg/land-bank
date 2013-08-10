@@ -1,0 +1,62 @@
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+
+<script type="text/javascript"
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBroCTXbMjlkQTtTjuICn2sMKtM7IssVp0&sensor=false">
+</script>
+<script type="text/javascript"
+  src="/static/landbank_data/wax/dist/wax.g.min.js">
+</script>
+<link href="/static/landbank_data/wax/theme/controls.css" rel="stylesheet" type="text/css" />
+<script src='http://api.tiles.mapbox.com/mapbox.js/v1.3.1/mapbox.js'></script>
+<link href='http://api.tiles.mapbox.com/mapbox.js/v1.3.1/mapbox.css' rel='stylesheet' />
+
+
+<script type="text/javascript">
+function initialize() {
+  var mapOptions = {
+    zoom: 16,
+    center: new google.maps.LatLng({{mapcenter.lat}}, {{mapcenter.lon}}),
+    mapTypeId: google.maps.MapTypeId.ROADMAP
+  };
+  var map = new google.maps.Map(document.getElementById("map-base"),
+      mapOptions);
+
+  var marker = new google.maps.Marker({
+      position: mapOptions.center,
+      map: map,
+      title: "{{ assessor.houseno}} {{ assessor.direction|title }} {{ assessor.street|title }}"
+  });
+  var infowindow = new google.maps.InfoWindow({
+      content: "{{ assessor.houseno}} {{ assessor.direction|title }} {{ assessor.street|title }}"
+  });
+  infowindow.open(map,marker);
+
+  var url_1 = 'http://a.tiles.mapbox.com/v3/salice412.parcel.json';
+  var base = {
+          tilejson: '2.0.0',
+          tiles: [
+          "http://a.tiles.mapbox.com/v3/salice412.parcel/{z}/{x}/{y}.png",
+          "http://b.tiles.mapbox.com/v3/salice412.parcel/{z}/{x}/{y}.png",
+          "http://c.tiles.mapbox.com/v3/salice412.parcel/{z}/{x}/{y}.png",
+          "http://d.tiles.mapbox.com/v3/salice412.parcel/{z}/{x}/{y}.png"
+          ]};
+  var base_layer = new wax.g.connector(base);
+  map.overlayMapTypes.insertAt(0,base_layer);
+
+
+  var url_1 = 'http://a.tiles.mapbox.com/v3/salice412.parcel_foreclosure.json';
+  var foreclosure = {
+          tilejson: '2.0.0',
+          tiles: [
+          "http://a.tiles.mapbox.com/v3/salice412.parcel_foreclosure/{z}/{x}/{y}.png",
+          "http://b.tiles.mapbox.com/v3/salice412.parcel_foreclosure/{z}/{x}/{y}.png",
+          "http://c.tiles.mapbox.com/v3/salice412.parcel_foreclosure/{z}/{x}/{y}.png",
+          "http://d.tiles.mapbox.com/v3/salice412.parcel_foreclosure/{z}/{x}/{y}.png"
+          ]};
+  var foreclosure_layer = new wax.g.connector(foreclosure);
+  map.overlayMapTypes.insertAt(0,foreclosure_layer);
+
+}
+google.maps.event.addDomListener(window, 'load', initialize);
+
+</script>
