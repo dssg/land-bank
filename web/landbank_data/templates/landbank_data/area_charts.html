@@ -1,40 +1,42 @@
 <div id="d3div"></div>
 <script type="text/javascript">
 
-var data = {{ histData | safe }};
+function d3chart(data, title, marker) {
 
-var gdata = data.histData.land_psf
-
-var margin = { top: 20, right: 20, bottom: 60, left: 80},
-    width = 460 - margin.left - margin.right,
+var margin = { top: 20, right: 20, bottom: 60, left: 60},
+    width = 320 - margin.left - margin.right,
     height = 320 - margin.top - margin.bottom;
 
-var xScale = d3.scale.ordinal()
-    .domain(gdata.map(function(d) { return d.x ; }))
-    .rangeRoundBands([0, width], .05);
+data = data.sort(function(a,b) { if (a.x > b.x) return 1; if (a.x < b.x) return -1; return 0; });
+var xdelta=data[1].x - data[0].x;
+var xmax = d3.max(data, function(d) { return d.x; });
+var ymax = d3.max(data, function(d) { return d.y; });
+var padding = xdelta * 0.1;
+var bar_width = xdelta - padding;
+
+
+var xScale = d3.scale.linear()
+    .domain([0, xmax+xdelta/2.0])
+    .range([0, width]);
 
 var yScale = d3.scale.linear()
-    .domain([0, d3.max(gdata, function(d) { return d.y; })])
+    .domain([0, ymax])
     .range([height, 0]);
 
 var xAxis = d3.svg.axis()
     .scale(xScale)
     .orient("bottom")
-    .ticks(10);
-
-var format2dec = d3.format("3.2f");
-
-    xAxis.tickFormat(format2dec);
+    .ticks(10)
+    .tickFormat(d3.format("3.2f"));
 
 var yAxis = d3.svg.axis()
     .scale(yScale)
     .orient("left");
 
-
 var svg = d3.select("#d3div").append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
-  .append("g")
+    .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 svg.append("g")
@@ -45,8 +47,7 @@ svg.append("g")
     .attr("y",margin.bottom/2)
     .attr("x",width/2)
     .style("text-anchor", "middle")
-    .text("Land Value psf") ;
-
+    .text(title) ;
 
 svg.append("g")
     .attr("class", "axis")
@@ -59,41 +60,36 @@ svg.append("g")
     .style("text-anchor", "middle")
     .text("Count");
 
-var maxData=d3.max(gdata);
-//print "maxData =" + maxData;
+if (typeof marker !== 'undefined') {
+  svg.append("line")
+    .attr({ 
+      "x1": xScale(marker), "y1": yScale(0),
+      "x2": xScale(marker), "y2": yScale(ymax),
+      "stroke-width": 3, "stroke": "black"
+    });
+};
 
 svg.selectAll(".bar")
-    .data(gdata)
+    .data(data)
     .enter()
     .append("rect")
     .attr("class", "bar")
-    .attr("x", function(d) { return xScale(d.x)} )
-    .attr("width", xScale.rangeBand())
+    .attr("x", function(d) { return xScale(d.x - xdelta/2.0 + padding/2.0)} )
+    .attr("width", xScale(bar_width))
     .attr("y", function(d) { return yScale(d.y)} )
     .attr("height", function(d) { return height - yScale(d.y); })
     .attr("fill", function(d) {
 	return "rgb(0, 0, "+ Math.round((255*d.y)/
 					d3.max(
-	$.map(gdata,function(d){ return d.y; })))  + ")";
+	$.map(data,function(d){ return d.y; })))  + ")";
     })
     .attr("opacity", "0.4");
 
-svg.selectAll(".bar text")
-    .data(gdata)
-    .enter()
-    .append("text")
-    .text(function(d) { return d.y; })
-    .attr("text-anchor", "middle" )
-    .attr("x", function(d) {
-	return (xScale(d.x) + xScale.rangeBand()/2);
-    })
-    .attr("y", function(d) {
-	console.log(yScale(d.y));
-	return ( margin.top + yScale(d.y) + 8);
-    })
-    .attr("font-family","sans-serif")
-    .attr("font-size","8px")
-    .attr("fill", "white");
-//	return (+height + margin.top - yScale(d.y) + 14);
+};
+
+var chart_data = {{ histData | safe }};
+var mydata = chart_data.histData.land_psf;
+
+d3chart(mydata, "Assessed Land Value Per Square Foot", 0.48);
 
 </script>
