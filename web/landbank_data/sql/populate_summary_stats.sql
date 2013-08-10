@@ -26,7 +26,7 @@ insert into landbank_data_summarystats
         ,case when avg(sqft_bldg)>0 then avg(sqft_bldg) else null end as bldg_sqft_avg
         ,avg(sqft_land) as land_sqft_avg
         ,avg(case when (type_pt_sf=1 and sqft_bldg>0) then current_building_assmt/sqft_bldg else null end)*10 as ppsf_avg
-    from landbank_data_communityareas as ldca
+    from landbank_data_communityarea as ldca
         ,landbank_data_assessor as lda
         ,landbank_data_pinarealookup as ldpal
     where ldca.id = ldpal.community_area_id
@@ -49,7 +49,7 @@ insert into landbank_data_summarystats
         ,case when avg(sqft_bldg)>0 then avg(sqft_bldg) else null end as bldg_sqft_avg
         ,avg(sqft_land) as land_sqft_avg
         ,avg(case when (type_pt_sf=1 and sqft_bldg>0) then current_building_assmt/sqft_bldg else null end)*10 as ppsf_avg
-    from landbank_data_wards as ldw
+    from landbank_data_ward as ldw
         ,landbank_data_assessor as lda
         ,landbank_data_pinarealookup as ldpal
     where ldw.id = ldpal.ward_id

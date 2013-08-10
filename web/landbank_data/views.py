@@ -1,8 +1,8 @@
 from django.shortcuts import render, get_object_or_404, render_to_response
 from django.template import RequestContext
 from landbank_data.models import \
-  Assessor, PinAreaLookup, CommunityAreas, \
-  CensusTract, Wards, Transaction, TractScores, AreaPlotCache
+  Assessor, PinAreaLookup, CommunityArea, \
+  CensusTract, Ward, Transaction, TractScores, AreaPlotCache
 import datetime
 import numpy as np
 from pytz import timezone
@@ -15,8 +15,8 @@ def base_map(request):
     return render(request, 'landbank_data/base_map.html', {})
 
 def map(request, ca_number=1):
-    #ca = CommunityAreas.objects.filter(pk__lte=10)
-    ca = CommunityAreas.objects.get(area_number=ca_number)
+    #ca = CommunityArea.objects.filter(pk__lte=10)
+    ca = CommunityArea.objects.get(area_number=ca_number)
     ca.geom.transform(4326)
     ca_list = []
     ca_list.append(ca)
@@ -35,10 +35,10 @@ def pin(request, search_pin=None):
     else:  
       lookup = PinAreaLookup.objects.get(pin=search_pin)
 
-    try:      ward = Wards.objects.get(pk=lookup.ward_id)
+    try:      ward = Ward.objects.get(pk=lookup.ward_id)
     except:   ward = None
 
-    try:      ca = CommunityAreas.objects.get(pk=lookup.community_area_id)
+    try:      ca = CommunityArea.objects.get(pk=lookup.community_area_id)
     except:   ca = None
 
     try:      tract = CensusTract.objects.get(pk=lookup.census_tract_id)
@@ -70,7 +70,7 @@ def pin(request, search_pin=None):
 	})
 
 def commarea(request, search_commarea=None):
-  commarea = get_object_or_404(CommunityAreas,area_number=search_commarea)
+  commarea = get_object_or_404(CommunityArea,area_number=search_commarea)
 
   apc = AreaPlotCache.objects.\
     filter(area_type__exact='Community Area').\
