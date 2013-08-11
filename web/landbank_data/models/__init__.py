@@ -17,6 +17,7 @@ from LoanApplication import LoanApplication
 from Mortgage import Mortgage
 from Municipality import Municipality
 from PinAreaLookup import PinAreaLookup
+from Population import Population
 from PropertyTypes import PropertyTypes
 from Scavenger import Scavenger
 from SummaryStats import SummaryStats
@@ -25,3 +26,4 @@ from Transaction import Transaction
 from Vacancy311 import Vacancy311
 from VacancyUSPS import VacancyUSPS
 from Ward import Ward
+from CensusTractMapping import CensusTractMapping
