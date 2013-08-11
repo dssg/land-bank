@@ -3,7 +3,6 @@ from Municipality import Municipality
 from CommunityArea import CommunityArea
 from Ward import Ward
 from CensusTractCharacteristics import CensusTractCharacteristics
-from CensusTractOccupancy import CensusTractOccupancy
 from CensusTractIncome import CensusTractIncome
 
 class CensusTractMapping(models.Model):
@@ -15,7 +14,6 @@ class CensusTractMapping(models.Model):
   ward				= models.ForeignKey(Ward, null=True)
   ward_frac			= models.FloatField(null=True)
   characteristics               = models.ForeignKey(CensusTractCharacteristics, null=False)
-  occupancy                     = models.ForeignKey(CensusTractOccupancy, null=False)
   income                        = models.ForeignKey(CensusTractIncome, null=False)
   def __unicode__(self):
     return unicode(self.fips)

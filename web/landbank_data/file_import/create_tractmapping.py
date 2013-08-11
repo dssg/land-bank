@@ -1,6 +1,6 @@
 from models import CensusTractMapping, CommunityArea, Ward, Municipality, \
   CensusBlock, CensusBlockPopulation, CensusTract, CensusTractCharacteristics, \
-  CensusTractIncome, CensusTractOccupancy
+  CensusTractIncome
 from django.contrib.gis.measure import Area
 
 def run():
@@ -13,7 +13,6 @@ def run():
     try:
       income = CensusTractIncome.objects.get(fips=tract.fips)
       characteristics = CensusTractCharacteristics.objects.get(fips=tract.fips)
-      occupancy = CensusTractOccupancy.objects.get(fips=tract.fips)
     except:
       print('Census data not found for '+str(tract.fips))
       continue
@@ -61,8 +60,7 @@ def run():
         communityarea = CommunityArea.objects.get(id=k),\
         communityarea_frac = frac,\
         income = income,\
-        characteristics = characteristics,\
-        occupancy = occupancy)
+        characteristics = characteristics)
       entry.save()
     for k,v in munis.iteritems():
       frac = v/pop
@@ -73,8 +71,7 @@ def run():
         municipality = Municipality.objects.get(id=k),\
         municipality_frac = frac,\
         income = income,\
-        characteristics = characteristics,\
-        occupancy = occupancy)
+        characteristics = characteristics)
       entry.save()
     for k,v in wards.iteritems():
       frac = v/pop
@@ -85,7 +82,6 @@ def run():
         ward = Ward.objects.get(id=k),\
         ward_frac = frac,\
         income = income,\
-        characteristics = characteristics,\
-        occupancy = occupancy)
+        characteristics = characteristics)
       entry.save()
      
