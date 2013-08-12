@@ -1,8 +1,8 @@
 function d3hist(div, data, title, marker) {
   
   var margin = { top: 20, right: 20, bottom: 60, left: 40},
-      width = 320 - margin.left - margin.right,
-      height = 280 - margin.top - margin.bottom;
+      width = 240 - margin.left - margin.right,
+      height = 200 - margin.top - margin.bottom;
   
   data = data.sort(function(a,b) { if (a.x > b.x) return 1; if (a.x < b.x) return -1; return 0; });
   var xdelta=data[1].x - data[0].x;
@@ -23,8 +23,14 @@ function d3hist(div, data, title, marker) {
   var xAxis = d3.svg.axis()
       .scale(xScale)
       .orient("bottom")
-      .ticks(10)
+      .ticks(5)
       .tickFormat(d3.format("3.0f"));
+  if (xdelta < 1.0) {
+    xAxis.tickFormat(d3.format("3.1f"));
+  }
+  if (xdelta < 0.1) {
+    xAxis.tickFormat(d3.format("3.2f"));
+  }
   
   var yAxis = d3.svg.axis()
       .scale(yScale)
@@ -60,7 +66,7 @@ function d3hist(div, data, title, marker) {
       .text("Count");
   
   if ((typeof marker !== 'undefined') && (marker != 99999)) {
-    svg.append("line")
+    var line=svg.append("line")
       .attr({ 
         "x1": xScale(marker), "y1": yScale(0),
         "x2": xScale(marker), "y2": yScale(ymax),

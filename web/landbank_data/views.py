@@ -75,38 +75,63 @@ def commarea(request, search_commarea=None):
   # First get the community area.
   commarea = get_object_or_404(CommunityArea,area_number=search_commarea)
   # Now get a bunch of indicator values for it.
-  indicators = IndicatorCache.objects.filter(area_type__exact='Community Area').\
+  indicators = IndicatorCache.objects.\
+    filter(area_type__exact='Community Area').\
     filter(area_id__exact=commarea.id)
+
   pop = int(indicators.get(indicator_name='pop').indicator_value)
   pct_white = indicators.get(indicator_name='pct_whitenh').indicator_value
   pct_black = indicators.get(indicator_name='pct_blacknh').indicator_value
   pct_asian = indicators.get(indicator_name='pct_asiannh').indicator_value
   pct_hispanic = indicators.get(indicator_name='pct_hispanic').indicator_value
   median_age = indicators.get(indicator_name='median_age').indicator_value
-  pct_owner_occupied = indicators.get(indicator_name='pct_owner_occupied').indicator_value
+  pct_owner_occupied = indicators.get(indicator_name='pct_owner_occupied').\
+    indicator_value
   segregation = indicators.get(indicator_name='segregation').indicator_value
+  owner_occ_hh_size = indicators.get(indicator_name='owner_occ_hh_size').\
+    indicator_value
+  renter_occ_hh_size = indicators.get(indicator_name='renter_occ_hh_size').\
+    indicator_value
+  pct_occ_units = indicators.get(indicator_name='pct_occ_units').\
+    indicator_value
 
   # Now make the histograms for comparing it to other community areas.
   # These could be cached.
-  median_ages_values, median_ages_bins = \
-    indicator_hist('Community Area', 'median_age')
-  
   pct_owner_occupieds_values, pct_owner_occupieds_bins = \
     indicator_hist('Community Area', 'pct_owner_occupied')
-
+  pct_occ_units_values, pct_occ_units_bins = \
+    indicator_hist('Community Area', 'pct_occ_units')
   segregations_values, segregations_bins = \
     indicator_hist('Community Area', 'segregation')
+  owner_occ_hh_sizes_values, owner_occ_hh_sizes_bins = \
+    indicator_hist('Community Area', 'owner_occ_hh_size')
+  renter_occ_hh_sizes_values, renter_occ_hh_sizes_bins = \
+    indicator_hist('Community Area', 'renter_occ_hh_size')
+  median_ages_values, median_ages_bins = \
+    indicator_hist('Community Area', 'median_age')
 
   # Get the data ready to be passed to the plotter.
-  histData = [\
-    {'data': [{'x': b, 'y': v} for b,v in \
-      zip(median_ages_bins,median_ages_values)],\
-     'title': 'Median age', 'marker': median_age, \
-     'tooltip': 'Median age in this community area compared to all others'},\
+  histData = {'Demographics' : [\
     {'data': [{'x': b, 'y': v} for b,v in \
       zip(pct_owner_occupieds_bins,pct_owner_occupieds_values)],\
      'title': 'Percent owner occupied', 'marker': pct_owner_occupied,\
-     'tooltip': 'Percent owner occupied housing units in this community area compared to all others'},\
+     'tooltip': 'Percent owner occupied housing units in this '+\
+       'community area compared to all others'},\
+    {'data': [{'x': b, 'y': v} for b,v in \
+      zip(pct_occ_units_bins,pct_occ_units_values)],\
+     'title': 'Percent occupied units', 'marker': pct_occ_units,\
+     'tooltip': 'Percent housing units that are occupied in this '+\
+       'community area compared to all others'},\
+    {'data': [{'x': b, 'y': v} for b,v in \
+      zip(owner_occ_hh_sizes_bins,owner_occ_hh_sizes_values)],\
+     'title': 'Household size, owner-occupied', 'marker': owner_occ_hh_size,\
+     'tooltip': 'Average household size in owner-occupied units for this '+\
+       'community area compared to all others'},\
+    {'data': [{'x': b, 'y': v} for b,v in \
+      zip(renter_occ_hh_sizes_bins,renter_occ_hh_sizes_values)],\
+     'title': 'Household size, renter-occupied', 'marker': renter_occ_hh_size,\
+     'tooltip': 'Average household size in renter-occupied units for this '+\
+       'community area compared to all others'},\
     {'data': [{'x': b, 'y': v} for b,v in \
       zip(segregations_bins,segregations_values)],\
      'title': 'Segregation', 'marker': segregation,\
@@ -114,7 +139,11 @@ def commarea(request, search_commarea=None):
        'out for its racial and ethnic '+\
        'composition to match the city as a whole, compared to all '+\
        'other community areas.'},\
-  ]
+    {'data': [{'x': b, 'y': v} for b,v in \
+      zip(median_ages_bins,median_ages_values)],\
+     'title': 'Median age', 'marker': median_age, \
+     'tooltip': 'Median age in this community area compared to all others'},\
+  ]}
 
   # Make the outline of the community area for the map.
   outline = commarea.geom

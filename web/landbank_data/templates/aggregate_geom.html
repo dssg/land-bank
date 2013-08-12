@@ -19,44 +19,58 @@
   </script>
 
   {% include "aggregate_map_head.html" %}
+
+</script>
+
 </head>
 
 <body>
+
+ <div class="page-header">
+   <h3> {{ title }} <small> Community Area </small> </h3> 
+ </div>
+   {% include "aggregate_map_body.html" %}
  <div class="container">
   <div class="row">
-    <div class="col-lg-4">
+    <div class="col-lg-12">
+      <h4> Basic properties </h4>
+    </div>
+    <div class="col-lg-12">
       {% include "aggregate_properties.html" %}
     </div>
-    <div class="col-lg-8">
-      {% include "aggregate_map_body.html" %}
+  </div>
+ </div>
+ <div class="container">
+  {% for histType, hists in histData.items %}
+    <div class="row">
+      <div class="col-lg-12">
+        <h4> {{histType}} </h4>
+      </div>
     </div>
-  </div>
-  <div class="row">
-    <h4> Basic Demographics </h4>
-  </div>
-    {% for hist in histData %}
-      {% if forloop.counter0|divisibleby:2 %}
-        <div class="row">
+    <div class="row">
+    {% for hist in hists %}
+      {% if forloop.counter0|divisibleby:3 %}
+        </div><div class="row">
       {% endif %}
-        <center><div id="d3div{{ forloop.counter }}" class="col-lg-6"></div></center>
-      {% if not forloop.counter0|divisibleby:2 %}
-        </div>
-      {% endif %}
+      <center><div id="d3div{{ forloop.parentloop.counter }}_{{ forloop.counter }}" 
+        class="col-lg-4"></div></center>
     {% endfor %}
+    </div>
+  {% endfor %}
  </div>
 
 <script type="text/javascript">
-{% for hist in histData %}
-  var chart_data = {{ hist.data | safe }};
-  {% if hist.marker != None %}
-    d3hist("#d3div{{ forloop.counter }}", chart_data, "{{ hist.title}}", {{hist.marker}});
-  {% else %}
-    d3hist("#d3div{{ forloop.counter }}", chart_data, "{{ hist.title}}");
-  {% endif %}
-
-  $('#d3div{{ forloop.counter }}').popover(
-    {content:"{{ hist.tooltip }}", trigger:"hover", placement:"top"});
-
+{% for histType, hists in histData.items %}
+  {% for hist in hists %}
+    var chart_data = {{ hist.data | safe }};
+    {% if hist.marker != None %}
+      d3hist("#d3div{{ forloop.parentloop.counter }}_{{ forloop.counter }}", chart_data, "{{ hist.title}}", {{hist.marker}});
+    {% else %}
+      d3hist("#d3div{{ forloop.parentloop.counter }}_{{ forloop.counter }}", chart_data, "{{ hist.title}}");
+    {% endif %}
+    $('#d3div{{ forloop.parentloop.counter }}_{{ forloop.counter }}').popover(
+      {content:"{{ hist.tooltip }}", trigger:"hover", placement:"top"});
+  {% endfor %}
 {% endfor %}
 </script>
 

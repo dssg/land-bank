@@ -3,7 +3,8 @@
         max-height: 500px;
 }
 #map-aggregate {
-        height: 100%;
+        height: 70%;
+        margin: 15px;
         max-height: 500px;
 }
 

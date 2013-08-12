@@ -22,6 +22,7 @@ def cache_census():
   # Other census indicators.
   for indicator in ['median_age', 'pct_18plus', 'pct_65plus', 'pct_whitenh',\
                     'pct_blacknh', 'pct_asiannh', 'pct_hispanic', 'pct_owner_occupied',\
+                    'pct_occ_units',\
                     'pct_renter_occupied', 'owner_occ_hh_size', 'renter_occ_hh_size']:
 
     for geom_type,geom_str in \
