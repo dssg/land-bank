@@ -1,4 +1,5 @@
 <div id="d3div"></div>
+<<<<<<< HEAD
 <script type="text/javascript">
 
 function d3chart(data, title, marker) {
@@ -91,5 +92,25 @@ var chart_data = {{ histData | safe }};
 var mydata = chart_data.histData.land_psf;
 
 d3chart(mydata, "Assessed Land Value Per Square Foot", 0.48);
+=======
+<div id="d3div2"></div>
+
+<script type="text/javascript"
+  src="/static/landbank_data/js/d3plots.js">
+</script>
+
+<script type="text/javascript">
+
+var chart_data = {{ histData | safe }};
+var mydata = chart_data.histData.land_psf;
+var myfakedata = [
+  { "x": "2012-01-01", "y": 50 },
+  { "x": "2011-01-01", "y": 30 },
+  { "x": "2011-05-01", "y": 20 },
+  { "x": "2010-01-01", "y": 10 }];
+
+d3hist("#d3div", mydata, "Assessed Land Value Per Square Foot", 0.48);
+d3timeline("#d3div2", myfakedata, "Fake time series");
+>>>>>>> 22bade52bf11ce6073f7e77f5a16608467e6392a
 
 </script>
