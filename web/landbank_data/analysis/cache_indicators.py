@@ -6,11 +6,13 @@ import json
 import numpy as np
 
 def iterable(obj):
+  '''If it's a scalar, make it a 1-item list. Otherwise do nothing.'''
   try:    iter(obj)
   except: return [obj]
   return obj
 
 def get_tract_characteristic(characteristic, tracts):
+  '''Get a value from the characteristics table for a census tract.'''
   retval = {}
   for tract in iterable(tracts):
     tc = CensusTractCharacteristics.objects.get(\
@@ -20,21 +22,36 @@ def get_tract_characteristic(characteristic, tracts):
   return retval
 
 def get_tract_from_fips(fips):
+  '''Map a fips code to a census tract.'''
   return CensusTract.objects.get(fips__exact=fips)
 
 def get_tracts_and_weights(\
   tracts=None, communityareas=None,\
   municipalities=None, wards=None):
+  '''Pull the mapping from census tract to geometry out of the
+     CensusTractMapping table. You can pass in any or several
+     geometries at once.'''
   retval = {}
+  # First deal with any actual census tracts that were passed in.
   if tracts is not None:
     for tract in iterable(tracts):
       retval[tract]=1.0
+  # Now step through the other geometries and use the pre-computed
+  # mapping to derive the percentage of population of each census tract
+  # that should be included for the specified boundaries.
   if communityareas is not None:
     for ca in iterable(communityareas):
       t = ca.censustractmapping_set.all()
       for i in t: 
         thistract = get_tract_from_fips(i.fips)
+        # If this tract hasn't already been specified, add it to the output.
         if thistract not in retval.keys(): retval[thistract]=i.communityarea_frac
+        # If it has been specified by some other geometry argument, 
+        # take the larger of the two fractions. This is a little 
+        # sloppy, since it could be a different portion of the community
+        # area you've specified already. We should be taking the union.
+        # But that's hard, and so far the only use case for this function
+        # is for a single geometry type. So this code is dead letter for now anyway.
         else: retval[thistract] = max(i.communityarea_frac, retval[thistract])
   if municipalities is not None:
     for m in iterable(municipalities):
@@ -55,6 +72,8 @@ def get_tracts_and_weights(\
 def get_population(
   tracts=None, communityareas=None,\
   municipalities=None, wards=None, geoms=None):
+  ''' Get the population of a given geometry. If you want me to try to
+      infer the geometry type, use the geoms argument. '''
   if geoms is not None:
     for g in iterable(geoms):
       if isinstance(g,CensusTract):
@@ -69,16 +88,19 @@ def get_population(
       if isinstance(g,Municipality):
         if municipalities==None: municipalities=[g]
         else: municipalities.append(g)
+  # Unpack the given geometry(ies) into tracts, and get the multiplicitive
+  # factor for which fraction of the tract should be included.
   tracts = get_tracts_and_weights(tracts,communityareas,municipalities,wards)
+  # Get the population for each tract.
   pops = get_tract_characteristic('pop',tracts.keys())
-  vals = get_tract_characteristic(characteristic,tracts.keys())
-  tracts = get_tracts_and_weights(tracts,communityareas,municipalities,wards)
-  pops = get_tract_characteristic('pop',tracts.keys())
+  # Population should be an integer.
   return int(sum([pops[i]*tracts[i] for i in pops.keys()]))
 
 def get_pop_weighted_characteristic(characteristic,
   tracts=None, communityareas=None,\
   municipalities=None, wards=None, geoms=None):
+  ''' Get some characteristic of a given geometry. If you want me to try to
+      infer the geometry type, use the geoms argument. '''
   if geoms is not None:
     for g in iterable(geoms):
       if isinstance(g,CensusTract):
@@ -93,9 +115,14 @@ def get_pop_weighted_characteristic(characteristic,
       if isinstance(g,Municipality):
         if municipalities==None: municipalities=[g]
         else: municipalities.append(g)
+  # First get the multiplicitive factor for which fraction of each tract
+  # should be included.
   tracts = get_tracts_and_weights(tracts,communityareas,municipalities,wards)
+  # Now get the populations...
   pops = get_tract_characteristic('pop',tracts.keys())
+  # And the characteristic in question.
   vals = get_tract_characteristic(characteristic,tracts.keys())
+  # Here's the normalization factor, which we pre-compute to do a divide-by-zero test.
   norm = sum([pops[i]*tracts[i] for i in pops.keys()])
   return sum([pops[i]*tracts[i]*vals[i] for i in pops.keys()])/norm \
     if norm > 0 else 0
