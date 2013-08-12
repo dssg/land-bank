@@ -75,13 +75,6 @@ def pin(request, search_pin=None):
 	})
 
 def commarea(request, search_commarea=None):
-<<<<<<< HEAD
-  commarea = get_object_or_404(CommunityArea,area_number=search_commarea)
-
-  apc = AreaPlotCache.objects.\
-    filter(area_type__exact='Community Area').\
-    filter(area_id__exact=commarea.id)[0]
-=======
   # First get the community area.
   commarea = get_object_or_404(CommunityArea,area_number=search_commarea)
   # Now get a bunch of indicator values for it.
@@ -122,25 +115,10 @@ def commarea(request, search_commarea=None):
   ]
 
   # Make the outline of the community area for the map.
->>>>>>> 22bade52bf11ce6073f7e77f5a16608467e6392a
   outline = commarea.geom
   outline.transform(4326)
   mapcenter_centroid = outline.centroid
   mapcenter = {'lon': mapcenter_centroid[0], 'lat': mapcenter_centroid[1]}
-<<<<<<< HEAD
-  proplist = [\
-    {'key': 'Type', 'val': 'Chicago community area'},\
-    {'key': 'Number', 'val': commarea.area_number}\
-  ]
-  
-#  print data
-  return render_to_response('aggregate_geom.html', {\
-    'histData': apc.json_str,\
-    'title': commarea.area_name.title(),\
-    'proplist': proplist,\
-    'mapcenter': mapcenter,\
-    'outline': outline
-=======
 
   # These are the indicators to show at the top of the page.
   proplist = [\
@@ -160,7 +138,6 @@ def commarea(request, search_commarea=None):
     'mapcenter': mapcenter,\
     'outline': outline,\
     'histData': histData\
->>>>>>> 22bade52bf11ce6073f7e77f5a16608467e6392a
     },\
     context_instance=RequestContext(request))
 
