@@ -111,38 +111,34 @@ def commarea(request, search_commarea=None):
     indicator_hist('Community Area', 'median_age')
 
   # Get the data ready to be passed to the plotter.
-  histData = {'Demographics' : [\
+  histData = {\
+    ('Demographics','Black lines mark this community area relative to all others') : [\
     {'data': [{'x': b, 'y': v} for b,v in \
       zip(pct_owner_occupieds_bins,pct_owner_occupieds_values)],\
      'title': 'Percent owner occupied', 'marker': pct_owner_occupied,\
-     'tooltip': 'Percent owner occupied housing units in this '+\
-       'community area compared to all others'},\
+     'tooltip': 'Percent owner occupied housing units'},
     {'data': [{'x': b, 'y': v} for b,v in \
       zip(pct_occ_units_bins,pct_occ_units_values)],\
      'title': 'Percent occupied units', 'marker': pct_occ_units,\
-     'tooltip': 'Percent housing units that are occupied in this '+\
-       'community area compared to all others'},\
+     'tooltip': 'Percent housing units that are occupied'},\
     {'data': [{'x': b, 'y': v} for b,v in \
       zip(owner_occ_hh_sizes_bins,owner_occ_hh_sizes_values)],\
      'title': 'Household size, owner-occupied', 'marker': owner_occ_hh_size,\
-     'tooltip': 'Average household size in owner-occupied units for this '+\
-       'community area compared to all others'},\
+     'tooltip': 'Average household size in owner-occupied units'},\
     {'data': [{'x': b, 'y': v} for b,v in \
       zip(renter_occ_hh_sizes_bins,renter_occ_hh_sizes_values)],\
      'title': 'Household size, renter-occupied', 'marker': renter_occ_hh_size,\
-     'tooltip': 'Average household size in renter-occupied units for this '+\
-       'community area compared to all others'},\
+     'tooltip': 'Average household size in renter-occupied units'},\
     {'data': [{'x': b, 'y': v} for b,v in \
       zip(segregations_bins,segregations_values)],\
      'title': 'Segregation', 'marker': segregation,\
      'tooltip': 'Percentage of the community area that would have to move '+\
        'out for its racial and ethnic '+\
-       'composition to match the city as a whole, compared to all '+\
-       'other community areas.'},\
+       'composition to match the city as a whole'},\
     {'data': [{'x': b, 'y': v} for b,v in \
       zip(median_ages_bins,median_ages_values)],\
      'title': 'Median age', 'marker': median_age, \
-     'tooltip': 'Median age in this community area compared to all others'},\
+     'tooltip': 'Median age of residents'},\
   ]}
 
   # Make the outline of the community area for the map.
@@ -165,6 +161,7 @@ def commarea(request, search_commarea=None):
   # And we're ready to render.
   return render_to_response('aggregate_geom.html', {\
     'title': commarea.area_name.title(),\
+    'type': 'Chicago community area',\
     'proplist': proplist,\
     'mapcenter': mapcenter,\
     'outline': outline,\

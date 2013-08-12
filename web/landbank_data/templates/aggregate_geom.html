@@ -27,13 +27,13 @@
 <body>
 
  <div class="page-header">
-   <h3> {{ title }} <small> Community Area </small> </h3> 
+   <h3> {{ title }} <small> {{ type }} </small> </h3> 
  </div>
    {% include "aggregate_map_body.html" %}
  <div class="container">
   <div class="row">
     <div class="col-lg-12">
-      <h4> Basic properties </h4>
+      <h3> Basic properties </h3>
     </div>
     <div class="col-lg-12">
       {% include "aggregate_properties.html" %}
@@ -44,18 +44,13 @@
   {% for histType, hists in histData.items %}
     <div class="row">
       <div class="col-lg-12">
-        <h4> {{histType}} </h4>
+        <h3> {{ histType.0 }} <small> {{ histType.1 }} </small> </h3> 
       </div>
     </div>
-    <div class="row">
     {% for hist in hists %}
-      {% if forloop.counter0|divisibleby:3 %}
-        </div><div class="row">
-      {% endif %}
-      <center><div id="d3div{{ forloop.parentloop.counter }}_{{ forloop.counter }}" 
-        class="col-lg-4"></div></center>
+      <div id="d3div{{ forloop.parentloop.counter }}_{{ forloop.counter }}" 
+        class="col-lg-4"></div>
     {% endfor %}
-    </div>
   {% endfor %}
  </div>
 

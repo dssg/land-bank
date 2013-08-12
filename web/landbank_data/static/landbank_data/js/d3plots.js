@@ -82,12 +82,8 @@ function d3hist(div, data, title, marker) {
       .attr("width", function(d) { return xScale(d.x + bar_width/2.0)-xScale(d.x - bar_width/2.0);} )
       .attr("y", function(d) { return yScale(d.y)} )
       .attr("height", function(d) { return height - yScale(d.y); })
-      .attr("fill", function(d) {
-          return "rgb(0, 0, "+ Math.round((255*d.y)/
-                                          d3.max(
-          $.map(data,function(d){ return d.y; })))  + ")";
-      })
-      .attr("opacity", "0.4");
+      .attr("fill", "rgb(0, 0, 128)")
+      .attr("opacity", 0.3);
 };
 
 function d3timeline(div, data, title, marker) {

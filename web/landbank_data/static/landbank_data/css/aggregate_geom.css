@@ -1,6 +1,9 @@
 .container {
   margin: 15px;
-  padding: 15px;
+  padding-top: 0px;
+  padding-bottom: 15px;
+  padding-left: 15px;
+  padding-right: 15px;
   background-color: rgba(64,64,64,.1);
   border: 1px solid rgba(128,128,128,.7);
 }
