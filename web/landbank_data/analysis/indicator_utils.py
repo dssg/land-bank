@@ -13,7 +13,7 @@ def indicator_hist(area_type, indicator_name, notzero=True, nbins=10):
 
   retval = [i.indicator_value for i in myinds]
   values, bins = np.histogram(retval,bins=nbins)
-  return values, bins
+  return values, [bins[i]+(bins[i+1]-bins[i])/2.0 for i in range(len(values))]
 
 def percentile(values, thisvalue):
   return int(sum(np.array(values) <= thisvalue)/float(len(values))*100)

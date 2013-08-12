@@ -78,7 +78,7 @@ function d3hist(div, data, title, marker) {
       .enter()
       .append("rect")
       .attr("class", "bar")
-      .attr("x", function(d) { return xScale(d.x - xdelta/2.0 + padding/2.0);} )
+      .attr("x", function(d) { return xScale(d.x - bar_width/2.0);} )
       .attr("width", function(d) { return xScale(d.x + bar_width/2.0)-xScale(d.x - bar_width/2.0);} )
       .attr("y", function(d) { return yScale(d.y)} )
       .attr("height", function(d) { return height - yScale(d.y); })

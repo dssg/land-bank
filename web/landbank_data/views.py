@@ -72,12 +72,28 @@ def pin(request, search_pin=None):
 	})
 
 def commarea(request, search_commarea=None):
-  # First get the community area.
   commarea = get_object_or_404(CommunityArea,area_number=search_commarea)
+  return aggregate(request, commarea, commarea.area_name.title(), 'Community Area')
+
+def ward(request, search_ward=None):
+  ward = get_object_or_404(Ward,ward=search_ward)
+  return aggregate(request, ward, 'Chicago '+str(search_ward), 'Ward')
+
+def tract(request, search_tract=None):
+  tract = get_object_or_404(CensusTract,fips=search_tract)
+  return aggregate(request, tract, str(search_tract), 'Census Tract')
+
+def municipality(request, search_muni=None):
+  mymuni=search_muni.replace('_',' ').title()
+  muni = get_object_or_404(Municipality,name=mymuni)
+  return aggregate(request, muni, mymuni, 'Municipality')
+
+def aggregate(request, search_geom, search_geom_name, geom_type):
+  # First get the community area.
   # Now get a bunch of indicator values for it.
   indicators = IndicatorCache.objects.\
-    filter(area_type__exact='Community Area').\
-    filter(area_id__exact=commarea.id)
+    filter(area_type__exact=geom_type).\
+    filter(area_id__exact=search_geom.id)
 
   pop = int(indicators.get(indicator_name='pop').indicator_value)
   pct_white = indicators.get(indicator_name='pct_whitenh').indicator_value
@@ -98,21 +114,21 @@ def commarea(request, search_commarea=None):
   # Now make the histograms for comparing it to other community areas.
   # These could be cached.
   pct_owner_occupieds_values, pct_owner_occupieds_bins = \
-    indicator_hist('Community Area', 'pct_owner_occupied')
+    indicator_hist(geom_type, 'pct_owner_occupied')
   pct_occ_units_values, pct_occ_units_bins = \
-    indicator_hist('Community Area', 'pct_occ_units')
+    indicator_hist(geom_type, 'pct_occ_units')
   segregations_values, segregations_bins = \
-    indicator_hist('Community Area', 'segregation')
+    indicator_hist(geom_type, 'segregation')
   owner_occ_hh_sizes_values, owner_occ_hh_sizes_bins = \
-    indicator_hist('Community Area', 'owner_occ_hh_size')
+    indicator_hist(geom_type, 'owner_occ_hh_size')
   renter_occ_hh_sizes_values, renter_occ_hh_sizes_bins = \
-    indicator_hist('Community Area', 'renter_occ_hh_size')
+    indicator_hist(geom_type, 'renter_occ_hh_size')
   median_ages_values, median_ages_bins = \
-    indicator_hist('Community Area', 'median_age')
+    indicator_hist(geom_type, 'median_age')
 
   # Get the data ready to be passed to the plotter.
   histData = {\
-    ('Demographics','Black lines mark this community area relative to all others') : [\
+    ('Demographics','Black lines mark this '+geom_type+' relative to all others') : [\
     {'data': [{'x': b, 'y': v} for b,v in \
       zip(pct_owner_occupieds_bins,pct_owner_occupieds_values)],\
      'title': 'Percent owner occupied', 'marker': pct_owner_occupied,\
@@ -132,7 +148,7 @@ def commarea(request, search_commarea=None):
     {'data': [{'x': b, 'y': v} for b,v in \
       zip(segregations_bins,segregations_values)],\
      'title': 'Segregation', 'marker': segregation,\
-     'tooltip': 'Percentage of the community area that would have to move '+\
+     'tooltip': 'Percentage of people who would have to move '+\
        'out for its racial and ethnic '+\
        'composition to match the city as a whole'},\
     {'data': [{'x': b, 'y': v} for b,v in \
@@ -142,15 +158,14 @@ def commarea(request, search_commarea=None):
   ]}
 
   # Make the outline of the community area for the map.
-  outline = commarea.geom
+  outline = search_geom.loc if geom_type == "Census Tract" else search_geom.geom
   outline.transform(4326)
   mapcenter_centroid = outline.centroid
   mapcenter = {'lon': mapcenter_centroid[0], 'lat': mapcenter_centroid[1]}
 
   # These are the indicators to show at the top of the page.
   proplist = [\
-    {'key': 'Type', 'val': 'Chicago community area'},\
-    {'key': 'Number', 'val': commarea.area_number},\
+    {'key': 'Type', 'val': geom_type},\
     {'key': 'Population', 'val': pop},\
     {'key': 'White', 'val': '%4.1f%%' % (pct_white)},\
     {'key': 'Black', 'val': '%4.1f%%' % (pct_black)},\
@@ -160,8 +175,8 @@ def commarea(request, search_commarea=None):
   
   # And we're ready to render.
   return render_to_response('aggregate_geom.html', {\
-    'title': commarea.area_name.title(),\
-    'type': 'Chicago community area',\
+    'title': search_geom_name,\
+    'type': geom_type,\
     'proplist': proplist,\
     'mapcenter': mapcenter,\
     'outline': outline,\
