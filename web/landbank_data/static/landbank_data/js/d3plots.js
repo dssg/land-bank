@@ -1,19 +1,19 @@
 function d3hist(div, data, title, marker) {
   
-  var margin = { top: 20, right: 20, bottom: 60, left: 60},
+  var margin = { top: 20, right: 20, bottom: 60, left: 40},
       width = 320 - margin.left - margin.right,
-      height = 320 - margin.top - margin.bottom;
+      height = 280 - margin.top - margin.bottom;
   
   data = data.sort(function(a,b) { if (a.x > b.x) return 1; if (a.x < b.x) return -1; return 0; });
   var xdelta=data[1].x - data[0].x;
+  var xmin = d3.min(data, function(d) { return d.x; });
   var xmax = d3.max(data, function(d) { return d.x; });
   var ymax = d3.max(data, function(d) { return d.y; });
   var padding = xdelta * 0.1;
   var bar_width = xdelta - padding;
-  
-  
+
   var xScale = d3.scale.linear()
-      .domain([0, xmax+xdelta/2.0])
+      .domain([xmin-xdelta, xmax+xdelta])
       .range([0, width]);
   
   var yScale = d3.scale.linear()
@@ -24,7 +24,7 @@ function d3hist(div, data, title, marker) {
       .scale(xScale)
       .orient("bottom")
       .ticks(10)
-      .tickFormat(d3.format("3.2f"));
+      .tickFormat(d3.format("3.0f"));
   
   var yAxis = d3.svg.axis()
       .scale(yScale)
@@ -71,8 +71,8 @@ function d3hist(div, data, title, marker) {
       .enter()
       .append("rect")
       .attr("class", "bar")
-      .attr("x", function(d) { return xScale(d.x - xdelta/2.0 + padding/2.0)} )
-      .attr("width", xScale(bar_width))
+      .attr("x", function(d) { return xScale(d.x - xdelta/2.0 + padding/2.0);} )
+      .attr("width", function(d) { return xScale(d.x + bar_width/2.0)-xScale(d.x - bar_width/2.0);} )
       .attr("y", function(d) { return yScale(d.y)} )
       .attr("height", function(d) { return height - yScale(d.y); })
       .attr("fill", function(d) {
@@ -149,14 +149,14 @@ function d3timeline(div, data, title, marker) {
       .style("text-anchor", "middle")
       .text(title);
   
-  /*if (typeof marker !== 'undefined') {
+  if (typeof marker !== 'undefined') {
     svg.append("line")
       .attr({ 
         "y1": yScale(marker), "x1": xScale(0),
         "y2": yScale(marker), "x2": xScale(xmax),
         "stroke-width": 3, "stroke": "black"
       });
-  };*/
+  };
 
 
   var timeseries = svg.selectAll(".timeseries")
