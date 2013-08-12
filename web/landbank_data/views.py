@@ -2,12 +2,8 @@ from django.shortcuts import render, get_object_or_404, render_to_response
 from django.template import RequestContext
 from landbank_data.models import \
   Assessor, PinAreaLookup, CommunityArea, \
-<<<<<<< HEAD
-  CensusTract, Ward, Transaction, TractScores, AreaPlotCache
-=======
   CensusTract, Ward, Transaction, TractScores, AreaPlotCache,\
   CensusTractMapping, IndicatorCache
->>>>>>> 22bade52bf11ce6073f7e77f5a16608467e6392a
 import datetime
 import numpy as np
 from pytz import timezone
