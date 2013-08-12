@@ -1,5 +1,6 @@
-from django.shortcuts import render, get_object_or_404, render_to_response
+from django.shortcuts import render, get_object_or_404, render_to_response, redirect
 from django.template import RequestContext
+from django.views.decorators.csrf import csrf_protect
 from landbank_data.models import \
   Assessor, PinAreaLookup, CommunityArea, \
   CensusTract, Ward, Transaction, TractScores, AreaPlotCache,\
@@ -8,10 +9,19 @@ import datetime
 import numpy as np
 from pytz import timezone
 import json
+import re
 from indicator_utils import *
 
+re_fips = re.compile('17031[0-9]{6}')
+re_pin = re.compile('[0-9]{14}')
+re_ward = re.compile('[wW][aA][rR][dD]')
+re_area = re.compile('[aA][rR][eE][aA].*([1-7][0-9]|[1-9])')
+re_num = re.compile('[0-9]+')
+
+@csrf_protect
 def home(request):
-    return render(request, 'landbank_data/home.html', {})
+    return render_to_response('landbank_data/home.html', {}, RequestContext(request))
+#    return render(request, 'landbank_data/home.html', {})
 
 def base_map(request):
     return render(request, 'landbank_data/base_map.html', {})
@@ -26,6 +36,35 @@ def map(request, ca_number=1):
         #c.geom.transform(4326)
         #ca_list.append(c)
     return render(request, 'landbank_data/map.html', {'object_list': ca_list})
+
+@csrf_protect
+def search(request):
+    if request.method == "POST":
+        search_term = request.POST['search']
+        if re.match(re_pin, search_term):
+	    url = '/pin/' + search_term
+            return redirect(url)
+	if re.match(re_fips, search_term):
+	    url = '/tract/' + search_term
+	    return redirect(url)
+	if re.match(re_area, search_term):
+	    match = re.search(re_num, search_term)
+	    if match is not None:
+	        area_number = match.group(0)
+                url = '/commarea/' + area_number 
+		# TODO: check if area_number is 1-77, if not, give 404
+	        return redirect(url)
+	if re.match(re_ward, search_term):
+	    match = re.search(re_num, search_term)
+	    if match is not None:
+	        ward_number = match.group(0)
+                url = '/ward/' + ward_number 
+		# TODO: check if ward_number is 1-50, if not, give 404
+	        return redirect(url)
+
+        return render_to_response('landbank_data/test_search.html', {'data': search_term}, RequestContext(request))
+    else:
+        return render(request, 'landbank_data/home.html', {})
 
 def pin(request, search_pin=None):
     try: 

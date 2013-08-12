@@ -83,7 +83,7 @@
       this.query = this.$element.val()
 
       // Don't autocomplete if we're entering any kind of long area/property ID number
-      var no_auto = /.*[0-9]{6}.*/
+      var no_auto = /.*([0-9]{6}|[wW][aA][rR][dD]|[aA][rR][eE][aA]).*/
       if (!this.query || this.query.length < this.options.minLength || no_auto.test(this.query)) {
         return this.shown ? this.hide() : this
       }

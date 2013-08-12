@@ -36,4 +36,5 @@ urlpatterns = patterns('',
     url(r'^base_map/', 'landbank_data.views.base_map'),
     url(r'api/', include(v1_api.urls)),
     url(r'^$', 'landbank_data.views.home', name='home'),
+    url(r'search/', 'landbank_data.views.search', name='search'),
 )
