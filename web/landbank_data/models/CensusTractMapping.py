@@ -1,12 +1,14 @@
 from django.db import models
 from Municipality import Municipality
 from CommunityArea import CommunityArea
+from CensusTract import CensusTract
 from Ward import Ward
 from CensusTractCharacteristics import CensusTractCharacteristics
 from CensusTractIncome import CensusTractIncome
 
 class CensusTractMapping(models.Model):
   fips                          = models.BigIntegerField('Census block identifying FIPS number', null=False)
+  censustract                   = models.ForeignKey(CensusTract, null=False)
   municipality			= models.ForeignKey(Municipality, null=True)
   municipality_frac		= models.FloatField(null=True)
   communityarea			= models.ForeignKey(CommunityArea, null=True)

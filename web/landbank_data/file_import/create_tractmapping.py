@@ -57,6 +57,7 @@ def run():
       if frac > 0.99: frac=1
       entry = CensusTractMapping(\
         fips = tract.fips,\
+        censustract = tract,\
         communityarea = CommunityArea.objects.get(id=k),\
         communityarea_frac = frac,\
         income = income,\
@@ -68,6 +69,7 @@ def run():
       if frac > 0.99: frac=1
       entry = CensusTractMapping(\
         fips = tract.fips,\
+        censustract = tract,\
         municipality = Municipality.objects.get(id=k),\
         municipality_frac = frac,\
         income = income,\
@@ -79,6 +81,7 @@ def run():
       if frac > 0.99: frac=1
       entry = CensusTractMapping(\
         fips = tract.fips,\
+        censustract = tract,\
         ward = Ward.objects.get(id=k),\
         ward_frac = frac,\
         income = income,\
