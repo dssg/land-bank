@@ -14,6 +14,9 @@
   <script type="text/javascript"
     src="/static/landbank_data/js/d3plots.js">
   </script>
+  <script type="text/javascript"
+    src="/static/landbank_data/js/bootstrap.js">
+  </script>
 
   {% include "aggregate_map_head.html" %}
 </head>
@@ -50,6 +53,10 @@
   {% else %}
     d3hist("#d3div{{ forloop.counter }}", chart_data, "{{ hist.title}}");
   {% endif %}
+
+  $('#d3div{{ forloop.counter }}').popover(
+    {content:"{{ hist.tooltip }}", trigger:"hover", placement:"top"});
+
 {% endfor %}
 </script>
 

@@ -8,6 +8,7 @@ import datetime
 import numpy as np
 from pytz import timezone
 import json
+from indicator_utils import *
 
 def home(request):
     return render(request, 'landbank_data/home.html', {})
@@ -83,31 +84,36 @@ def commarea(request, search_commarea=None):
   pct_hispanic = indicators.get(indicator_name='pct_hispanic').indicator_value
   median_age = indicators.get(indicator_name='median_age').indicator_value
   pct_owner_occupied = indicators.get(indicator_name='pct_owner_occupied').indicator_value
+  segregation = indicators.get(indicator_name='segregation').indicator_value
 
   # Now make the histograms for comparing it to other community areas.
   # These could be cached.
-  median_ages = [i.indicator_value for i in \
-    IndicatorCache.objects.filter(area_type__exact='Community Area').\
-                           filter(indicator_name__exact='median_age').\
-                           filter(indicator_value__gt=0)]
   median_ages_values, median_ages_bins = \
-    np.histogram(median_ages,bins=10) 
-
-  pct_owner_occupieds = [i.indicator_value for i in \
-    IndicatorCache.objects.filter(area_type__exact='Community Area').\
-                           filter(indicator_name__exact='pct_owner_occupied').\
-                           filter(indicator_value__gt=0)]
+    indicator_hist('Community Area', 'median_age')
+  
   pct_owner_occupieds_values, pct_owner_occupieds_bins = \
-    np.histogram(pct_owner_occupieds,bins=10) 
+    indicator_hist('Community Area', 'pct_owner_occupied')
+
+  segregations_values, segregations_bins = \
+    indicator_hist('Community Area', 'segregation')
 
   # Get the data ready to be passed to the plotter.
   histData = [\
     {'data': [{'x': b, 'y': v} for b,v in \
       zip(median_ages_bins,median_ages_values)],\
-     'title': 'Median age', 'marker': median_age},\
+     'title': 'Median age', 'marker': median_age, \
+     'tooltip': 'Median age in this community area compared to all others'},\
     {'data': [{'x': b, 'y': v} for b,v in \
       zip(pct_owner_occupieds_bins,pct_owner_occupieds_values)],\
-     'title': 'Percent owner occupied', 'marker': pct_owner_occupied}\
+     'title': 'Percent owner occupied', 'marker': pct_owner_occupied,\
+     'tooltip': 'Percent owner occupied housing units in this community area compared to all others'},\
+    {'data': [{'x': b, 'y': v} for b,v in \
+      zip(segregations_bins,segregations_values)],\
+     'title': 'Segregation', 'marker': segregation,\
+     'tooltip': 'Percentage of the community area that would have to move '+\
+       'out for its racial and ethnic '+\
+       'composition to match the city as a whole, compared to all '+\
+       'other community areas.'},\
   ]
 
   # Make the outline of the community area for the map.

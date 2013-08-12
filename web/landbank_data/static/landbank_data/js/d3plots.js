@@ -34,7 +34,8 @@ function d3hist(div, data, title, marker) {
       .attr("width", width + margin.left + margin.right)
       .attr("height", height + margin.top + margin.bottom)
       .append("g")
-      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+      .attr("id","chart");
   
   svg.append("g")
       .attr("class", "axis")
@@ -48,6 +49,7 @@ function d3hist(div, data, title, marker) {
   
   svg.append("g")
       .attr("class", "axis")
+      .attr("id", "yaxis")
       .call(yAxis)
       .append("text")
       .attr("transform", "rotate(-90)")
@@ -57,7 +59,7 @@ function d3hist(div, data, title, marker) {
       .style("text-anchor", "middle")
       .text("Count");
   
-  if (typeof marker !== 'undefined') {
+  if ((typeof marker !== 'undefined') && (marker != 99999)) {
     svg.append("line")
       .attr({ 
         "x1": xScale(marker), "y1": yScale(0),
@@ -65,7 +67,6 @@ function d3hist(div, data, title, marker) {
         "stroke-width": 3, "stroke": "black"
       });
   };
-  
   svg.selectAll(".bar")
       .data(data)
       .enter()
@@ -81,7 +82,6 @@ function d3hist(div, data, title, marker) {
           $.map(data,function(d){ return d.y; })))  + ")";
       })
       .attr("opacity", "0.4");
-  
 };
 
 function d3timeline(div, data, title, marker) {
