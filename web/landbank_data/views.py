@@ -71,23 +71,52 @@ def pin(request, search_pin=None):
 	})
 
 def commarea(request, search_commarea=None):
+  # First get the community area.
   commarea = get_object_or_404(CommunityArea,area_number=search_commarea)
+  # Now get a bunch of indicator values for it.
   indicators = IndicatorCache.objects.filter(area_type__exact='Community Area').\
     filter(area_id__exact=commarea.id)
-  print indicators
-  pop = indicators.get(indicator_name='pop').indicator_value
+  pop = int(indicators.get(indicator_name='pop').indicator_value)
   pct_white = indicators.get(indicator_name='pct_whitenh').indicator_value
   pct_black = indicators.get(indicator_name='pct_blacknh').indicator_value
   pct_asian = indicators.get(indicator_name='pct_asiannh').indicator_value
   pct_hispanic = indicators.get(indicator_name='pct_hispanic').indicator_value
+  median_age = indicators.get(indicator_name='median_age').indicator_value
+  pct_owner_occupied = indicators.get(indicator_name='pct_owner_occupied').indicator_value
 
-  apc = AreaPlotCache.objects.\
-    filter(area_type__exact='Community Area').\
-    filter(area_id__exact=commarea.id)[0]
+  # Now make the histograms for comparing it to other community areas.
+  # These could be cached.
+  median_ages = [i.indicator_value for i in \
+    IndicatorCache.objects.filter(area_type__exact='Community Area').\
+                           filter(indicator_name__exact='median_age').\
+                           filter(indicator_value__gt=0)]
+  median_ages_values, median_ages_bins = \
+    np.histogram(median_ages,bins=10) 
+
+  pct_owner_occupieds = [i.indicator_value for i in \
+    IndicatorCache.objects.filter(area_type__exact='Community Area').\
+                           filter(indicator_name__exact='pct_owner_occupied').\
+                           filter(indicator_value__gt=0)]
+  pct_owner_occupieds_values, pct_owner_occupieds_bins = \
+    np.histogram(pct_owner_occupieds,bins=10) 
+
+  # Get the data ready to be passed to the plotter.
+  histData = [\
+    {'data': [{'x': b, 'y': v} for b,v in \
+      zip(median_ages_bins,median_ages_values)],\
+     'title': 'Median age', 'marker': median_age},\
+    {'data': [{'x': b, 'y': v} for b,v in \
+      zip(pct_owner_occupieds_bins,pct_owner_occupieds_values)],\
+     'title': 'Percent owner occupied', 'marker': pct_owner_occupied}\
+  ]
+
+  # Make the outline of the community area for the map.
   outline = commarea.geom
   outline.transform(4326)
   mapcenter_centroid = outline.centroid
   mapcenter = {'lon': mapcenter_centroid[0], 'lat': mapcenter_centroid[1]}
+
+  # These are the indicators to show at the top of the page.
   proplist = [\
     {'key': 'Type', 'val': 'Chicago community area'},\
     {'key': 'Number', 'val': commarea.area_number},\
@@ -98,13 +127,13 @@ def commarea(request, search_commarea=None):
     {'key': 'Asian', 'val': '%4.1f%%' % (pct_asian)},\
   ]
   
-#  print data
+  # And we're ready to render.
   return render_to_response('aggregate_geom.html', {\
-    'histData': apc.json_str,\
     'title': commarea.area_name.title(),\
     'proplist': proplist,\
     'mapcenter': mapcenter,\
-    'outline': outline
+    'outline': outline,\
+    'histData': histData\
     },\
     context_instance=RequestContext(request))
 
