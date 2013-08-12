@@ -3,7 +3,7 @@ from django.template import RequestContext
 from landbank_data.models import \
   Assessor, PinAreaLookup, CommunityArea, \
   CensusTract, Ward, Transaction, TractScores, AreaPlotCache,\
-  Population
+  CensusTractMapping, IndicatorCache
 import datetime
 import numpy as np
 from pytz import timezone
@@ -72,7 +72,14 @@ def pin(request, search_pin=None):
 
 def commarea(request, search_commarea=None):
   commarea = get_object_or_404(CommunityArea,area_number=search_commarea)
-  pop = Population.objects.get(area_name=commarea.area_name.upper(),area_type='Community Area').pop
+  indicators = IndicatorCache.objects.filter(area_type__exact='Community Area').\
+    filter(area_id__exact=commarea.id)
+  print indicators
+  pop = indicators.get(indicator_name='pop').indicator_value
+  pct_white = indicators.get(indicator_name='pct_whitenh').indicator_value
+  pct_black = indicators.get(indicator_name='pct_blacknh').indicator_value
+  pct_asian = indicators.get(indicator_name='pct_asiannh').indicator_value
+  pct_hispanic = indicators.get(indicator_name='pct_hispanic').indicator_value
 
   apc = AreaPlotCache.objects.\
     filter(area_type__exact='Community Area').\
@@ -84,7 +91,11 @@ def commarea(request, search_commarea=None):
   proplist = [\
     {'key': 'Type', 'val': 'Chicago community area'},\
     {'key': 'Number', 'val': commarea.area_number},\
-    {'key': 'Population', 'val': pop}
+    {'key': 'Population', 'val': pop},\
+    {'key': 'White', 'val': '%4.1f%%' % (pct_white)},\
+    {'key': 'Black', 'val': '%4.1f%%' % (pct_black)},\
+    {'key': 'Hispanic', 'val': '%4.1f%%' % (pct_hispanic)},\
+    {'key': 'Asian', 'val': '%4.1f%%' % (pct_asian)},\
   ]
   
 #  print data

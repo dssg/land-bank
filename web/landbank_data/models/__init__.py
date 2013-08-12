@@ -27,3 +27,4 @@ from Vacancy311 import Vacancy311
 from VacancyUSPS import VacancyUSPS
 from Ward import Ward
 from CensusTractMapping import CensusTractMapping
+from IndicatorCache import IndicatorCache
