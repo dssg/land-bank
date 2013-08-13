@@ -1,7 +1,7 @@
 from models import \
   CommunityArea, Ward, CensusTract, Municipality, \
   CensusTractMapping, AreaPlotCache, CensusTractCharacteristics, \
-  IndicatorCache
+  IndicatorCache, Transaction, Foreclosure, Mortgage, Assessor
 import json
 import numpy as np
 from indicator_utils import *
@@ -117,4 +117,51 @@ def get_median_price(\
       filter(ptype_id__in=[1,2]).\
       filter(adj_yq__exact=yq.adj_yq)
     retval[yq.adj_yq] = np.median([i.amount_prime for i in transact])
+  return retval
+
+def get_transactions_per_thousand(\
+  tracts=None, communityareas=None,\
+  municipalities=None, wards=None, geoms=None):
+  # Example usage:
+  # indicators.get_median_price(geoms=CensusTract.objects.filter(fips__in=(17031840300, 17031840200)))
+  if geoms is not None:
+    tracts, wards, communityareas, municipalities = unpack_geoms(geoms,\
+      tracts=tracts, communityareas=communityareas, municipalities=municipalities,\
+      wards=wards)
+  geoms = unite_geoms(\
+      tracts=tracts, communityareas=communityareas, municipalities=municipalities,\
+      wards=wards)
+  retval = {}
+  pop = get_population(\
+      tracts=tracts, communityareas=communityareas, municipalities=municipalities,\
+      wards=wards)
+  for yq in Transaction.objects.distinct('adj_yq'):
+    transact = Transaction.objects.\
+      filter(loc__contained=geoms).\
+      filter(ptype_id__in=[1,2]).\
+      filter(adj_yq__exact=yq.adj_yq)
+    retval[yq.adj_yq] = len([i.amount_prime for i in transact])/float(pop)*1000
+  return retval
+
+
+def get_mortgages_per_thousand(\
+  tracts=None, communityareas=None,\
+  municipalities=None, wards=None, geoms=None):
+  if geoms is not None:
+    tracts, wards, communityareas, municipalities = unpack_geoms(geoms,\
+      tracts=tracts, communityareas=communityareas, municipalities=municipalities,\
+      wards=wards)
+  geoms = unite_geoms(\
+      tracts=tracts, communityareas=communityareas, municipalities=municipalities,\
+      wards=wards)
+  pop = get_population(\
+      tracts=tracts, communityareas=communityareas, municipalities=municipalities,\
+      wards=wards)
+  retval = {}
+  for yq in Mortgage.objects.distinct('adj_yq'):
+    mortgages = Mortgage.objects.\
+      filter(loc__contained=geoms).\
+      filter(ptype_id__in=[1,2]).\
+      filter(adj_yq__exact=yq.adj_yq)
+    retval[yq.adj_yq] = len(mortgages)/float(pop)*1000
   return retval
