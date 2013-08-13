@@ -65,7 +65,8 @@ google.maps.event.addDomListener(window, 'resize', function() {
 </ul>
 
 <form class="navbar-form pull-left" action="/search/" method="POST">
-    <input id="search-field" type="text" class="form-control" style="width: 350px;" placeholder="Enter an address or PIN" autocomplete="off">
+    {% csrf_token %}
+    <input name="search" id="search-field" type="text" class="form-control" style="width: 350px;" placeholder="Enter an address or PIN" autocomplete="off">
     <button type="submit" class="btn btn-default">Search</button>
 </form>
 
