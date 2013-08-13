@@ -10,11 +10,16 @@
 </style>
 <!-- Skyler's google API key; <25k requests/day -->
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyDI19ju3HG5k6WRMU4mYyTJNv_YIWHUqxA&sensor=false"></script>
-
+<script src="/static/landbank_data/js/jquery.dajax.core.js"></script>
+<script src="/static/landbank_data/js/dajaxice.core.js"></script>
 <script>
 var map;
 var chicagoLatLng = new google.maps.LatLng(41.85, -87.65);
 var tileset = 'community';
+
+function pin_callback(data) {
+  console.log(data);
+}
 
 function retile(newTileset) {
   if (newTileset!=tileset) {
@@ -42,20 +47,15 @@ function initialize() {
   map = new google.maps.Map(document.getElementById('map-canvas'),
       mapOptions);
   retile(tileset);
+  google.maps.event.addDomListener(map, 'click', function(e) {
+    Dajaxice.landbank_data.get_property_from_latlng(Dajax.process, {'lat':e.latLng.lat(),'lng':e.latLng.lng()});
+  });
 }
 google.maps.event.addDomListener(window, 'load', initialize);
 google.maps.event.addDomListener(window, 'resize', function() {
     map.setCenter(chicagoLatLng); });
 </script>
 
-<script type="text/javascript">
-//$('.landbank_search .typeahead').typeahead([
-//  {
-//    name: 'landbank_search',
-//    remote: 'https://maps.googleapis.com/maps/api/place/autocomplete/json?key=&sensor=false&input'
-//  }
-//]);
-</script>
 {% endblock %}
 
 {% block topnav %}
