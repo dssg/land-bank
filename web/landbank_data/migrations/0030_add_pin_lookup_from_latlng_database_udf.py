@@ -11,7 +11,7 @@ class Migration(SchemaMigration):
 	db.execute("CREATE OR REPLACE FUNCTION latlng_to_pin14(numeric, numeric) RETURNS varchar(14) AS '" \
 		+  "SELECT pin14 " \
 		+  "FROM parcel " \
-		+  "WHERE ST_Within(ST_Transform(ST_SetSRID(ST_MakePoint($1, $2),4326),3435), wkb_geometry); " \
+		+  "WHERE ST_Within(ST_Transform(ST_SetSRID(ST_MakePoint($2, $1),4326),3435), wkb_geometry); " \
 		+  "' LANGUAGE SQL;")
 
     def backwards(self, orm):
