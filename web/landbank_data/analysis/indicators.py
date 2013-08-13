@@ -74,3 +74,5 @@ def cache_segregation():
         indicator_value = segregation)
       cv.save()
 
+def cache_foreclosurerate():
+  pass
