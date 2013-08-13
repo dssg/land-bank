@@ -1,7 +1,7 @@
 from models import \
   CommunityArea, Ward, CensusTract, Municipality, \
   CensusTractMapping, AreaPlotCache, CensusTractCharacteristics, \
-  IndicatorCache
+  IndicatorCache, Foreclosure, Assessor, Transaction
 import json
 import numpy as np
 
@@ -109,25 +109,15 @@ def get_population(
   # Population should be an integer.
   return int(sum([pops[i]*tracts[i] for i in pops.keys()]))
 
-def get_pop_weighted_characteristic(characteristic,
+def get_pop_weighted_characteristic(characteristic,\
   tracts=None, communityareas=None,\
   municipalities=None, wards=None, geoms=None):
   ''' Get some characteristic of a given geometry. If you want me to try to
       infer the geometry type, use the geoms argument. '''
   if geoms is not None:
-    for g in iterable(geoms):
-      if isinstance(g,CensusTract):
-        if tracts==None: tracts=[g]
-        else: tracts.append(g)
-      if isinstance(g,Ward):
-        if wards==None: wards=[g]
-        else: wards.append(g)
-      if isinstance(g,CommunityArea):
-        if communityareas==None: communityareas=[g]
-        else: communityareas.append(g)
-      if isinstance(g,Municipality):
-        if municipalities==None: municipalities=[g]
-        else: municipalities.append(g)
+    tracts, wards, communityareas, municipalities = unpack_geoms(geoms,\
+      tracts=tracts, communityareas=communityareas, municipalities=municipalities,\
+      wards=wards)
   # First get the multiplicitive factor for which fraction of each tract
   # should be included.
   tracts = get_tracts_and_weights(tracts,communityareas,municipalities,wards)
@@ -139,3 +129,43 @@ def get_pop_weighted_characteristic(characteristic,
   norm = sum([pops[i]*tracts[i] for i in pops.keys()])
   return sum([pops[i]*tracts[i]*vals[i] for i in pops.keys()])/norm \
     if norm > 0 else 0
+
+def unpack_geoms(geoms,\
+  tracts=None, communityareas=None,\
+  municipalities=None, wards=None):
+  for g in iterable(geoms):
+    if isinstance(g,CensusTract):
+      if tracts==None: tracts=[g]
+      else: tracts.append(g)
+    if isinstance(g,Ward):
+      if wards==None: wards=[g]
+      else: wards.append(g)
+    if isinstance(g,CommunityArea):
+      if communityareas==None: communityareas=[g]
+      else: communityareas.append(g)
+    if isinstance(g,Municipality):
+      if municipalities==None: municipalities=[g]
+      else: municipalities.append(g)
+  return tracts, wards, communityareas, municipalities
+
+def unite_geoms(\
+  tracts=None, communityareas=None,\
+  municipalities=None, wards=None):
+  mygeo=None
+  for tract in iterable(tracts):
+    if tract is None: continue
+    if mygeo is None: mygeo = tract.loc
+    mygeo = tract.loc.union(mygeo)
+  for communityarea in iterable(communityareas):
+    if communityarea is None: continue
+    if mygeo is None: mygeo = communityarea.geom
+    mygeo = communityarea.geom.union(mygeo)
+  for ward in iterable(wards):
+    if ward is None: continue
+    if mygeo is None: mygeo = ward.geom
+    mygeo = ward.geom.union(mygeo)
+  for muni in iterable(municipalities):
+    if muni is None: continue
+    if mygeo is None: mygeo = muni.geom
+    mygeo = muni.geom.union(mygeo)
+  return mygeo
