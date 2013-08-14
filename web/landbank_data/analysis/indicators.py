@@ -41,6 +41,23 @@ def cache_census():
           indicator_value = retval)
         cv.save()
 
+def cache_income():
+  for field in [\
+    'inc_lt_10', 'inc_10_15', 'inc_15_25', 'inc_25_35',\
+    'inc_35_50', 'inc_50_75', 'inc_75_100', 'inc_100_150',\
+    'inc_150_200', 'inc_gt_200', 'med_inc']:
+    for geom_type,geom_str in \
+      zip([CensusTract,Municipality,Ward,CommunityArea],\
+          ['Census Tract', 'Municipality', 'Ward', 'Community Area']):
+      for geom in geom_type.objects.all():
+        val = get_pop_weighted_characteristic(field,\
+        geoms=geom, income=True)
+        cv = IndicatorCache(\
+          area_type=geom_str, area_id = geom.id,\
+          indicator_name = field,\
+          indicator_value = val)
+        cv.save()
+
 
 def cache_segregation():
   # Segregation index

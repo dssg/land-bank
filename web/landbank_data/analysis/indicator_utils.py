@@ -1,7 +1,7 @@
 from models import \
   CommunityArea, Ward, CensusTract, Municipality, \
   CensusTractMapping, AreaPlotCache, CensusTractCharacteristics, \
-  IndicatorCache, Foreclosure, Assessor, Transaction
+  IndicatorCache, Foreclosure, Assessor, Transaction, CensusTractIncome
 import json
 import numpy as np
 
@@ -24,14 +24,20 @@ def iterable(obj):
   except: return [obj]
   return obj
 
-def get_tract_characteristic(characteristic, tracts):
+def get_tract_characteristic(characteristic, tracts, income=False):
   '''Get a value from the characteristics table for a census tract.'''
   retval = {}
   for tract in iterable(tracts):
-    tc = CensusTractCharacteristics.objects.get(\
-      fips=tract.fips)
-    retval[tract] = getattr(tc,characteristic)
-    if retval[tract] is None: retval[tract]=0.0
+    if income:
+      tc = CensusTractIncome.objects.get(\
+        fips=tract.fips)
+      retval[tract] = getattr(tc,characteristic)
+      if retval[tract] is None: retval[tract]=0.0
+    else:
+      tc = CensusTractCharacteristics.objects.get(\
+        fips=tract.fips)
+      retval[tract] = getattr(tc,characteristic)
+      if retval[tract] is None: retval[tract]=0.0
   return retval
 
 def get_tract_from_fips(fips):
@@ -111,7 +117,7 @@ def get_population(
 
 def get_pop_weighted_characteristic(characteristic,\
   tracts=None, communityareas=None,\
-  municipalities=None, wards=None, geoms=None):
+  municipalities=None, wards=None, geoms=None, income=False):
   ''' Get some characteristic of a given geometry. If you want me to try to
       infer the geometry type, use the geoms argument. '''
   if geoms is not None:
@@ -124,7 +130,8 @@ def get_pop_weighted_characteristic(characteristic,\
   # Now get the populations...
   pops = get_tract_characteristic('pop',tracts.keys())
   # And the characteristic in question.
-  vals = get_tract_characteristic(characteristic,tracts.keys())
+  vals = {}
+  vals = get_tract_characteristic(characteristic,tracts.keys(), income=income)
   # Here's the normalization factor, which we pre-compute to do a divide-by-zero test.
   norm = sum([pops[i]*tracts[i] for i in pops.keys()])
   return sum([pops[i]*tracts[i]*vals[i] for i in pops.keys()])/norm \
