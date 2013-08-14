@@ -1,7 +1,8 @@
 from models import \
   CommunityArea, Ward, CensusTract, Municipality, \
   CensusTractMapping, AreaPlotCache, CensusTractCharacteristics, \
-  IndicatorCache, Transaction, Foreclosure, Mortgage, Assessor
+  IndicatorCache, Transaction, Foreclosure, Mortgage, Assessor,\
+  CensusBlock, CensusBlockEmployment, VacancyUSPS
 import json, datetime
 import numpy as np
 from indicator_utils import *
@@ -304,3 +305,70 @@ def get_mortgages_per_thousand(\
     else:
       retval[yq.adj_yq] = len(mortgages)/float(pop)*1000
   return retval
+
+def get_jobs_within_dist(dist,\
+  tracts=None, communityareas=None,\
+  municipalities=None, wards=None, geoms=None):
+  if geoms is not None:
+    tracts, wards, communityareas, municipalities = unpack_geoms(geoms,\
+      tracts=tracts, communityareas=communityareas, municipalities=municipalities,\
+      wards=wards)
+  geoms = unite_geoms(\
+      tracts=tracts, communityareas=communityareas, municipalities=municipalities,\
+      wards=wards)
+  blockswithin = CensusBlock.objects.filter(loc__dwithin=(geoms,dist))
+  retval = 0
+  for block in blockswithin:
+    retval += sum([i.jobs for i in block.censusblockemployment_set.all()])
+  return retval
+
+def get_vacancyusps(\
+  tracts=None, communityareas=None,\
+  municipalities=None, wards=None, geoms=None):
+  if geoms is not None:
+    tracts, wards, communityareas, municipalities = unpack_geoms(geoms,\
+      tracts=tracts, communityareas=communityareas, municipalities=municipalities,\
+      wards=wards)
+  retval = {}
+  for y, q in [(i.year, i.quarter) for i in VacancyUSPS.objects.distinct('year','quarter')]:
+    num, den = 0.0, 0.0
+    if tracts is not None:
+     for tract in iterable(tracts): 
+      v = VacancyUSPS.objects.get(fips=tract.fips, year=y, quarter=q)
+      num += v.res_vacant + v.res_nostat
+      den += v.naddr_res
+    if municipalities is not None:
+     for muni in iterable(municipalities):
+      for tract_mapping in muni.censustractmapping_set.all():
+        v = VacancyUSPS.objects.get(fips=tract_mapping.fips, year=y, quarter=q)
+        num += (v.res_vacant + v.res_nostat) * tract_mapping.municipality_frac
+        den += (v.naddr_res) * tract_mapping.municipality_frac
+    if wards is not None:
+     for ward in iterable(wards):
+      for tract_mapping in ward.censustractmapping_set.all():
+        v = VacancyUSPS.objects.get(fips=tract_mapping.fips, year=y, quarter=q)
+        num += (v.res_vacant + v.res_nostat) * tract_mapping.ward_frac
+        den += (v.naddr_res) * tract_mapping.ward_frac
+    if communityareas is not None:
+     for communityarea in iterable(communityareas):
+      for tract_mapping in communityarea.censustractmapping_set.all():
+        v = VacancyUSPS.objects.get(fips=tract_mapping.fips, year=y, quarter=q)
+        num += (v.res_vacant + v.res_nostat) * tract_mapping.communityarea_frac
+        den += (v.naddr_res) * tract_mapping.communityarea_frac
+    retval[int(str(y)+str(q))] = float(num)/den if den!=0 else 0
+  return retval
+   
+def cache_vacancy_indicators():
+  for geom_type,geom_str in \
+    zip([CensusTract,Municipality,Ward,CommunityArea],\
+        ['Census Tract', 'Municipality', 'Ward', 'Community Area']):
+    for geom in geom_type.objects.all():
+      print '.'
+      retval = get_vacancyusps(geoms=geom)
+      for k,v in retval.iteritems():
+        cv = IndicatorCache(\
+          area_type=geom_str, area_id = geom.id,\
+          indicator_name='vacancy_usps',\
+          indicator_value = v,\
+          indicator_date = quarter_to_datetime(k))
+        cv.save()
