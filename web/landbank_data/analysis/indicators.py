@@ -334,27 +334,35 @@ def get_vacancyusps(\
     num, den = 0.0, 0.0
     if tracts is not None:
      for tract in iterable(tracts): 
-      v = VacancyUSPS.objects.get(fips=tract.fips, year=y, quarter=q)
-      num += v.res_vacant + v.res_nostat
-      den += v.naddr_res
+      try:
+       v = VacancyUSPS.objects.get(fips=tract.fips, year=y, quarter=q)
+       num += v.res_vacant + v.res_nostat
+       den += v.naddr_res
+      except: continue
     if municipalities is not None:
      for muni in iterable(municipalities):
       for tract_mapping in muni.censustractmapping_set.all():
+       try:
         v = VacancyUSPS.objects.get(fips=tract_mapping.fips, year=y, quarter=q)
         num += (v.res_vacant + v.res_nostat) * tract_mapping.municipality_frac
         den += (v.naddr_res) * tract_mapping.municipality_frac
+       except: continue
     if wards is not None:
      for ward in iterable(wards):
       for tract_mapping in ward.censustractmapping_set.all():
+       try:
         v = VacancyUSPS.objects.get(fips=tract_mapping.fips, year=y, quarter=q)
         num += (v.res_vacant + v.res_nostat) * tract_mapping.ward_frac
         den += (v.naddr_res) * tract_mapping.ward_frac
+       except: continue
     if communityareas is not None:
      for communityarea in iterable(communityareas):
       for tract_mapping in communityarea.censustractmapping_set.all():
+       try:
         v = VacancyUSPS.objects.get(fips=tract_mapping.fips, year=y, quarter=q)
         num += (v.res_vacant + v.res_nostat) * tract_mapping.communityarea_frac
         den += (v.naddr_res) * tract_mapping.communityarea_frac
+       except: continue
     retval[int(str(y)+str(q))] = float(num)/den if den!=0 else 0
   return retval
    
