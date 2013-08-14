@@ -1,8 +1,12 @@
 #from django.conf.urls import patterns, include, url
 from django.conf.urls.defaults import *
 from django.conf.urls import patterns, include, url
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+from dajaxice.core import dajaxice_autodiscover, dajaxice_config
 from tastypie.api import Api
 from landbank_data.api import ParcelResource, AuctionResource, CashFinResource, ForeclosureResource, MortgageResource, ScavengerResource, TransactionResource
+
+dajaxice_autodiscover()
 
 # Uncomment the next two lines to enable the admin:
 # from django.contrib import admin
@@ -27,6 +31,7 @@ urlpatterns = patterns('',
 
     # Uncomment the next line to enable the admin:
     # url(r'^admin/', include(admin.site.urls)),
+    url(dajaxice_config.dajaxice_url, include('dajaxice.urls')),
     url(r'^pin/', include('landbank_data.urls')),
     url(r'^commarea/(?P<search_commarea>[0-9]+)/$', 'landbank_data.views.commarea'),
     url(r'^ward/(?P<search_ward>[0-9]+)/$', 'landbank_data.views.ward'),
@@ -37,4 +42,7 @@ urlpatterns = patterns('',
     url(r'api/', include(v1_api.urls)),
     url(r'^$', 'landbank_data.views.home', name='home'),
     url(r'search/', 'landbank_data.views.search', name='search'),
+    url(r'dajax_test/', 'landbank_data.views.dajax_test', name='dajax_test'),
 )
+
+urlpatterns += staticfiles_urlpatterns()

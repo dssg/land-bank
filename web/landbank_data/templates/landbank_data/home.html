@@ -7,27 +7,26 @@
         padding: 0;
         height: 100%;
     }
+    .wax-tooltip {
+        margin-top: 50px; /* adjust for fixed nav bar */
+    }
 </style>
 <!-- Skyler's google API key; <25k requests/day -->
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyDI19ju3HG5k6WRMU4mYyTJNv_YIWHUqxA&sensor=false"></script>
-
+<script src="/static/landbank_data/wax/dist/wax.g.js"></script>
+<link href="/static/landbank_data/wax/theme/controls.css" rel="stylesheet" type="text/css">
 <script>
-var map;
-var chicagoLatLng = new google.maps.LatLng(41.85, -87.65);
-var tileset = 'community';
-
-function retile(newTileset) {
-  if (newTileset!=tileset) {
-    tileset = newTileset;
-    // TODO: update tileset based on geography selection
-    alert("You chose " + newTileset);
-  } else {
-    return;
-  }
-}
-
-function initialize() {
-  var mapOptions = {
+var map, interaction,
+  chicagoLatLng = new google.maps.LatLng(41.85, -87.65);
+  overlay_key = '';
+  default_overlay= 'community';
+  overlay_urls = {
+   'community':'http://api.tiles.mapbox.com/v3/swhorton.communityarea.jsonp'
+  ,'tract':'http://api.tiles.mapbox.com/v3/swhorton.censustract.jsonp'
+  ,'municipality':'http://api.tiles.mapbox.com/v3/swhorton.municipality.jsonp'
+  ,'ward':'http://api.tiles.mapbox.com/v3/swhorton.ward.jsonp'
+  },
+  mapOptions = {
     zoom: 11,
     center: chicagoLatLng,
     mapTypeId: google.maps.MapTypeId.ROADMAP,
@@ -35,26 +34,31 @@ function initialize() {
     mapTypeControl: false,
     panControl: false,
     zoomControl: false,
-    //draggable: false,
-    //scrollwheel: false,
-    //disableDoubleClickZoom: true
   };
-  map = new google.maps.Map(document.getElementById('map-canvas'),
-      mapOptions);
-  retile(tileset);
+
+function retile(new_key) {
+  if (new_key===overlay_key) { return; }
+  overlay_key = new_key;
+
+  wax.tilejson(overlay_urls[overlay_key],
+    function(tilejson) {
+      if (!map) { 
+	map = new google.maps.Map(document.getElementById('map-canvas'),mapOptions);
+        map.overlayMapTypes.insertAt(0, new wax.g.connector(tilejson));
+      } else {
+	map.overlayMapTypes.setAt(0, new wax.g.connector(tilejson));
+	interaction.remove();
+      }
+      interaction = wax.g.interaction().map(map).tilejson(tilejson)
+        .on(wax.tooltip().parent(map.getDiv()).events())
+        .on(wax.location().events());
+      console.log(interaction);
+    });
 }
-google.maps.event.addDomListener(window, 'load', initialize);
+
+google.maps.event.addDomListener(window, 'load', retile(default_overlay));
 google.maps.event.addDomListener(window, 'resize', function() {
     map.setCenter(chicagoLatLng); });
-</script>
-
-<script type="text/javascript">
-//$('.landbank_search .typeahead').typeahead([
-//  {
-//    name: 'landbank_search',
-//    remote: 'https://maps.googleapis.com/maps/api/place/autocomplete/json?key=&sensor=false&input'
-//  }
-//]);
 </script>
 {% endblock %}
 
@@ -74,9 +78,10 @@ google.maps.event.addDomListener(window, 'resize', function() {
     <li class="dropdown">
         <a href="#" id="searchBox" class="dropdown-toggle" data-toggle="dropdown">Geography <b class="caret"></b></a>
         <ul class="dropdown-menu">
+            <li><a href="#" onClick="retile('municipality');">Municipality</a></li>
             <li><a href="#" onClick="retile('community');">Community</a></li>
             <li><a href="#" onClick="retile('ward');">Ward</a></li>
-        <li><a href="#" onClick="retile('tract');">Tract</a></li>
+            <li><a href="#" onClick="retile('tract');">Tract</a></li>
         </ul>
     </li>
 </ul>

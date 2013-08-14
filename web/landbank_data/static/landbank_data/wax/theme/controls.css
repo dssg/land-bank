@@ -99,11 +99,11 @@ a.wax-fullscreen {
 .wax-tooltip {
   z-index:999999;
   position:absolute;
-  background:#333;
+  background:#222;
   color:#fff;
   padding:10px;
   -webkit-user-select:auto;
-  left:10px;
+  right:10px;
   top:10px;
   max-width:300px;
   opacity:1;
