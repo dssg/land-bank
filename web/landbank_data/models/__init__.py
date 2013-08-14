@@ -28,3 +28,4 @@ from VacancyUSPS import VacancyUSPS
 from Ward import Ward
 from CensusTractMapping import CensusTractMapping
 from IndicatorCache import IndicatorCache
+from BuildingPermit import BuildingPermit

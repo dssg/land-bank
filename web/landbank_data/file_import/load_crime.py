@@ -21,7 +21,7 @@ class SocrataClient:
   def get_data(self):
     urllib.urlretrieve('http://'+chicago_host+'/api/views/'+self.view+\
       '/rows.csv?accessType=DOWNLOAD', self.outfile)
-    return get_data_from_file()
+    return self.get_data_from_file()
 
   def get_data_from_file(self):
     f=open(self.outfile,'r') 

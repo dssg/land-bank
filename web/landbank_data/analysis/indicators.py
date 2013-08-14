@@ -2,9 +2,12 @@ from models import \
   CommunityArea, Ward, CensusTract, Municipality, \
   CensusTractMapping, AreaPlotCache, CensusTractCharacteristics, \
   IndicatorCache, Transaction, Foreclosure, Mortgage, Assessor
-import json
+import json, datetime
 import numpy as np
 from indicator_utils import *
+from pytz import timezone
+
+cst=timezone('US/Central')
 
 def cache_population():
   # Total population.
@@ -74,6 +77,70 @@ def cache_segregation():
         indicator_value = segregation)
       cv.save()
 
+def quarter_to_datetime(quarter):
+  quarter=str(quarter)
+  thisyear=quarter[:4]
+  thismonth='10'
+  if   quarter[4]=='1': thismonth='1'
+  elif quarter[4]=='2': thismonth='4'
+  elif quarter[4]=='3': thismonth='7'
+  return cst.localize(datetime.datetime.strptime(thisyear+'/'+thismonth, '%Y/%m'))
+
+def cache_market_indicators():
+  for geom_type,geom_str in \
+    zip([CensusTract,Municipality,Ward,CommunityArea],\
+        ['Census Tract', 'Municipality', 'Ward', 'Community Area']):
+    for geom in geom_type.objects.all():
+      print '.'
+      retval = get_foreclosure_rate(geoms=geom)
+      for k,v in retval.iteritems():
+        cv = IndicatorCache(\
+          area_type=geom_str, area_id = geom.id,\
+          indicator_name='foreclosure_rate',\
+          indicator_value = v,\
+          indicator_date = quarter_to_datetime(k))
+        cv.save()
+      retval = get_median_price(geoms=geom)
+      for k,v in retval.iteritems():
+        cv = IndicatorCache(\
+          area_type=geom_str, area_id = geom.id,\
+          indicator_name='median_price',\
+          indicator_value = v,\
+          indicator_date = quarter_to_datetime(k))
+        cv.save()
+      retval = get_transactions_per_thousand(geoms=geom)
+      for k,v in retval.iteritems():
+        cv = IndicatorCache(\
+          area_type=geom_str, area_id = geom.id,\
+          indicator_name='transactions_per_thousand',\
+          indicator_value = v,\
+          indicator_date = quarter_to_datetime(k))
+        cv.save()
+      retval = get_mortgages_per_thousand(geoms=geom)
+      for k,v in retval.iteritems():
+        cv = IndicatorCache(\
+          area_type=geom_str, area_id = geom.id,\
+          indicator_name='mortgages_per_thousand',\
+          indicator_value = v,\
+          indicator_date = quarter_to_datetime(k))
+        cv.save()
+      retval = get_percent_lowvalue_transactions(geoms=geom)
+      for k,v in retval.iteritems():
+        cv = IndicatorCache(\
+          area_type=geom_str, area_id = geom.id,\
+          indicator_name='percent_lowvalue',\
+          indicator_value = v,\
+          indicator_date = quarter_to_datetime(k))
+        cv.save()
+      retval = get_percent_business_buyers(geoms=geom)
+      for k,v in retval.iteritems():
+        cv = IndicatorCache(\
+          area_type=geom_str, area_id = geom.id,\
+          indicator_name='percent_businessbuyers',\
+          indicator_value = v,\
+          indicator_date = quarter_to_datetime(k))
+        cv.save()
+
 def get_foreclosure_rate(\
   tracts=None, communityareas=None,\
   municipalities=None, wards=None, geoms=None):
@@ -95,7 +162,10 @@ def get_foreclosure_rate(\
       filter(loc__contained=geoms).\
       filter(ptype_id__in=[1,2]).\
       filter(adj_yq__exact=yq.adj_yq)
-    retval[yq.adj_yq] = float(len(forecs))/len(assess)
+    if len(assess) == 0:
+      retval[yq.adj_yq] = 0
+    else:
+      retval[yq.adj_yq] = float(len(forecs))/len(assess)*1000
   return retval
 
 def get_median_price(\
@@ -116,8 +186,71 @@ def get_median_price(\
       filter(loc__contained=geoms).\
       filter(ptype_id__in=[1,2]).\
       filter(adj_yq__exact=yq.adj_yq)
-    retval[yq.adj_yq] = np.median([i.amount_prime for i in transact])
+    if len(transact) == 0:
+      retval[yq.adj_yq] = 0
+    else:
+      retval[yq.adj_yq] = np.median([i.amount_prime for i in transact])
   return retval
+
+def get_percent_business_buyers(\
+  tracts=None, communityareas=None,\
+  municipalities=None, wards=None, geoms=None):
+  # Example usage:
+  # indicators.get_median_price(geoms=CensusTract.objects.filter(fips__in=(17031840300, 17031840200)))
+  if geoms is not None:
+    tracts, wards, communityareas, municipalities = unpack_geoms(geoms,\
+      tracts=tracts, communityareas=communityareas, municipalities=municipalities,\
+      wards=wards)
+  geoms = unite_geoms(\
+      tracts=tracts, communityareas=communityareas, municipalities=municipalities,\
+      wards=wards)
+  retval = {}
+  for yq in Transaction.objects.distinct('adj_yq'):
+    transact = Transaction.objects.\
+      filter(loc__contained=geoms).\
+      filter(ptype_id__in=[1,2]).\
+      filter(adj_yq__exact=yq.adj_yq)
+    busbuyer = Transaction.objects.\
+      filter(loc__contained=geoms).\
+      filter(business_buyer__exact=1).\
+      filter(ptype_id__in=[1,2]).\
+      filter(adj_yq__exact=yq.adj_yq)
+    if len(transact) == 0:
+      retval[yq.adj_yq] = 0
+    else:
+      retval[yq.adj_yq] = len(busbuyer)/float(len(transact))*100
+  return retval
+
+
+def get_percent_lowvalue_transactions(\
+  tracts=None, communityareas=None,\
+  municipalities=None, wards=None, geoms=None):
+  # Example usage:
+  # indicators.get_median_price(geoms=CensusTract.objects.filter(fips__in=(17031840300, 17031840200)))
+  if geoms is not None:
+    tracts, wards, communityareas, municipalities = unpack_geoms(geoms,\
+      tracts=tracts, communityareas=communityareas, municipalities=municipalities,\
+      wards=wards)
+  geoms = unite_geoms(\
+      tracts=tracts, communityareas=communityareas, municipalities=municipalities,\
+      wards=wards)
+  retval = {}
+  for yq in Transaction.objects.distinct('adj_yq'):
+    transact = Transaction.objects.\
+      filter(loc__contained=geoms).\
+      filter(ptype_id__in=[1,2]).\
+      filter(adj_yq__exact=yq.adj_yq)
+    lowvalue = Transaction.objects.\
+      filter(loc__contained=geoms).\
+      filter(purchase_less_20k__exact=1).\
+      filter(ptype_id__in=[1,2]).\
+      filter(adj_yq__exact=yq.adj_yq)
+    if len(transact) == 0:
+      retval[yq.adj_yq] = 0
+    else:
+      retval[yq.adj_yq] = len(lowvalue)/float(len(transact))*100
+  return retval
+
 
 def get_transactions_per_thousand(\
   tracts=None, communityareas=None,\
@@ -140,7 +273,10 @@ def get_transactions_per_thousand(\
       filter(loc__contained=geoms).\
       filter(ptype_id__in=[1,2]).\
       filter(adj_yq__exact=yq.adj_yq)
-    retval[yq.adj_yq] = len([i.amount_prime for i in transact])/float(pop)*1000
+    if pop == 0:
+      retval[yq.adj_yq] = 0
+    else:
+      retval[yq.adj_yq] = len([i.amount_prime for i in transact])/float(pop)*1000
   return retval
 
 
@@ -163,5 +299,8 @@ def get_mortgages_per_thousand(\
       filter(loc__contained=geoms).\
       filter(ptype_id__in=[1,2]).\
       filter(adj_yq__exact=yq.adj_yq)
-    retval[yq.adj_yq] = len(mortgages)/float(pop)*1000
+    if pop == 0:
+      retval[yq.adj_yq] = 0
+    else:
+      retval[yq.adj_yq] = len(mortgages)/float(pop)*1000
   return retval
