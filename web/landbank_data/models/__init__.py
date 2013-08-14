@@ -30,3 +30,4 @@ from CensusTractMapping import CensusTractMapping
 from IndicatorCache import IndicatorCache
 from BuildingPermit import BuildingPermit
 from BusinessLicense import BusinessLicense
+from CensusBlockEmployment import CensusBlockEmployment
