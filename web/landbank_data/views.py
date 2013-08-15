@@ -128,6 +128,11 @@ def municipality(request, search_muni=None):
   return aggregate(request, muni, mymuni, 'Municipality')
 
 def aggregate(request, search_geom, search_geom_name, geom_type):
+  city_flag=True
+  if geom_type=='Municipality' and search_geom_name!='Chicago': city_flag=False
+  if geom_type=='Census Tract':
+    city_geom=Municipality.objects.get(name='Chicago').geom
+    if city_geom.intersection(search_geom.loc).area==0: city_flag=False
   # First get the community area.
   # Now get a bunch of indicator values for it.
   indicators = IndicatorCache.objects.\
@@ -208,13 +213,23 @@ def aggregate(request, search_geom, search_geom_name, geom_type):
     indicator_hist(geom_type, 'jobs_within_mile_pc', hist_range=(0,20))
   jobs_within_mile_pc = indicators.get(indicator_name='jobs_within_mile_pc').\
     indicator_value
+  if city_flag:
+    construction_pc_values, construction_pc_bins = \
+      indicator_hist(geom_type, 'construction_pc', hist_range=(0,5000))
+    construction_pc = indicators.get(indicator_name='construction_pc').\
+      indicator_value
 
   income_hist_dicts = [\
     {'title': 'Household income (thousands)', 'marker': med_inc,\
      'tooltip': 'Annual household income in thousands of dollars', 'data': inc_data},\
     {'title': 'Jobs within 1 mile per capita', 'marker': jobs_within_mile_pc,\
-     'tooltip': 'Annual household income in thousands of dollars', 'data': \
-     [{'x': b, 'y': v} for b,v in zip(jobs_within_mile_pc_bins, jobs_within_mile_pc_values)]}]\
+     'tooltip': 'Jobs within 1 mile of this geometry, per capita', 'data': \
+     [{'x': b, 'y': v} for b,v in zip(jobs_within_mile_pc_bins, jobs_within_mile_pc_values)]}]
+  if city_flag:
+    income_hist_dicts.append( 
+    {'title': 'Construction spending per capita', 'marker': construction_pc,\
+     'tooltip': 'Spending on permitted construction per capita', 'data': \
+     [{'x': b, 'y': v} for b,v in zip(construction_pc_bins, construction_pc_values)]})
 
   # Market
   foreclosure_rates_values, foreclosure_rates_bins = \

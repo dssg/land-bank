@@ -488,4 +488,42 @@ def cache_demolition_indicator():
           indicator_date = lastyear)
         cv.save()
 
+def cache_construction_indicator():
+  lastyear = cst.localize(datetime.datetime.now() - datetime.timedelta(days=365.25))
+  city_geom=Municipality.objects.get(name='Chicago').geom
+  for geom_type,geom_str in \
+    zip([CensusTract,Municipality,Ward,CommunityArea],\
+        ['Census Tract', 'Municipality', 'Ward', 'Community Area']):
+    for geom in geom_type.objects.all():
+      pop = IndicatorCache.objects.get(indicator_name='pop', \
+            area_type=geom_str, area_id=geom.id).indicator_value
+      if pop==0: continue
+      if (geom_type==CensusTract):
+        if not city_geom.intersects(geom.loc): continue
+        myinds = BuildingPermit.objects.filter(loc__within=geom.loc).\
+                            filter(timestamp__gte=lastyear)
+        retval = 0
+        for myind in myinds: 
+          if myind.cost is not None: retval += myind.cost
+        cv = IndicatorCache(\
+          area_type=geom_str, area_id = geom.id,\
+          indicator_name='construction_pc',\
+          indicator_value = float(retval)/pop,\
+          indicator_date = lastyear)
+        cv.save()
+      else:
+        if not city_geom.intersects(geom.geom): continue
+        if geom_type==Municipality and geom.name!='Chicago': continue
+        myinds = BuildingPermit.objects.filter(loc__within=geom.geom).\
+                            filter(timestamp__gte=lastyear)
+        retval = 0
+        for myind in myinds: 
+          if myind.cost is not None: retval += myind.cost
+        cv = IndicatorCache(\
+          area_type=geom_str, area_id = geom.id,\
+          indicator_name='construction_pc',\
+          indicator_value = float(retval)/pop,\
+          indicator_date = lastyear)
+        cv.save()
+
   
