@@ -134,6 +134,7 @@ def aggregate(request, search_geom, search_geom_name, geom_type):
     filter(area_type__exact=geom_type).\
     filter(area_id__exact=search_geom.id)
 
+  # Basic demographics
   pop = int(indicators.get(indicator_name='pop').indicator_value)
   pct_white = indicators.get(indicator_name='pct_whitenh').indicator_value
   pct_black = indicators.get(indicator_name='pct_blacknh').indicator_value
@@ -149,6 +150,18 @@ def aggregate(request, search_geom, search_geom_name, geom_type):
     indicator_value
   pct_occ_units = indicators.get(indicator_name='pct_occ_units').\
     indicator_value
+
+  # Income
+  inc_levels = [\
+    'inc_lt_10', 'inc_10_15', 'inc_15_25', 'inc_25_35',\
+    'inc_35_50', 'inc_50_75', 'inc_75_100', 'inc_100_150',\
+    'inc_150_200', 'inc_gt_200']
+  inc_vals = [5,12.5,20,30,42.5,62.5,87.5,125,175,250]
+  inc_data = []
+  for inc_val, inc_level in zip(inc_vals, inc_levels):
+    val = indicators.get(indicator_name=inc_level).indicator_value
+    inc_data.append({'x': inc_val, 'y': val})
+  med_inc = indicators.get(indicator_name='med_inc').indicator_value/1000.0
 
   # Now make the histograms for comparing it to other community areas.
   # These could be cached.
@@ -193,8 +206,11 @@ def aggregate(request, search_geom, search_geom_name, geom_type):
     {'data': [{'x': b, 'y': v} for b,v in \
       zip(median_ages_bins,median_ages_values)],\
      'title': 'Median age', 'marker': median_age, \
-     'tooltip': 'Median age of residents'},\
-  ]}
+     'tooltip': 'Median age of residents'}],\
+    ('Income','Black line marks median household income') : [\
+    {'title': 'Household income (thousands)', 'marker': med_inc,\
+     'tooltip': 'Annual household income in thousands of dollars', 'data': inc_data}]\
+}
 
   # Make the outline of the community area for the map.
   outline = search_geom.loc if geom_type == "Census Tract" else search_geom.geom

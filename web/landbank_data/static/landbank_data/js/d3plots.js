@@ -5,30 +5,31 @@ function d3hist(div, data, title, marker) {
       height = 200 - margin.top - margin.bottom;
   
   data = data.sort(function(a,b) { if (a.x > b.x) return 1; if (a.x < b.x) return -1; return 0; });
-  var xdelta=data[1].x - data[0].x;
+  var xdeltas = [];
+  for(var i=1; i<data.length; i++) { data[i].xdelta = data[i].x - data[i-1].x; };
+  data[0].xdelta = data[1].xdelta;
   var xmin = d3.min(data, function(d) { return d.x; });
   var xmax = d3.max(data, function(d) { return d.x; });
   var ymax = d3.max(data, function(d) { return d.y; });
-  var padding = xdelta * 0.1;
-  var bar_width = xdelta - padding;
+  var padding = data[0].xdelta * 0.1;
 
   var xScale = d3.scale.linear()
-      .domain([xmin-xdelta, xmax+xdelta])
+      .domain([xmin-data[0].xdelta, xmax+data[data.length-1].xdelta])
       .range([0, width]);
   
   var yScale = d3.scale.linear()
       .domain([0, ymax])
-      .range([height, 0]);
+      .range([height, 0])
   
   var xAxis = d3.svg.axis()
       .scale(xScale)
       .orient("bottom")
       .ticks(5)
       .tickFormat(d3.format("3.0f"));
-  if (xdelta < 1.0) {
+  if (data[0].xdelta < 1.0) {
     xAxis.tickFormat(d3.format("3.1f"));
   }
-  if (xdelta < 0.1) {
+  if (data[0].xdelta < 0.1) {
     xAxis.tickFormat(d3.format("3.2f"));
   }
   
@@ -78,8 +79,9 @@ function d3hist(div, data, title, marker) {
       .enter()
       .append("rect")
       .attr("class", "bar")
-      .attr("x", function(d) { return xScale(d.x - bar_width/2.0);} )
-      .attr("width", function(d) { return xScale(d.x + bar_width/2.0)-xScale(d.x - bar_width/2.0);} )
+      .attr("x", function(d) { return xScale(d.x - d.xdelta/2.0);} )
+      .attr("width", function(d) { return xScale(d.x + d.xdelta/2.0-padding)-
+                                          xScale(d.x - d.xdelta/2.0 + padding);} )
       .attr("y", function(d) { return yScale(d.y)} )
       .attr("height", function(d) { return height - yScale(d.y); })
       .attr("fill", "rgb(0, 0, 128)")
