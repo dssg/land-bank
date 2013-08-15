@@ -10,10 +10,24 @@ def indicator_hist(area_type, indicator_name, notzero=True, nbins=10):
            filter(indicator_name__exact=indicator_name)
   if notzero:
     myinds = myinds.filter(indicator_value__gt=0)
+  if myinds[0].indicator_date is not None:
+    myinds = myinds.filter(indicator_date__exact=\
+      myinds.latest('indicator_date').indicator_date)
 
   retval = [i.indicator_value for i in myinds]
   values, bins = np.histogram(retval,bins=nbins)
   return values, [bins[i]+(bins[i+1]-bins[i])/2.0 for i in range(len(values))]
+
+def indicator_timestream(area_type, area_id, indicator_name, notzero=True):
+  myinds = IndicatorCache.objects.filter(area_type__exact=area_type).\
+           filter(area_id__exact=area_id).\
+           filter(indicator_name__exact=indicator_name)
+  if notzero:
+    myinds = myinds.filter(indicator_value__gt=0)
+  retval = []
+  return [{'x': b, 'y': v} for b, v in \
+    zip([i.indicator_date for i in myinds],\
+        [i.indicator_value for i in myinds])]
 
 def percentile(values, thisvalue):
   return int(sum(np.array(values) <= thisvalue)/float(len(values))*100)

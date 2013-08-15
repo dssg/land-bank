@@ -106,8 +106,10 @@ def quarter_to_datetime(quarter):
 
 def cache_market_indicators():
   for geom_type,geom_str in \
-    zip([CensusTract,Municipality,Ward,CommunityArea],\
-        ['Census Tract', 'Municipality', 'Ward', 'Community Area']):
+    zip([Municipality,Ward,CommunityArea],\
+        ['Municipality', 'Ward', 'Community Area']):
+    #zip([CensusTract,Municipality,Ward,CommunityArea],\
+    #    ['Census Tract', 'Municipality', 'Ward', 'Community Area']):
     for geom in geom_type.objects.all():
       print '.'
       retval = get_foreclosure_rate(geoms=geom)
