@@ -259,6 +259,26 @@ def aggregate(request, search_geom, search_geom_name, geom_type):
      'data': [{'x': b, 'y': v} for b,v in \
      zip(percent_businessbuyers_bins, percent_businessbuyers_values)]}\
     ]
+  market_timestream_dicts = [\
+    {'title': 'Foreclosure rate', \
+     'tooltip': 'Foreclosures per thousand residential properties by quarter', \
+     'data': indicator_timestream(geom_type, search_geom.id, 'foreclosure_rate')},\
+    {'title': 'Median price', \
+     'tooltip': 'Median price for residential properties by quarter', \
+     'data': indicator_timestream(geom_type, search_geom.id, 'median_price')},\
+    {'title': 'Transactions per thousand', \
+     'tooltip': 'Transactions per thousand residential properties by quarter', \
+     'data': indicator_timestream(geom_type, search_geom.id, 'transactions_per_thousand')},\
+    {'title': 'Mortgages per thousand', \
+     'tooltip': 'Mortgages per thousand residential properties by quarter', \
+     'data': indicator_timestream(geom_type, search_geom.id, 'mortgages_per_thousand')},\
+    {'title': 'Percent low-value transactions', \
+     'tooltip': 'Percent residential transactions for <$20k by quarter', \
+     'data': indicator_timestream(geom_type, search_geom.id, 'percent_lowvalue')},\
+    {'title': 'Percent business buyers', \
+     'tooltip': 'Percent business buyers by quarter', \
+     'data': indicator_timestream(geom_type, search_geom.id, 'percent_businessbuyers')}\
+  ]
 
   # Get the data ready to be passed to the plotter.
   histData = [\
@@ -268,6 +288,10 @@ def aggregate(request, search_geom, search_geom_name, geom_type):
     income_hist_dicts },\
     {('Real estate market', 'Black lines mark this '+geom_type+' relative to all others') : \
     market_hist_dicts }\
+  ]
+  timestreamData = [
+    {('Real estate market', 'Historical indicators') : \
+    market_timestream_dicts }\
   ]
 
   # Make the outline of the community area for the map.
@@ -293,7 +317,8 @@ def aggregate(request, search_geom, search_geom_name, geom_type):
     'proplist': proplist,\
     'mapcenter': mapcenter,\
     'outline': outline,\
-    'histData': histData\
+    'histData': histData,\
+    'timestreamData': timestreamData\
     },\
     context_instance=RequestContext(request))
 
