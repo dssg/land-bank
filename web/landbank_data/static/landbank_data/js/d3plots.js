@@ -67,6 +67,8 @@ function d3hist(div, data, title, marker) {
       .text("Count");
   
   if ((typeof marker !== 'undefined') && (marker != 99999)) {
+    if (marker > xmax) { marker = xmax; };
+    if (marker < xmin) { marker = xmin; };
     var line=svg.append("line")
       .attr({ 
         "x1": xScale(marker), "y1": yScale(0),

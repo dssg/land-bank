@@ -193,7 +193,7 @@ def aggregate(request, search_geom, search_geom_name, geom_type):
      'tooltip': 'Median age of residents'}\
   ]
 
-  # Income
+  # Economics
   inc_levels = [\
     'inc_lt_10', 'inc_10_15', 'inc_15_25', 'inc_25_35',\
     'inc_35_50', 'inc_50_75', 'inc_75_100', 'inc_100_150',\
@@ -204,9 +204,17 @@ def aggregate(request, search_geom, search_geom_name, geom_type):
     val = indicators.get(indicator_name=inc_level).indicator_value
     inc_data.append({'x': inc_val, 'y': val})
   med_inc = indicators.get(indicator_name='med_inc').indicator_value/1000.0
+  jobs_within_mile_pc_values, jobs_within_mile_pc_bins = \
+    indicator_hist(geom_type, 'jobs_within_mile_pc', hist_range=(0,20))
+  jobs_within_mile_pc = indicators.get(indicator_name='jobs_within_mile_pc').\
+    indicator_value
+
   income_hist_dicts = [\
     {'title': 'Household income (thousands)', 'marker': med_inc,\
-     'tooltip': 'Annual household income in thousands of dollars', 'data': inc_data}]\
+     'tooltip': 'Annual household income in thousands of dollars', 'data': inc_data},\
+    {'title': 'Jobs within 1 mile per capita', 'marker': jobs_within_mile_pc,\
+     'tooltip': 'Annual household income in thousands of dollars', 'data': \
+     [{'x': b, 'y': v} for b,v in zip(jobs_within_mile_pc_bins, jobs_within_mile_pc_values)]}]\
 
   # Market
   foreclosure_rates_values, foreclosure_rates_bins = \

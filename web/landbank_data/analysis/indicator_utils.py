@@ -5,7 +5,7 @@ from models import \
 import json
 import numpy as np
 
-def indicator_hist(area_type, indicator_name, notzero=True, nbins=10):
+def indicator_hist(area_type, indicator_name, notzero=True, nbins=10, hist_range=None):
   myinds = IndicatorCache.objects.filter(area_type__exact=area_type).\
            filter(indicator_name__exact=indicator_name)
   if notzero:
@@ -15,7 +15,10 @@ def indicator_hist(area_type, indicator_name, notzero=True, nbins=10):
       myinds.latest('indicator_date').indicator_date)
 
   retval = [i.indicator_value for i in myinds]
-  values, bins = np.histogram(retval,bins=nbins)
+  if hist_range is None:
+    values, bins = np.histogram(retval,bins=nbins)
+  else:
+    values, bins = np.histogram(retval,bins=nbins,range=hist_range)
   return values, [bins[i]+(bins[i+1]-bins[i])/2.0 for i in range(len(values))]
 
 def indicator_timestream(area_type, area_id, indicator_name, notzero=True):
