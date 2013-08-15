@@ -210,7 +210,7 @@ def aggregate(request, search_geom, search_geom_name, geom_type):
     inc_data.append({'x': inc_val, 'y': val})
   med_inc = indicators.get(indicator_name='med_inc').indicator_value/1000.0
   jobs_within_mile_pc_values, jobs_within_mile_pc_bins = \
-    indicator_hist(geom_type, 'jobs_within_mile_pc', hist_range=(0,20))
+    indicator_hist(geom_type, 'jobs_within_mile_pc', hist_range=(0,5))
   jobs_within_mile_pc = indicators.get(indicator_name='jobs_within_mile_pc').\
     indicator_value
   if city_flag:
@@ -231,6 +231,35 @@ def aggregate(request, search_geom, search_geom_name, geom_type):
      'tooltip': 'Spending on permitted construction per capita', 'data': \
      [{'x': b, 'y': v} for b,v in zip(construction_pc_bins, construction_pc_values)]})
 
+  # Vacancy
+  vacancy_usps_values, vacancy_usps_bins = \
+    indicator_hist(geom_type, 'vacancy_usps')
+  vacancy_usps = indicators.filter(indicator_name__exact='vacancy_usps').\
+    latest('indicator_date').indicator_value
+  if city_flag:
+    demolitions_pc_values, demolitions_pc_bins = \
+      indicator_hist(geom_type, 'demolitions_pc')
+    demolitions_pc = indicators.filter(indicator_name__exact='demolitions_pc').\
+      latest('indicator_date').indicator_value
+    vacancy_311_values, vacancy_311_bins = \
+      indicator_hist(geom_type, 'vacancy_311')
+    vacancy_311 = indicators.filter(indicator_name__exact='vacancy_311').\
+      latest('indicator_date').indicator_value
+
+  vacancy_hist_dicts = [\
+    {'title': 'Vacancy rate', 'marker': vacancy_usps,\
+     'tooltip': 'USPS percentage of vacant/no-stat residential addresses', 'data':\
+     [{'x': b, 'y': v} for b,v in zip(vacancy_usps_bins, vacancy_usps_values)]}]
+  if city_flag:
+    vacancy_hist_dicts.append({'title': 'Vacancy complaint percentage', 'marker': vacancy_311,\
+     'tooltip': 'Percentage of buildings with 311 vacant building complaints', 'data': \
+     [{'x': b, 'y': v} for b,v in zip(vacancy_311_bins, vacancy_311_values)]})
+    vacancy_hist_dicts.append({'title': 'Demolition permits per 1000', 'marker': demolitions_pc*1000,\
+     'tooltip': '311 vacant building complaints per 1000 residents', 'data': \
+     [{'x': b*1000, 'y': v} for b,v in zip(demolitions_pc_bins, demolitions_pc_values)]})
+
+  
+
   # Market
   foreclosure_rates_values, foreclosure_rates_bins = \
     indicator_hist(geom_type, 'foreclosure_rate')
@@ -241,11 +270,11 @@ def aggregate(request, search_geom, search_geom_name, geom_type):
   median_price = indicators.filter(indicator_name__exact='median_price').\
     latest('indicator_date').indicator_value
   transactions_per_thousands_values, transactions_per_thousands_bins = \
-    indicator_hist(geom_type, 'transactions_per_thousand')
+    indicator_hist(geom_type, 'transactions_per_thousand', hist_range=(0,25))
   transactions_per_thousand = indicators.filter(indicator_name__exact='transactions_per_thousand').\
     latest('indicator_date').indicator_value
   mortgages_per_thousands_values, mortgages_per_thousands_bins = \
-    indicator_hist(geom_type, 'mortgages_per_thousand')
+    indicator_hist(geom_type, 'mortgages_per_thousand', hist_range=(0,100))
   mortgages_per_thousand = indicators.filter(indicator_name__exact='mortgages_per_thousand').\
     latest('indicator_date').indicator_value
   percent_lowvalues_values, percent_lowvalues_bins = \
@@ -307,10 +336,12 @@ def aggregate(request, search_geom, search_geom_name, geom_type):
   histData = [\
     {('Demographics','Black lines mark this '+geom_type+' relative to all others') : \
     demographics_hist_dicts },\
-    {('Income','Black line marks median household income') : \
-    income_hist_dicts },\
+    {('Income','First black line marks median household income of this tract, remainder mark this '+\
+    geom_type+' relative to all others') : income_hist_dicts },\
     {('Real estate market', 'Black lines mark this '+geom_type+' relative to all others') : \
-    market_hist_dicts }\
+    market_hist_dicts },\
+    {('Vacancy and demolition', 'Black lines mark this '+geom_type+' relative to all others') : \
+    vacancy_hist_dicts }\
   ]
   timestreamData = [
     {('Real estate market', 'Historical indicators') : \
