@@ -41,31 +41,35 @@
   </div>
  </div>
  <div class="container">
-  {% for histType, hists in histData.items %}
+  {% for histogram_block in histData %}
+   {% for histType, hists in histogram_block.items %}
     <div class="row">
       <div class="col-lg-12">
         <h3> {{ histType.0 }} <small> {{ histType.1 }} </small> </h3> 
       </div>
     </div>
     {% for hist in hists %}
-      <div id="d3div{{ forloop.parentloop.counter }}_{{ forloop.counter }}" 
+      <div id="d3div{{ forloop.parentloop.parentloop.counter }}_{{ forloop.counter }}" 
         class="col-lg-4"></div>
     {% endfor %}
+   {% endfor %}
   {% endfor %}
  </div>
 
 <script type="text/javascript">
-{% for histType, hists in histData.items %}
+{% for histogram_block in histData %}
+ {% for histType, hists in histogram_block.items %}
   {% for hist in hists %}
     var chart_data = {{ hist.data | safe }};
     {% if hist.marker != None %}
-      d3hist("#d3div{{ forloop.parentloop.counter }}_{{ forloop.counter }}", chart_data, "{{ hist.title}}", {{hist.marker}});
+      d3hist("#d3div{{ forloop.parentloop.parentloop.counter }}_{{ forloop.counter }}", chart_data, "{{ hist.title}}", {{hist.marker}});
     {% else %}
-      d3hist("#d3div{{ forloop.parentloop.counter }}_{{ forloop.counter }}", chart_data, "{{ hist.title}}");
+      d3hist("#d3div{{ forloop.parentloop.parentloop.counter }}_{{ forloop.counter }}", chart_data, "{{ hist.title}}");
     {% endif %}
-    $('#d3div{{ forloop.parentloop.counter }}_{{ forloop.counter }}').popover(
+    $('#d3div{{ forloop.parentloop.parentloop.counter }}_{{ forloop.counter }}').popover(
       {content:"{{ hist.tooltip }}", trigger:"hover", placement:"top"});
   {% endfor %}
+ {% endfor %}
 {% endfor %}
 </script>
 

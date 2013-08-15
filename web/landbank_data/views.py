@@ -179,7 +179,7 @@ def aggregate(request, search_geom, search_geom_name, geom_type):
     indicator_hist(geom_type, 'median_age')
 
   # Get the data ready to be passed to the plotter.
-  histData = {\
+  histData = [{\
     ('Demographics','Black lines mark this '+geom_type+' relative to all others') : [\
     {'data': [{'x': b, 'y': v} for b,v in \
       zip(pct_owner_occupieds_bins,pct_owner_occupieds_values)],\
@@ -206,11 +206,11 @@ def aggregate(request, search_geom, search_geom_name, geom_type):
     {'data': [{'x': b, 'y': v} for b,v in \
       zip(median_ages_bins,median_ages_values)],\
      'title': 'Median age', 'marker': median_age, \
-     'tooltip': 'Median age of residents'}],\
-    ('Income','Black line marks median household income') : [\
+     'tooltip': 'Median age of residents'}]},\
+    {('Income','Black line marks median household income') : [\
     {'title': 'Household income (thousands)', 'marker': med_inc,\
-     'tooltip': 'Annual household income in thousands of dollars', 'data': inc_data}]\
-}
+     'tooltip': 'Annual household income in thousands of dollars', 'data': inc_data}]}\
+  ]
 
   # Make the outline of the community area for the map.
   outline = search_geom.loc if geom_type == "Census Tract" else search_geom.geom
