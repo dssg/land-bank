@@ -10,6 +10,9 @@ def indicator_hist(area_type, indicator_name, notzero=True, nbins=10):
            filter(indicator_name__exact=indicator_name)
   if notzero:
     myinds = myinds.filter(indicator_value__gt=0)
+  if myinds[0].indicator_date is not None:
+    myinds = myinds.filter(indicator_date__exact=\
+      myinds.latest('indicator_date').indicator_date)
 
   retval = [i.indicator_value for i in myinds]
   values, bins = np.histogram(retval,bins=nbins)

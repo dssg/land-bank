@@ -134,12 +134,14 @@ def aggregate(request, search_geom, search_geom_name, geom_type):
     filter(area_type__exact=geom_type).\
     filter(area_id__exact=search_geom.id)
 
-  # Basic demographics
+  # Basic info
   pop = int(indicators.get(indicator_name='pop').indicator_value)
   pct_white = indicators.get(indicator_name='pct_whitenh').indicator_value
   pct_black = indicators.get(indicator_name='pct_blacknh').indicator_value
   pct_asian = indicators.get(indicator_name='pct_asiannh').indicator_value
   pct_hispanic = indicators.get(indicator_name='pct_hispanic').indicator_value
+
+  # Demographics
   median_age = indicators.get(indicator_name='median_age').indicator_value
   pct_owner_occupied = indicators.get(indicator_name='pct_owner_occupied').\
     indicator_value
@@ -150,21 +152,6 @@ def aggregate(request, search_geom, search_geom_name, geom_type):
     indicator_value
   pct_occ_units = indicators.get(indicator_name='pct_occ_units').\
     indicator_value
-
-  # Income
-  inc_levels = [\
-    'inc_lt_10', 'inc_10_15', 'inc_15_25', 'inc_25_35',\
-    'inc_35_50', 'inc_50_75', 'inc_75_100', 'inc_100_150',\
-    'inc_150_200', 'inc_gt_200']
-  inc_vals = [5,12.5,20,30,42.5,62.5,87.5,125,175,250]
-  inc_data = []
-  for inc_val, inc_level in zip(inc_vals, inc_levels):
-    val = indicators.get(indicator_name=inc_level).indicator_value
-    inc_data.append({'x': inc_val, 'y': val})
-  med_inc = indicators.get(indicator_name='med_inc').indicator_value/1000.0
-
-  # Now make the histograms for comparing it to other community areas.
-  # These could be cached.
   pct_owner_occupieds_values, pct_owner_occupieds_bins = \
     indicator_hist(geom_type, 'pct_owner_occupied')
   pct_occ_units_values, pct_occ_units_bins = \
@@ -177,10 +164,7 @@ def aggregate(request, search_geom, search_geom_name, geom_type):
     indicator_hist(geom_type, 'renter_occ_hh_size')
   median_ages_values, median_ages_bins = \
     indicator_hist(geom_type, 'median_age')
-
-  # Get the data ready to be passed to the plotter.
-  histData = [{\
-    ('Demographics','Black lines mark this '+geom_type+' relative to all others') : [\
+  demographics_hist_dicts = [\
     {'data': [{'x': b, 'y': v} for b,v in \
       zip(pct_owner_occupieds_bins,pct_owner_occupieds_values)],\
      'title': 'Percent owner occupied', 'marker': pct_owner_occupied,\
@@ -206,10 +190,84 @@ def aggregate(request, search_geom, search_geom_name, geom_type):
     {'data': [{'x': b, 'y': v} for b,v in \
       zip(median_ages_bins,median_ages_values)],\
      'title': 'Median age', 'marker': median_age, \
-     'tooltip': 'Median age of residents'}]},\
-    {('Income','Black line marks median household income') : [\
+     'tooltip': 'Median age of residents'}\
+  ]
+
+  # Income
+  inc_levels = [\
+    'inc_lt_10', 'inc_10_15', 'inc_15_25', 'inc_25_35',\
+    'inc_35_50', 'inc_50_75', 'inc_75_100', 'inc_100_150',\
+    'inc_150_200', 'inc_gt_200']
+  inc_vals = [5,12.5,20,30,42.5,62.5,87.5,125,175,250]
+  inc_data = []
+  for inc_val, inc_level in zip(inc_vals, inc_levels):
+    val = indicators.get(indicator_name=inc_level).indicator_value
+    inc_data.append({'x': inc_val, 'y': val})
+  med_inc = indicators.get(indicator_name='med_inc').indicator_value/1000.0
+  income_hist_dicts = [\
     {'title': 'Household income (thousands)', 'marker': med_inc,\
-     'tooltip': 'Annual household income in thousands of dollars', 'data': inc_data}]}\
+     'tooltip': 'Annual household income in thousands of dollars', 'data': inc_data}]\
+
+  # Market
+  foreclosure_rates_values, foreclosure_rates_bins = \
+    indicator_hist(geom_type, 'foreclosure_rate')
+  foreclosure_rate = indicators.filter(indicator_name__exact='foreclosure_rate').\
+    latest('indicator_date').indicator_value
+  median_prices_values, median_prices_bins = \
+    indicator_hist(geom_type, 'median_price')
+  median_price = indicators.filter(indicator_name__exact='median_price').\
+    latest('indicator_date').indicator_value
+  transactions_per_thousands_values, transactions_per_thousands_bins = \
+    indicator_hist(geom_type, 'transactions_per_thousand')
+  transactions_per_thousand = indicators.filter(indicator_name__exact='transactions_per_thousand').\
+    latest('indicator_date').indicator_value
+  mortgages_per_thousands_values, mortgages_per_thousands_bins = \
+    indicator_hist(geom_type, 'mortgages_per_thousand')
+  mortgages_per_thousand = indicators.filter(indicator_name__exact='mortgages_per_thousand').\
+    latest('indicator_date').indicator_value
+  percent_lowvalues_values, percent_lowvalues_bins = \
+    indicator_hist(geom_type, 'percent_lowvalue')
+  percent_lowvalue = indicators.filter(indicator_name__exact='percent_lowvalue').\
+    latest('indicator_date').indicator_value
+  percent_businessbuyers_values, percent_businessbuyers_bins = \
+    indicator_hist(geom_type, 'percent_businessbuyers')
+  percent_businessbuyer = indicators.filter(indicator_name__exact='percent_businessbuyers').\
+    latest('indicator_date').indicator_value
+  market_hist_dicts = [\
+    {'title': 'Foreclosure rate', 'marker': foreclosure_rate,\
+     'tooltip': 'Foreclosures per thousand residential properties (single-family and condo, prev. quarter)',\
+     'data': [{'x': b, 'y': v} for b,v in \
+     zip(foreclosure_rates_bins, foreclosure_rates_values)]},\
+    {'title': 'Median price', 'marker': median_price,\
+     'tooltip': 'Median price for residential properties (single-family and condo, prev. quarter)',\
+     'data': [{'x': b, 'y': v} for b,v in \
+     zip(median_prices_bins, median_prices_values)]},\
+    {'title': 'Transactions per thousand', 'marker': transactions_per_thousand,\
+     'tooltip': 'Transactions per thousand residential properties (single-family and condo, prev. quarter)',\
+     'data': [{'x': b, 'y': v} for b,v in \
+     zip(transactions_per_thousands_bins, transactions_per_thousands_values)]},\
+    {'title': 'Mortgages per thousand', 'marker': mortgages_per_thousand,\
+     'tooltip': 'Mortgages per thousand residential properties (single-family and condo, prev. quarter)',\
+     'data': [{'x': b, 'y': v} for b,v in \
+     zip(mortgages_per_thousands_bins, mortgages_per_thousands_values)]},\
+    {'title': 'Percent low-value transactions', 'marker': percent_lowvalue,\
+     'tooltip': 'Percent residential transactions for <$20k (single-family and condo, prev. quarter)',\
+     'data': [{'x': b, 'y': v} for b,v in \
+     zip(percent_lowvalues_bins, percent_lowvalues_values)]},\
+    {'title': 'Percent business buyers', 'marker': percent_businessbuyer,\
+     'tooltip': 'Percent business buyers (single-family and condo, prev. quarter)',\
+     'data': [{'x': b, 'y': v} for b,v in \
+     zip(percent_businessbuyers_bins, percent_businessbuyers_values)]}\
+    ]
+
+  # Get the data ready to be passed to the plotter.
+  histData = [\
+    {('Demographics','Black lines mark this '+geom_type+' relative to all others') : \
+    demographics_hist_dicts },\
+    {('Income','Black line marks median household income') : \
+    income_hist_dicts },\
+    {('Real estate market', 'Black lines mark this '+geom_type+' relative to all others') : \
+    market_hist_dicts }\
   ]
 
   # Make the outline of the community area for the map.
