@@ -40,14 +40,19 @@
     </div>
   </div>
  </div>
- <div class="container">
+ <div class="container" id="demographics">
   {% for histogram_block in histData %}
    {% for histType, hists in histogram_block.items %}
     <div class="row">
-      <div class="col-lg-12">
-        <h3> {{ histType.0 }} <small> {{ histType.1 }} </small> </h3> 
+      <div class="col-lg-10">
+	     <div class="span10">
+               <h3> {{ histType.0 }} <small> {{ histType.1 }} </small> </h3> 
+	     </div>
       </div>
-    </div>
+      <div class="span2"><h3>
+	<input type="button" class="btn btn-primary" onclick="toggleChart()" value="time trend" /></h3>
+      </div>
+    </div
     {% for hist in hists %}
       <div id="d3div{{ forloop.parentloop.parentloop.counter }}_{{ forloop.counter }}" 
         class="col-lg-4"></div>
@@ -71,8 +76,45 @@
   {% endfor %}
  {% endfor %}
 {% endfor %}
-</script>
 
+
+</script>
+<div class="container" id="timeseries">
+  {% for timeseries_block in timeseriesData %}
+   {% for timeseriesType, hists in timeseries_block.items %}
+    <div class="row">
+      <div class="col-lg-10">
+	     <div class="span10">
+               <h3> {{ timeseriesType.0 }} <small> {{ timeseriesType.1 }} </small> </h3> 
+	     </div>
+      </div>
+      <div class="span2"><h3>
+	<input type="button" class="btn btn-primary" onclick="toggleChart()" value="time trend" /></h3>
+      </div>
+    </div
+    {% for hist in hists %}
+      <div id="d3div{{ forloop.parentloop.parentloop.counter }}_{{ forloop.counter }}" 
+        class="col-lg-4"></div>
+    {% endfor %}
+   {% endfor %}
+  {% endfor %}
+ </div>
+    <script>
+      {% for timeseries_block in timeData %}
+      {% for timeseriesType, times in timeseries_block.items %}
+      {% for time in times %}
+      var chart_data = {{ time.data | safe }};
+      {% if time.marker != None %}
+      d3hist("#d3div{{ forloop.parentloop.parentloop.counter }}_{{ forloop.counter }}", chart_data, "{{ time.title}}", {{time.marker}});
+      {% else %}
+      d3hist("#d3div{{ forloop.parentloop.parentloop.counter }}_{{ forloop.counter }}", chart_data, "{{ time.title}}");
+      {% endif %}
+      $('#d3div{{ forloop.parentloop.parentloop.counter }}_{{ forloop.counter }}').popover(
+      {content:"{{ time.tooltip }}", trigger:"hover", placement:"top"});
+      {% endfor %}
+      {% endfor %}
+      {% endfor %}
+    </script>
 </body>
 </html>
 
