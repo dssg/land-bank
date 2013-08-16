@@ -150,11 +150,10 @@ def aggregate(request, search_geom, search_geom_name, geom_type):
   pct_hispanic = indicators.get(indicator_name='pct_hispanic').indicator_value
 
   pct_sfh, pct_condo, pct_multifamily, pct_commind = None, None, None, None
-  if city_flag:
-    pct_sfh = indicators.get(indicator_name='pct_sfh').indicator_value
-    pct_condo = indicators.get(indicator_name='pct_condo').indicator_value
-    pct_multifamily = indicators.get(indicator_name='pct_multifamily').indicator_value
-    pct_commind = indicators.get(indicator_name='pct_commind').indicator_value
+  pct_sfh = indicators.get(indicator_name='pct_sfh').indicator_value
+  pct_condo = indicators.get(indicator_name='pct_condo').indicator_value
+  pct_multifamily = indicators.get(indicator_name='pct_multifamily').indicator_value
+  pct_commind = indicators.get(indicator_name='pct_commind').indicator_value
 
   # Demographics
   median_age = indicators.get(indicator_name='median_age').indicator_value
@@ -374,12 +373,11 @@ def aggregate(request, search_geom, search_geom_name, geom_type):
     {'key': 'Hispanic', 'val': '%4.1f%%' % (pct_hispanic)},\
     {'key': 'Asian', 'val': '%4.1f%%' % (pct_asian)},\
   ]
-  if city_flag:
-    proplist.append({'key': 'BR', 'val': ''})
-    proplist.append({'key': 'Single-family', 'val': '%4.1f%%' % (pct_sfh)})
-    proplist.append({'key': 'Condo', 'val': '%4.1f%%' % (pct_condo)})
-    proplist.append({'key': 'Multi-family', 'val': '%4.1f%%' % (pct_multifamily)})
-    proplist.append({'key': 'Commercial/Industrial', 'val': '%4.1f%%' % (pct_commind)})
+  proplist.append({'key': 'BR', 'val': ''})
+  proplist.append({'key': 'Single-family', 'val': '%4.1f%%' % (pct_sfh)})
+  proplist.append({'key': 'Condo', 'val': '%4.1f%%' % (pct_condo)})
+  proplist.append({'key': 'Multi-family', 'val': '%4.1f%%' % (pct_multifamily)})
+  proplist.append({'key': 'Commercial/Industrial', 'val': '%4.1f%%' % (pct_commind)})
   
   # And we're ready to render.
   return render_to_response('aggregate_geom.html', {\

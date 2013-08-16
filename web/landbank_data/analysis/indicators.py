@@ -527,14 +527,12 @@ def cache_construction_indicator():
         cv.save()
 
 def cache_landuse_indicators():
-  city_geom=Municipality.objects.get(name='Chicago').geom
   for geom_type,geom_str in \
     zip([CensusTract,Municipality,Ward,CommunityArea],\
         ['Census Tract', 'Municipality', 'Ward', 'Community Area']):
     for geom in geom_type.objects.all():
       allpins, sfh, condo, multi, commind = None, None, None, None, None
       if (geom_type==CensusTract):
-        if not city_geom.intersects(geom.loc): continue
         allpins = Assessor.objects.filter(loc__within=geom.loc)
         sfh     = Assessor.objects.filter(loc__within=geom.loc).\
                                    filter(ptype_id__exact=1)
@@ -545,8 +543,6 @@ def cache_landuse_indicators():
         commind = Assessor.objects.filter(loc__within=geom.loc).\
                                    filter(ptype_id__exact=(5))
       else:
-        if not city_geom.intersects(geom.geom): continue
-        if geom_type==Municipality and geom.name!='Chicago': continue
         allpins = Assessor.objects.filter(loc__within=geom.geom)
         sfh     = Assessor.objects.filter(loc__within=geom.geom).\
                                    filter(ptype_id__exact=1)
