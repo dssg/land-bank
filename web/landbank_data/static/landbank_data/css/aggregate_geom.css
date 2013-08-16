@@ -24,3 +24,8 @@
   color: #999999;
   font-style:italic;
 }
+
+.wax-tooltip {
+  text-align: right;
+  display: none;
+}

@@ -23,6 +23,9 @@ def home(request):
     return render_to_response('landbank_data/home.html', {}, RequestContext(request))
 #    return render(request, 'landbank_data/home.html', {})
 
+def leaflet(request):
+    return render_to_response('landbank_data/leaflet.html')
+
 def base_map(request):
     return render(request, 'landbank_data/base_map.html', {})
 
@@ -376,3 +379,5 @@ def aggregate(request, search_geom, search_geom_name, geom_type):
     },\
     context_instance=RequestContext(request))
 
+def dajax_test(request):
+  return render(request, 'landbank_data/dajax_test.html', {})
