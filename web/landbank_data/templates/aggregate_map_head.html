@@ -37,27 +37,13 @@ function initialize() {
   var transitLayer = new google.maps.TransitLayer();
   transitLayer.setMap(map); 
 
-  var base = {
-          tilejson: '2.0.0',
-          tiles: [
-          "http://a.tiles.mapbox.com/v3/salice412.parcel/{z}/{x}/{y}.png",
-          "http://b.tiles.mapbox.com/v3/salice412.parcel/{z}/{x}/{y}.png",
-          "http://c.tiles.mapbox.com/v3/salice412.parcel/{z}/{x}/{y}.png",
-          "http://d.tiles.mapbox.com/v3/salice412.parcel/{z}/{x}/{y}.png"
-          ]};
-  var base_layer = new wax.g.connector(base);
-  map.overlayMapTypes.insertAt(0,base_layer);
+  // Composited raster layer of parcel outline and shaded foreclosure
+  var base_foreclosure_url = 'http://api.tiles.mapbox.com/v3/salice412.parcel,salice412.parcel_foreclosure.jsonp';
+  wax.tilejson(base_foreclosure_url,
+    function(tilejson) {
+      map.overlayMapTypes.insertAt(0, new wax.g.connector(tilejson));
+    });
 
-  var foreclosure = {
-          tilejson: '2.0.0',
-          tiles: [
-          "http://a.tiles.mapbox.com/v3/salice412.parcel_foreclosure/{z}/{x}/{y}.png",
-          "http://b.tiles.mapbox.com/v3/salice412.parcel_foreclosure/{z}/{x}/{y}.png",
-          "http://c.tiles.mapbox.com/v3/salice412.parcel_foreclosure/{z}/{x}/{y}.png",
-          "http://d.tiles.mapbox.com/v3/salice412.parcel_foreclosure/{z}/{x}/{y}.png"
-          ]};
-  var foreclosure_layer = new wax.g.connector(foreclosure);
-  map.overlayMapTypes.insertAt(0,foreclosure_layer);
   map.fitBounds(bounds);
   // Position map area label
   google.maps.event.addListenerOnce(map, 'idle', function() {
