@@ -1,35 +1,24 @@
-<html lang="en">
-<head>
-  <title>CCLBA Analytics Tool - {{ title }}</title>
-  <link href="/static/landbank_data/css/bootstrap.css" rel="stylesheet">
-  <link href="/static/landbank_data/css/d3plots.css" rel="stylesheet">
-  <link href="/static/landbank_data/css/aggregate_geom.css" rel="stylesheet">
-  <link href="/static/landbank_data/css/map.css" rel="stylesheet">
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-  <script src="http://d3js.org/d3.v3.min.js"></script>
+{% extends "landbank_data/base.html" %} 
 
-  <meta charset="utf-8">
-  <meta name="description" content="">
-  <meta name="author" content="">
-  <script type="text/javascript"
-    src="/static/landbank_data/js/d3plots.js">
-  </script>
-  <script type="text/javascript"
-    src="/static/landbank_data/js/bootstrap.js">
-  </script>
+{% block title %}CCLBA Analytics Tool - {{ title }}{% endblock %}
 
-  {% include "aggregate_map_head.html" %}
+{% block head %}
+<link href="/static/landbank_data/css/bootstrap.css" rel="stylesheet">
+<link href="/static/landbank_data/css/d3plots.css" rel="stylesheet">
+<link href="/static/landbank_data/css/map.css" rel="stylesheet">
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="/static/landbank_data/js/d3plots.js"></script>
+{% include "aggregate_map_head.html" %}
+<link href="/static/landbank_data/css/aggregate_geom.css" rel="stylesheet">
+{% endblock %}
 
-</script>
-
-</head>
-
-<body>
-
- <div class="page-header">
-   <h3> {{ title }} <small> {{ type }} </small> </h3> 
+{% block content %}
+ <div class="wax-tooltip">
+   <h3> {{ title }} <br /><small> {{ type }} </small> </h3> 
  </div>
-   {% include "aggregate_map_body.html" %}
+
+ {% include "aggregate_map_body.html" %}
+
  <div class="container">
   <div class="row">
     <div class="col-lg-12">
@@ -72,7 +61,4 @@
  {% endfor %}
 {% endfor %}
 </script>
-
-</body>
-</html>
-
+{% endblock %}
