@@ -1,6 +1,6 @@
-function d3hist(div, data, title, marker) {
+function d3hist(div, data, title, label, marker) {
   
-  var margin = { top: 20, right: 20, bottom: 60, left: 40},
+  var margin = { top: 40, right: 20, bottom: 60, left: 40},
       width = 240 - margin.left - margin.right,
       height = 200 - margin.top - margin.bottom;
   
@@ -43,6 +43,13 @@ function d3hist(div, data, title, marker) {
       .append("g")
       .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
       .attr("id","chart");
+ 
+  svg.append("g")
+     .append("text")
+     .attr("y", -10)
+     .attr("x", width/2)
+     .style("text-anchor","middle")
+     .text(title);
   
   svg.append("g")
       .attr("class", "axis")
@@ -52,7 +59,7 @@ function d3hist(div, data, title, marker) {
       .attr("y",margin.bottom/2)
       .attr("x",width/2)
       .style("text-anchor", "middle")
-      .text(title) ;
+      .text(label) ;
   
   svg.append("g")
       .attr("class", "axis")

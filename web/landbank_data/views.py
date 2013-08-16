@@ -166,44 +166,50 @@ def aggregate(request, search_geom, search_geom_name, geom_type):
     indicator_value
   pct_occ_units = indicators.get(indicator_name='pct_occ_units').\
     indicator_value
-  pct_owner_occupieds_values, pct_owner_occupieds_bins = \
-    indicator_hist(geom_type, 'pct_owner_occupied')
-  pct_occ_units_values, pct_occ_units_bins = \
-    indicator_hist(geom_type, 'pct_occ_units')
-  segregations_values, segregations_bins = \
-    indicator_hist(geom_type, 'segregation')
-  owner_occ_hh_sizes_values, owner_occ_hh_sizes_bins = \
-    indicator_hist(geom_type, 'owner_occ_hh_size')
-  renter_occ_hh_sizes_values, renter_occ_hh_sizes_bins = \
-    indicator_hist(geom_type, 'renter_occ_hh_size')
-  median_ages_values, median_ages_bins = \
-    indicator_hist(geom_type, 'median_age')
+  pct_owner_occupieds_values, pct_owner_occupieds_bins, pct_owner_occupied_score = \
+    indicator_hist(geom_type, 'pct_owner_occupied', pct_owner_occupied)
+  pct_occ_units_values, pct_occ_units_bins, pct_occ_units_score = \
+    indicator_hist(geom_type, 'pct_occ_units', pct_occ_units)
+  segregations_values, segregations_bins, segregation_score = \
+    indicator_hist(geom_type, 'segregation', segregation)
+  owner_occ_hh_sizes_values, owner_occ_hh_sizes_bins, owner_occ_hh_size_score = \
+    indicator_hist(geom_type, 'owner_occ_hh_size', owner_occ_hh_size)
+  renter_occ_hh_sizes_values, renter_occ_hh_sizes_bins, renter_occ_hh_size_score = \
+    indicator_hist(geom_type, 'renter_occ_hh_size', renter_occ_hh_size)
+  median_ages_values, median_ages_bins, median_age_score = \
+    indicator_hist(geom_type, 'median_age', median_age)
   demographics_hist_dicts = [\
     {'data': [{'x': b, 'y': v} for b,v in \
       zip(pct_owner_occupieds_bins,pct_owner_occupieds_values)],\
-     'title': 'Percent owner occupied', 'marker': pct_owner_occupied,\
+     'title': 'Owner occupancy score: '+str(int(pct_owner_occupied_score)),\
+     'label': 'Percent owner occupied', 'marker': pct_owner_occupied,\
      'tooltip': 'Percent owner occupied housing units'},
     {'data': [{'x': b, 'y': v} for b,v in \
       zip(pct_occ_units_bins,pct_occ_units_values)],\
-     'title': 'Percent occupied units', 'marker': pct_occ_units,\
+     'title': 'Occupancy score: '+str(int(pct_occ_units_score)),\
+     'label': 'Percent occupied units', 'marker': pct_occ_units,\
      'tooltip': 'Percent housing units that are occupied'},\
     {'data': [{'x': b, 'y': v} for b,v in \
       zip(owner_occ_hh_sizes_bins,owner_occ_hh_sizes_values)],\
-     'title': 'Household size, owner-occupied', 'marker': owner_occ_hh_size,\
+     'title': 'Owner crowding score: '+str(int(owner_occ_hh_size_score)),\
+     'label': 'Household size, owner-occupied', 'marker': owner_occ_hh_size,\
      'tooltip': 'Average household size in owner-occupied units'},\
     {'data': [{'x': b, 'y': v} for b,v in \
       zip(renter_occ_hh_sizes_bins,renter_occ_hh_sizes_values)],\
-     'title': 'Household size, renter-occupied', 'marker': renter_occ_hh_size,\
+     'title': 'Renter crowding score: '+str(int(renter_occ_hh_size_score)),\
+     'label': 'Household size, renter-occupied', 'marker': renter_occ_hh_size,\
      'tooltip': 'Average household size in renter-occupied units'},\
     {'data': [{'x': b, 'y': v} for b,v in \
       zip(segregations_bins,segregations_values)],\
-     'title': 'Segregation', 'marker': segregation,\
+     'title': 'Segregation score: '+str(int(segregation_score)),\
+     'label': 'Segregation', 'marker': segregation,\
      'tooltip': 'Percentage of people who would have to move '+\
        'out for its racial and ethnic '+\
        'composition to match the city as a whole'},\
     {'data': [{'x': b, 'y': v} for b,v in \
       zip(median_ages_bins,median_ages_values)],\
-     'title': 'Median age', 'marker': median_age, \
+     'title': 'Median age score: '+str(int(median_age_score)),\
+     'label': 'Median age', 'marker': median_age, \
      'tooltip': 'Median age of residents'}\
   ]
 
@@ -218,110 +224,123 @@ def aggregate(request, search_geom, search_geom_name, geom_type):
     val = indicators.get(indicator_name=inc_level).indicator_value
     inc_data.append({'x': inc_val, 'y': val})
   med_inc = indicators.get(indicator_name='med_inc').indicator_value/1000.0
-  jobs_within_mile_pc_values, jobs_within_mile_pc_bins = \
-    indicator_hist(geom_type, 'jobs_within_mile_pc', hist_range=(0,5))
   jobs_within_mile_pc = indicators.get(indicator_name='jobs_within_mile_pc').\
     indicator_value
+  jobs_within_mile_pc_values, jobs_within_mile_pc_bins, jobs_within_mile_pc_score = \
+    indicator_hist(geom_type, 'jobs_within_mile_pc', jobs_within_mile_pc, hist_range=(0,5))
   if city_flag:
-    construction_pc_values, construction_pc_bins = \
-      indicator_hist(geom_type, 'construction_pc', hist_range=(0,5000))
     construction_pc = indicators.get(indicator_name='construction_pc').\
       indicator_value
+    construction_pc_values, construction_pc_bins, construction_pc_score = \
+      indicator_hist(geom_type, 'construction_pc', construction_pc, hist_range=(0,5000))
 
   income_hist_dicts = [\
-    {'title': 'Household income (thousands)', 'marker': med_inc,\
+    {'title': 'Household income', 'label': 'Household income (thousands)', 'marker': med_inc,\
      'tooltip': 'Annual household income in thousands of dollars', 'data': inc_data},\
-    {'title': 'Jobs within 1 mile per capita', 'marker': jobs_within_mile_pc,\
+    {'title': 'Job access score: '+str(int(jobs_within_mile_pc_score)),\
+     'label': 'Jobs within 1 mile per capita', 'marker': jobs_within_mile_pc,\
      'tooltip': 'Jobs within 1 mile of this geometry, per capita', 'data': \
      [{'x': b, 'y': v} for b,v in zip(jobs_within_mile_pc_bins, jobs_within_mile_pc_values)]}]
   if city_flag:
     income_hist_dicts.append( 
-    {'title': 'Construction spending per capita', 'marker': construction_pc,\
+    {'title': 'Construction score: '+str(int(construction_pc_score)),\
+     'label': 'Construction spending per capita', 'marker': construction_pc,\
      'tooltip': 'Spending on permitted construction per capita', 'data': \
      [{'x': b, 'y': v} for b,v in zip(construction_pc_bins, construction_pc_values)]})
 
   # Vacancy
-  vacancy_usps_values, vacancy_usps_bins = \
-    indicator_hist(geom_type, 'vacancy_usps')
   vacancy_usps = indicators.filter(indicator_name__exact='vacancy_usps').\
     latest('indicator_date').indicator_value
+  vacancy_usps_values, vacancy_usps_bins, vacancy_usps_score = \
+    indicator_hist(geom_type, 'vacancy_usps', vacancy_usps)
   if city_flag:
-    demolitions_pc_values, demolitions_pc_bins = \
-      indicator_hist(geom_type, 'demolitions_pc')
     demolitions_pc = indicators.filter(indicator_name__exact='demolitions_pc').\
       latest('indicator_date').indicator_value
-    vacancy_311_values, vacancy_311_bins = \
-      indicator_hist(geom_type, 'vacancy_311')
+    demolitions_pc_values, demolitions_pc_bins, demolitions_pc_score = \
+      indicator_hist(geom_type, 'demolitions_pc', demolitions_pc)
     vacancy_311 = indicators.filter(indicator_name__exact='vacancy_311').\
       latest('indicator_date').indicator_value
+    vacancy_311_values, vacancy_311_bins, vacancy_311_score = \
+      indicator_hist(geom_type, 'vacancy_311', vacancy_311)
 
   vacancy_hist_dicts = [\
-    {'title': 'Vacancy rate', 'marker': vacancy_usps,\
+    {'title': 'USPS vacancy score: '+str(int(vacancy_usps_score)),\
+     'label': 'USPS vacancy rate', 'marker': vacancy_usps,\
      'tooltip': 'USPS percentage of vacant/no-stat residential addresses', 'data':\
      [{'x': b, 'y': v} for b,v in zip(vacancy_usps_bins, vacancy_usps_values)]}]
   if city_flag:
-    vacancy_hist_dicts.append({'title': 'Vacancy complaint percentage', 'marker': vacancy_311,\
+    vacancy_hist_dicts.append({\
+     'title': 'Vacancy complaint score: '+str(int(vacancy_311_score)),\
+     'label': 'Vacancy complaint percentage', 'marker': vacancy_311,\
      'tooltip': 'Percentage of buildings with 311 vacant building complaints', 'data': \
      [{'x': b, 'y': v} for b,v in zip(vacancy_311_bins, vacancy_311_values)]})
-    vacancy_hist_dicts.append({'title': 'Demolition permits per 1000', 'marker': demolitions_pc*1000,\
-     'tooltip': '311 vacant building complaints per 1000 residents', 'data': \
+    vacancy_hist_dicts.append({\
+     'title': 'Demolition score: '+str(int(demolitions_pc_score)),\
+     'label': 'Demolition permits per 1000', 'marker': demolitions_pc*1000,\
+     'tooltip': 'Demolition permits per 1000 residents', 'data': \
      [{'x': b*1000, 'y': v} for b,v in zip(demolitions_pc_bins, demolitions_pc_values)]})
 
   
 
   # Market
-  foreclosure_rates_values, foreclosure_rates_bins = \
-    indicator_hist(geom_type, 'foreclosure_rate')
   foreclosure_rate = indicators.filter(indicator_name__exact='foreclosure_rate').\
     latest('indicator_date').indicator_value
-  median_prices_values, median_prices_bins = \
-    indicator_hist(geom_type, 'median_price')
+  foreclosure_rates_values, foreclosure_rates_bins, foreclosure_score = \
+    indicator_hist(geom_type, 'foreclosure_rate',foreclosure_rate)
   median_price = indicators.filter(indicator_name__exact='median_price').\
     latest('indicator_date').indicator_value
-  transactions_per_thousands_values, transactions_per_thousands_bins = \
-    indicator_hist(geom_type, 'transactions_per_thousand', hist_range=(0,25))
+  median_prices_values, median_prices_bins, price_score = \
+    indicator_hist(geom_type, 'median_price',median_price)
   transactions_per_thousand = indicators.filter(indicator_name__exact='transactions_per_thousand').\
     latest('indicator_date').indicator_value
-  mortgages_per_thousands_values, mortgages_per_thousands_bins = \
-    indicator_hist(geom_type, 'mortgages_per_thousand', hist_range=(0,100))
+  transactions_per_thousands_values, transactions_per_thousands_bins, velocity_score = \
+    indicator_hist(geom_type, 'transactions_per_thousand', transactions_per_thousand, hist_range=(0,25))
   mortgages_per_thousand = indicators.filter(indicator_name__exact='mortgages_per_thousand').\
     latest('indicator_date').indicator_value
-  percent_lowvalues_values, percent_lowvalues_bins = \
-    indicator_hist(geom_type, 'percent_lowvalue')
+  mortgages_per_thousands_values, mortgages_per_thousands_bins, mortgage_score = \
+    indicator_hist(geom_type, 'mortgages_per_thousand', mortgages_per_thousand, hist_range=(0,100))
   percent_lowvalue = indicators.filter(indicator_name__exact='percent_lowvalue').\
     latest('indicator_date').indicator_value
-  percent_businessbuyers_values, percent_businessbuyers_bins = \
-    indicator_hist(geom_type, 'percent_businessbuyers')
+  percent_lowvalues_values, percent_lowvalues_bins, lowvalue_score = \
+    indicator_hist(geom_type, 'percent_lowvalue', percent_lowvalue)
   percent_businessbuyer = indicators.filter(indicator_name__exact='percent_businessbuyers').\
     latest('indicator_date').indicator_value
+  percent_businessbuyers_values, percent_businessbuyers_bins, spec_score = \
+    indicator_hist(geom_type, 'percent_businessbuyers',percent_businessbuyer)
   market_hist_dicts = [\
-    {'title': 'Foreclosure rate', 'marker': foreclosure_rate,\
+    {'title': 'Foreclosure score: '+str(foreclosure_score),\
+     'label': 'Foreclosure rate', 'marker': foreclosure_rate,\
      'tooltip': 'Foreclosures per thousand residential properties (single-family and condo, prev. quarter)',\
      'data': [{'x': b, 'y': v} for b,v in \
      zip(foreclosure_rates_bins, foreclosure_rates_values)]},\
-    {'title': 'Median price', 'marker': median_price,\
+    {'title': 'Price score: '+str(price_score),\
+     'label': 'Median price', 'marker': median_price,\
      'tooltip': 'Median price for residential properties (single-family and condo, prev. quarter)',\
      'data': [{'x': b, 'y': v} for b,v in \
      zip(median_prices_bins, median_prices_values)]},\
-    {'title': 'Transactions per thousand', 'marker': transactions_per_thousand,\
+    {'title': 'Velocity score: '+str(velocity_score),\
+     'label': 'Transactions per thousand', 'marker': transactions_per_thousand,\
      'tooltip': 'Transactions per thousand residential properties (single-family and condo, prev. quarter)',\
      'data': [{'x': b, 'y': v} for b,v in \
      zip(transactions_per_thousands_bins, transactions_per_thousands_values)]},\
-    {'title': 'Mortgages per thousand', 'marker': mortgages_per_thousand,\
+    {'title': 'Credit availability score: '+str(mortgage_score),\
+     'label': 'Mortgages per thousand', 'marker': mortgages_per_thousand,\
      'tooltip': 'Mortgages per thousand residential properties (single-family and condo, prev. quarter)',\
      'data': [{'x': b, 'y': v} for b,v in \
      zip(mortgages_per_thousands_bins, mortgages_per_thousands_values)]},\
-    {'title': 'Percent low-value transactions', 'marker': percent_lowvalue,\
+    {'title': 'Low-value score: '+str(lowvalue_score),\
+     'label': 'Percent low-value transactions', 'marker': percent_lowvalue,\
      'tooltip': 'Percent residential transactions for <$20k (single-family and condo, prev. quarter)',\
      'data': [{'x': b, 'y': v} for b,v in \
      zip(percent_lowvalues_bins, percent_lowvalues_values)]},\
-    {'title': 'Percent business buyers', 'marker': percent_businessbuyer,\
+    {'title': 'Speculation score: '+str(spec_score),\
+     'label': 'Percent business buyers', 'marker': percent_businessbuyer,\
      'tooltip': 'Percent business buyers (single-family and condo, prev. quarter)',\
      'data': [{'x': b, 'y': v} for b,v in \
      zip(percent_businessbuyers_bins, percent_businessbuyers_values)]}\
     ]
   market_timestream_dicts = [\
-    {'title': 'Foreclosure rate', \
+    {'title': 'Foreclosure rate', 'label': 'Foreclosure rate',\
      'tooltip': 'Foreclosures per thousand residential properties by quarter', \
      'data': indicator_timestream(geom_type, search_geom.id, 'foreclosure_rate')},\
     {'title': 'Median price', \

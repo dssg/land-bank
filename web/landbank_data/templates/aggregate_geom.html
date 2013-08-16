@@ -51,9 +51,9 @@
   {% for hist in hists %}
     var chart_data = {{ hist.data | safe }};
     {% if hist.marker != None %}
-      d3hist("#d3div{{ forloop.parentloop.parentloop.counter }}_{{ forloop.counter }}", chart_data, "{{ hist.title}}", {{hist.marker}});
+      d3hist("#d3div{{ forloop.parentloop.parentloop.counter }}_{{ forloop.counter }}", chart_data, "{{ hist.title}}", "{{ hist.label }}",{{hist.marker}});
     {% else %}
-      d3hist("#d3div{{ forloop.parentloop.parentloop.counter }}_{{ forloop.counter }}", chart_data, "{{ hist.title}}");
+      d3hist("#d3div{{ forloop.parentloop.parentloop.counter }}_{{ forloop.counter }}", chart_data, "{{ hist.title}}", "{{ hist.label }}");
     {% endif %}
     $('#d3div{{ forloop.parentloop.parentloop.counter }}_{{ forloop.counter }}').popover(
       {content:"{{ hist.tooltip }}", trigger:"hover", placement:"top"});
