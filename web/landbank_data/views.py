@@ -181,34 +181,34 @@ def aggregate(request, search_geom, search_geom_name, geom_type):
   demographics_hist_dicts = [\
     {'data': [{'x': b, 'y': v} for b,v in \
       zip(pct_owner_occupieds_bins,pct_owner_occupieds_values)],\
-     'title': 'Owner occupancy score: '+str(int(pct_owner_occupied_score)),\
+     'title': 'Owner occupancy rank: '+str(int(pct_owner_occupied_score)),\
      'label': 'Percent owner occupied', 'marker': pct_owner_occupied,\
      'tooltip': 'Percent owner occupied housing units'},
     {'data': [{'x': b, 'y': v} for b,v in \
       zip(pct_occ_units_bins,pct_occ_units_values)],\
-     'title': 'Occupancy score: '+str(int(pct_occ_units_score)),\
+     'title': 'Occupancy rank: '+str(int(pct_occ_units_score)),\
      'label': 'Percent occupied units', 'marker': pct_occ_units,\
      'tooltip': 'Percent housing units that are occupied'},\
     {'data': [{'x': b, 'y': v} for b,v in \
       zip(owner_occ_hh_sizes_bins,owner_occ_hh_sizes_values)],\
-     'title': 'Owner crowding score: '+str(int(owner_occ_hh_size_score)),\
+     'title': 'Owner crowding rank: '+str(int(owner_occ_hh_size_score)),\
      'label': 'Household size, owner-occupied', 'marker': owner_occ_hh_size,\
      'tooltip': 'Average household size in owner-occupied units'},\
     {'data': [{'x': b, 'y': v} for b,v in \
       zip(renter_occ_hh_sizes_bins,renter_occ_hh_sizes_values)],\
-     'title': 'Renter crowding score: '+str(int(renter_occ_hh_size_score)),\
+     'title': 'Renter crowding rank: '+str(int(renter_occ_hh_size_score)),\
      'label': 'Household size, renter-occupied', 'marker': renter_occ_hh_size,\
      'tooltip': 'Average household size in renter-occupied units'},\
     {'data': [{'x': b, 'y': v} for b,v in \
       zip(segregations_bins,segregations_values)],\
-     'title': 'Segregation score: '+str(int(segregation_score)),\
+     'title': 'Segregation rank: '+str(int(segregation_score)),\
      'label': 'Segregation', 'marker': segregation,\
      'tooltip': 'Percentage of people who would have to move '+\
        'out for its racial and ethnic '+\
        'composition to match the city as a whole'},\
     {'data': [{'x': b, 'y': v} for b,v in \
       zip(median_ages_bins,median_ages_values)],\
-     'title': 'Median age score: '+str(int(median_age_score)),\
+     'title': 'Median age rank: '+str(int(median_age_score)),\
      'label': 'Median age', 'marker': median_age, \
      'tooltip': 'Median age of residents'}\
   ]
@@ -237,13 +237,13 @@ def aggregate(request, search_geom, search_geom_name, geom_type):
   income_hist_dicts = [\
     {'title': 'Household income', 'label': 'Household income (thousands)', 'marker': med_inc,\
      'tooltip': 'Annual household income in thousands of dollars', 'data': inc_data},\
-    {'title': 'Job access score: '+str(int(jobs_within_mile_pc_score)),\
+    {'title': 'Job access rank: '+str(int(jobs_within_mile_pc_score)),\
      'label': 'Jobs within 1 mile per capita', 'marker': jobs_within_mile_pc,\
      'tooltip': 'Jobs within 1 mile of this geometry, per capita', 'data': \
      [{'x': b, 'y': v} for b,v in zip(jobs_within_mile_pc_bins, jobs_within_mile_pc_values)]}]
   if city_flag:
     income_hist_dicts.append( 
-    {'title': 'Construction score: '+str(int(construction_pc_score)),\
+    {'title': 'Construction rank: '+str(int(construction_pc_score)),\
      'label': 'Construction spending per capita', 'marker': construction_pc,\
      'tooltip': 'Spending on permitted construction per capita', 'data': \
      [{'x': b, 'y': v} for b,v in zip(construction_pc_bins, construction_pc_values)]})
@@ -264,18 +264,18 @@ def aggregate(request, search_geom, search_geom_name, geom_type):
       indicator_hist(geom_type, 'vacancy_311', vacancy_311)
 
   vacancy_hist_dicts = [\
-    {'title': 'USPS vacancy score: '+str(int(vacancy_usps_score)),\
+    {'title': 'USPS vacancy rank: '+str(int(vacancy_usps_score)),\
      'label': 'USPS vacancy rate', 'marker': vacancy_usps,\
      'tooltip': 'USPS percentage of vacant/no-stat residential addresses', 'data':\
      [{'x': b, 'y': v} for b,v in zip(vacancy_usps_bins, vacancy_usps_values)]}]
   if city_flag:
     vacancy_hist_dicts.append({\
-     'title': 'Vacancy complaint score: '+str(int(vacancy_311_score)),\
+     'title': 'Vacancy complaint rank: '+str(int(vacancy_311_score)),\
      'label': 'Vacancy complaint percentage', 'marker': vacancy_311,\
      'tooltip': 'Percentage of buildings with 311 vacant building complaints', 'data': \
      [{'x': b, 'y': v} for b,v in zip(vacancy_311_bins, vacancy_311_values)]})
     vacancy_hist_dicts.append({\
-     'title': 'Demolition score: '+str(int(demolitions_pc_score)),\
+     'title': 'Demolition rank: '+str(int(demolitions_pc_score)),\
      'label': 'Demolition permits per 1000', 'marker': demolitions_pc*1000,\
      'tooltip': 'Demolition permits per 1000 residents', 'data': \
      [{'x': b*1000, 'y': v} for b,v in zip(demolitions_pc_bins, demolitions_pc_values)]})
@@ -308,32 +308,32 @@ def aggregate(request, search_geom, search_geom_name, geom_type):
   percent_businessbuyers_values, percent_businessbuyers_bins, spec_score = \
     indicator_hist(geom_type, 'percent_businessbuyers',percent_businessbuyer)
   market_hist_dicts = [\
-    {'title': 'Foreclosure score: '+str(foreclosure_score),\
+    {'title': 'Foreclosure rank: '+str(foreclosure_score),\
      'label': 'Foreclosure rate', 'marker': foreclosure_rate,\
      'tooltip': 'Foreclosures per thousand residential properties (single-family and condo, prev. quarter)',\
      'data': [{'x': b, 'y': v} for b,v in \
      zip(foreclosure_rates_bins, foreclosure_rates_values)]},\
-    {'title': 'Price score: '+str(price_score),\
+    {'title': 'Price rank: '+str(price_score),\
      'label': 'Median price', 'marker': median_price,\
      'tooltip': 'Median price for residential properties (single-family and condo, prev. quarter)',\
      'data': [{'x': b, 'y': v} for b,v in \
      zip(median_prices_bins, median_prices_values)]},\
-    {'title': 'Velocity score: '+str(velocity_score),\
+    {'title': 'Velocity rank: '+str(velocity_score),\
      'label': 'Transactions per thousand', 'marker': transactions_per_thousand,\
      'tooltip': 'Transactions per thousand residential properties (single-family and condo, prev. quarter)',\
      'data': [{'x': b, 'y': v} for b,v in \
      zip(transactions_per_thousands_bins, transactions_per_thousands_values)]},\
-    {'title': 'Credit availability score: '+str(mortgage_score),\
+    {'title': 'Credit availability rank: '+str(mortgage_score),\
      'label': 'Mortgages per thousand', 'marker': mortgages_per_thousand,\
      'tooltip': 'Mortgages per thousand residential properties (single-family and condo, prev. quarter)',\
      'data': [{'x': b, 'y': v} for b,v in \
      zip(mortgages_per_thousands_bins, mortgages_per_thousands_values)]},\
-    {'title': 'Low-value score: '+str(lowvalue_score),\
+    {'title': 'Low-value rank: '+str(lowvalue_score),\
      'label': 'Percent low-value transactions', 'marker': percent_lowvalue,\
      'tooltip': 'Percent residential transactions for <$20k (single-family and condo, prev. quarter)',\
      'data': [{'x': b, 'y': v} for b,v in \
      zip(percent_lowvalues_bins, percent_lowvalues_values)]},\
-    {'title': 'Speculation score: '+str(spec_score),\
+    {'title': 'Speculation rank: '+str(spec_score),\
      'label': 'Percent business buyers', 'marker': percent_businessbuyer,\
      'tooltip': 'Percent business buyers (single-family and condo, prev. quarter)',\
      'data': [{'x': b, 'y': v} for b,v in \
