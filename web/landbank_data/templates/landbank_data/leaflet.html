@@ -2,48 +2,51 @@
 {% block head %}
 <script src="/static/landbank_data/leaflet/leaflet.js"></script>
 <link rel="stylesheet" href="/static/landbank_data/leaflet/leaflet.css">
-<link href='//api.tiles.mapbox.com/mapbox.js/v1.3.1/mapbox.css' rel='stylesheet' />
-<script src='//api.tiles.mapbox.com/mapbox.js/v1.3.1/mapbox.js'></script>
+<link href='http://api.tiles.mapbox.com/mapbox.js/v1.3.1/mapbox.css' rel='stylesheet' />
+<script src='http://api.tiles.mapbox.com/mapbox.js/v1.3.1/mapbox.js'></script>
 <style type="text/css">
 #map {
   height: 100%;
 }
+li i {
+  position: relative;
+  top: 6px;
+}
 </style>
 <script type="text/javascript">
-var map, geojson;
+var map, currentGeography = ''
+    ,tileLayers = {}
+    ,featureLayers = {}
+    ,defaultLat = 41.85
+    ,defaultLng = -87.65
+    ,defaultZoom = 11;
 function style(feature) {
     return {
         fillColor: 'white',
-        weight: 2,
-        opacity: 1,
+        weight: 0,
+        opacity: 0,
         color: 'white',
-        dashArray: '3',
-        fillOpacity: 0.7
+        fillOpacity: 0
     };
 }
-
 function highlightFeature(e) {
     var layer = e.target;
 
     layer.setStyle({
-        weight: 5,
-        color: '#666',
+        weight: 3,
+        color: 'white',
         dashArray: '',
-        fillOpacity: 0.7
+        fillOpacity: 0.25
     });
 
     if (!L.Browser.ie && !L.Browser.opera) {
         layer.bringToFront();
     }
 }
-
 function resetHighlight(e) {
-    geojson.resetStyle(e.target);
-}
-
+    featureLayers[currentGeography].resetStyle(e.target);}
 function zoomToFeature(e) {
-    map.fitBounds(e.target.getBounds());
-}
+    map.fitBounds(e.target.getBounds());}
 
 function onEachFeature(feature, layer) {
     layer.on({
@@ -52,22 +55,66 @@ function onEachFeature(feature, layer) {
         click: zoomToFeature
     });
 }
+
+function resetView() {
+    map.setView([defaultLat, defaultLng], defaultZoom);}
+
+function switchGeography(newGeography){
+    if (newGeography != currentGeography) {
+      if (currentGeography != '') {
+        map.removeLayer(tileLayers[currentGeography]);
+        map.removeLayer(featureLayers[currentGeography]);
+        $('li.active').removeClass('active');
+      }
+      map.addLayer(tileLayers[newGeography]);
+      map.addLayer(featureLayers[newGeography]);
+      $('#'+newGeography+'_switcher').addClass('active');
+    }
+    currentGeography = newGeography;
+}
+
+$(document).ready(function() {
+    switchGeography('communityarea');
+});
 </script>
 {% endblock %}
+
+{% block topnav %}
+<ul class="nav navbar-nav pull-right">
+    <li id='communityarea_switcher'><a href="#" onClick="switchGeography('communityarea')">Community Area</a></li>
+    <li id='ward_switcher'><a href="#" onClick="switchGeography('ward')">Ward</a></li>
+    <li id='censustract_switcher'><a href="#" onClick="switchGeography('censustract')">Census Tract</a></li>
+    <li id='municipality_switcher'><a href="#" onClick="switchGeography('municipality')">Municipality</a></li>
+    <li><a href="#" onClick="resetView();"><i class="icon-resize-full icon-large"></i></a></li>
+</ul>
+{% endblock %}
+
 {% block content %}
 <div id="map"></div>
 <script src="/static/landbank_data/json/communityarea.js"></script>
+<script src="/static/landbank_data/json/ward.js"></script>
+<script src="/static/landbank_data/json/censustract.js"></script>
+<script src="/static/landbank_data/json/municipality.js"></script>
 <script type="text/javascript">
-communityarea_url = 'http://a.tiles.mapbox.com/v3/swhorton.communityarea/{z}/{x}/{y}.png'
-map = L.map('map').setView([41.8819, -87.65], 10);
-L.tileLayer(communityarea_url, {
-  minZoom: 10,
-  maxZoom: 14,
-}).addTo(map);
+map = L.map('map').setView([defaultLat, defaultLng], defaultZoom);
 
-geojson = L.geoJson(communityarea_geojson, {
-  style: style,
-  onEachFeature: onEachFeature
-}).addTo(map);
+tilelayer_urls = {'communityarea':'http://a.tiles.mapbox.com/v3/swhorton.communityarea_color/{z}/{x}/{y}.png'
+                 ,'ward':'http://a.tiles.mapbox.com/v3/swhorton.ward/{z}/{x}/{y}.png'
+                 ,'censustract':'http://a.tiles.mapbox.com/v3/swhorton.censustract/{z}/{x}/{y}.png'
+                 ,'municipality':'http://a.tiles.mapbox.com/v3/swhorton.municipality/{z}/{x}/{y}.png'};
+
+// define four pairs of tile/feature (geojson) layers
+var geographies = ['communityarea','ward','censustract','municipality'];
+for (var i=0; i<geographies.length; i++) {
+    tileLayers[geographies[i]] = L.tileLayer(tilelayer_urls[geographies[i]], {
+      minZoom: 10,
+      maxZoom: 14,
+    });
+    var geojson_varname = geographies[i]+'_geojson';
+    featureLayers[geographies[i]] = L.geoJson(window[geojson_varname], {
+      style: style,
+      onEachFeature: onEachFeature
+    });
+}
 </script>
 {% endblock %}
