@@ -1,4 +1,8 @@
 {% for prop in proplist %}
-  <div class="col-3"><dfn> {{ prop.key }} </dfn></div>
-  <div class="col-9"> {{ prop.val }} </div>
+  {% if prop.key == "BR" %}
+    <div class="col-12"><BR></div>
+  {% else %}
+    <div class="col-3"><dfn> {{ prop.key }} </dfn></div>
+    <div class="col-9"> {{ prop.val }} </div>
+  {% endif %}
 {% endfor %}

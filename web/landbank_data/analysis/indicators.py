@@ -526,4 +526,56 @@ def cache_construction_indicator():
           indicator_date = lastyear)
         cv.save()
 
-  
+def cache_landuse_indicators():
+  city_geom=Municipality.objects.get(name='Chicago').geom
+  for geom_type,geom_str in \
+    zip([CensusTract,Municipality,Ward,CommunityArea],\
+        ['Census Tract', 'Municipality', 'Ward', 'Community Area']):
+    for geom in geom_type.objects.all():
+      allpins, sfh, condo, multi, commind = None, None, None, None, None
+      if (geom_type==CensusTract):
+        if not city_geom.intersects(geom.loc): continue
+        allpins = Assessor.objects.filter(loc__within=geom.loc)
+        sfh     = Assessor.objects.filter(loc__within=geom.loc).\
+                                   filter(ptype_id__exact=1)
+        condo   = Assessor.objects.filter(loc__within=geom.loc).\
+                                   filter(ptype_id__exact=2)
+        multi   = Assessor.objects.filter(loc__within=geom.loc).\
+                                   filter(ptype_id__in=(3,4))
+        commind = Assessor.objects.filter(loc__within=geom.loc).\
+                                   filter(ptype_id__exact=(5))
+      else:
+        if not city_geom.intersects(geom.geom): continue
+        if geom_type==Municipality and geom.name!='Chicago': continue
+        allpins = Assessor.objects.filter(loc__within=geom.geom)
+        sfh     = Assessor.objects.filter(loc__within=geom.geom).\
+                                   filter(ptype_id__exact=1)
+        condo   = Assessor.objects.filter(loc__within=geom.geom).\
+                                   filter(ptype_id__exact=2)
+        multi   = Assessor.objects.filter(loc__within=geom.geom).\
+                                   filter(ptype_id__in=(3,4))
+        commind = Assessor.objects.filter(loc__within=geom.geom).\
+                                   filter(ptype_id__exact=(5))
+      tot_pins = len(allpins)
+      if tot_pins == 0: continue
+      cv = IndicatorCache(\
+        area_type=geom_str, area_id = geom.id,\
+        indicator_name='pct_sfh',\
+        indicator_value = float(len(sfh))/len(allpins)*100)
+      cv.save()
+      cv = IndicatorCache(\
+        area_type=geom_str, area_id = geom.id,\
+        indicator_name='pct_condo',\
+        indicator_value = float(len(condo))/len(allpins)*100)
+      cv.save()
+      cv = IndicatorCache(\
+        area_type=geom_str, area_id = geom.id,\
+        indicator_name='pct_multifamily',\
+        indicator_value = float(len(multi))/len(allpins)*100)
+      cv.save()
+      cv = IndicatorCache(\
+        area_type=geom_str, area_id = geom.id,\
+        indicator_name='pct_commind',\
+        indicator_value = float(len(commind))/len(allpins)*100)
+      cv.save()
+
