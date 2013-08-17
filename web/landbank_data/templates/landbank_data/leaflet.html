@@ -16,6 +16,10 @@ div[class^="col"] {
   height: 90%;
   display: none;
 }
+.dtr-highlight {
+  /* todo: make a better highlight style, after integrating bootstrap */
+  font-weight: bold;
+}
 #map {
   height: 100%;
 }
@@ -25,7 +29,7 @@ li i {
 }
 </style>
 <script type="text/javascript">
-var map, currentGeography = ''
+var map, currentGeography = '', defaultGeography = 'communityarea'
     ,tileLayers = {}
     ,featureLayers = {}
     ,defaultLat = 41.85
@@ -40,57 +44,138 @@ function style(feature) {
         fillOpacity: 0
     };
 }
-function highlightFeature(e) {
+function highlightFeatureFromEvent(e) {
     var layer = e.target;
-    // todo: trigger DataTable UI highlighting
+    highlightFeature(layer);
+    highlightRow(layer.feature.id);
+}
+function highlightFeature(layer) {
     layer.setStyle({
         weight: 4,
         color: '#222',
         opacity: 0.8,
         fillOpacity: 0.25
     });
-
     if (!L.Browser.ie && !L.Browser.opera) {
         layer.bringToFront();
     }
 }
-function resetHighlight(e) {
-    featureLayers[currentGeography].resetStyle(e.target);}
-function zoomToFeature(e) {
-    map.fitBounds(e.target.getBounds());}
+function highlightRow(idString) {
+  $('#'+idString).addClass('dtr-highlight');
 
-function onEachFeature(feature, layer) {
-    layer.on({
-        mouseover: highlightFeature,
-        mouseout: resetHighlight,
-        click: zoomToFeature
-    });
+}
+function unhighlightRow(idString) {
+  $('#'+idString).removeClass('dtr-highlight');
 }
 
-function resetView() {
-    map.setView([defaultLat, defaultLng], defaultZoom);}
-
-function switchGeography(newGeography){
-    if (newGeography != currentGeography) {
-      if (currentGeography != '') {
-        map.removeLayer(tileLayers[currentGeography]);
-        map.removeLayer(featureLayers[currentGeography]);
-        $('li.active').removeClass('active');
-      }
-      map.addLayer(tileLayers[newGeography]);
-      map.addLayer(featureLayers[newGeography]);
-      $('#'+newGeography+'_switcher').addClass('active');
+function getLayerFromIdString(idString) {
+  var featureLayerKeys = Object.keys(featureLayers[currentGeography]._layers);
+  for (var i=0; i< featureLayerKeys.length; i++) {
+    var theLayer = featureLayers[currentGeography]._layers[featureLayerKeys[i]];
+    if (theLayer.feature.id === idString) {
+      return theLayer;
     }
-    currentGeography = newGeography;
+  }
+}
+
+function onMouseOverRow(idString) {
+  highlightRow(idString);
+  highlightFeature(getLayerFromIdString(idString));
+}
+function onMouseOutRow(idString) {
+  unhighlightRow(idString);
+  resetHighlight(getLayerFromIdString(idString));
+}
+function onMouseClickRow(idString) {
+  console.log(getLayerFromIdString(idString).getBounds());
+  map.fitBounds(getLayerFromIdString(idString).getBounds());
+}
+
+function resetHighlightFromEvent(e) {
+  var layer = e.target;
+  resetHighlight(layer);
+  unhighlightRow(layer.feature.id);
+}
+function resetHighlight(layer) {
+  featureLayers[currentGeography].resetStyle(layer);
+}
+function zoomToFeature(e) {
+  map.fitBounds(e.target.getBounds());
+}
+function onEachFeature(feature, layer) {
+  layer.on({
+    mouseover: highlightFeatureFromEvent,
+    mouseout: resetHighlightFromEvent,
+    click: zoomToFeature
+  });
+}
+function resetView() {
+  map.setView([defaultLat, defaultLng], defaultZoom);
+}
+function switchGeography(newGeography){
+  if (newGeography != currentGeography) {
+    if (currentGeography != '') {
+      map.removeLayer(tileLayers[currentGeography]);
+      map.removeLayer(featureLayers[currentGeography]);
+      $('li.active').removeClass('active');
+    }
+    map.addLayer(tileLayers[newGeography]);
+    map.addLayer(featureLayers[newGeography]);
+    $('#'+newGeography+'_switcher').addClass('active');
+  }
+  currentGeography = newGeography;
+}
+
+var dataTableColumns = {
+  'communityarea':[
+    {'sTitle':'#'}
+    ,{'sTitle':'Area Name'}
+  ]
+  ,'ward':[
+    {'sTitle':'#'}
+    ,{'sTitle':'Alderman'}
+  ]
+  ,'municipality':[
+    {'sTitle':'Municipality'}
+  ]
+  ,'censustract':[
+    {'sTitle':'FIPS Code'}
+  ]
+  ,'all':[
+    {'sTitle':'Foreclosure Rate'}
+    ,{'sTitle':'Vacancy Rate'}
+    ,{'sTitle':'Median Income'}
+  ]
+}
+
+function loadDataTable(geoType) {
+  // new ajax source
+
+  // update column headers
 }
 
 $(document).ready(function() {
-    switchGeography('communityarea');
+    switchGeography(defaultGeography);
     $('#tbl').dataTable( {
-      'bProcessing':true,
-      'aSorting':true,
-      'sAjaxSource':'/static/landbank_data/json/test.json'
+      'bProcessing':true
+      ,'aoColumns': dataTableColumns[defaultGeography].concat(dataTableColumns['all'])
+      ,'fnRowCallback': function( nRow, aData, iDisplayIndex ) {
+        $(nRow).attr("id",defaultGeography+"_"+aData[0]);
+      }
+      ,'sAjaxSource':'/static/landbank_data/json/' + defaultGeography + '_table.json'
     });
+    $('#tbl tbody').on(
+      'click', 'tr', function() {
+        onMouseClickRow($(this).attr('id'));
+      })
+    .on(
+      'mouseenter', 'tr', function() {
+        onMouseOverRow($(this).attr('id'));
+      })
+    .on(
+      'mouseleave', 'tr', function() {
+        onMouseOutRow($(this).attr('id'));
+      });
     $('#tbl-wrapper').show();
 });
 </script>
@@ -98,29 +183,35 @@ $(document).ready(function() {
 
 {% block topnav %}
 <ul class="nav navbar-nav pull-right">
-    <li id='communityarea_switcher'><a href="#" onClick="switchGeography('communityarea')">Community Area</a></li>
+    <li id='communityarea_switcher'><a href="#" onClick="switchGeography(defaultGeography)">Community Area</a></li>
     <li id='ward_switcher'><a href="#" onClick="switchGeography('ward')">Ward</a></li>
     <li id='censustract_switcher'><a href="#" onClick="switchGeography('censustract')">Census Tract</a></li>
     <li id='municipality_switcher'><a href="#" onClick="switchGeography('municipality')">Municipality</a></li>
-    <li><a href="#" onClick="resetView();"><i class="icon-resize-full icon-large"></i></a></li>
+<li><a href="#" onClick="resetView();"><i class="icon-resize-full icon-large"></i></a></li>
 </ul>
 {% endblock %}
 
 {% block content %}
 <div class="col-5">
-  <div id="tbl-wrapper" class="panel">
-    <div class="panel-body">
-      <table id="tbl"></table>
+<div id="tbl-wrapper" class="panel">
+<div class="panel-body">
+<table id="tbl">
+        <thead>
+          <tr>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
     </div>
  </div>
 </div>
 <div class="col-7">
   <div id="map"></div>
 </div>
-<script src="/static/landbank_data/json/communityarea.js"></script>
-<script src="/static/landbank_data/json/ward.js"></script>
-<script src="/static/landbank_data/json/censustract.js"></script>
-<script src="/static/landbank_data/json/municipality.js"></script>
+<script src="/static/landbank_data/json/communityarea_geojson.js"></script>
+<script src="/static/landbank_data/json/ward_geojson.js"></script>
+<script src="/static/landbank_data/json/censustract_geojson.js"></script>
+<script src="/static/landbank_data/json/municipality_geojson.js"></script>
 <script type="text/javascript">
 map = L.map('map').setView([defaultLat, defaultLng], defaultZoom);
 
