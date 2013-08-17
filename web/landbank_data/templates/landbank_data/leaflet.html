@@ -5,6 +5,17 @@
 <link href='http://api.tiles.mapbox.com/mapbox.js/v1.3.1/mapbox.css' rel='stylesheet' />
 <script src='http://api.tiles.mapbox.com/mapbox.js/v1.3.1/mapbox.js'></script>
 <style type="text/css">
+body {
+  background-color: #ddd;
+}
+div[class^="col"] {
+  padding: 0px
+}
+#tbl-wrapper {
+  margin: 15px;
+  height: 90%;
+  display: none;
+}
 #map {
   height: 100%;
 }
@@ -31,11 +42,11 @@ function style(feature) {
 }
 function highlightFeature(e) {
     var layer = e.target;
-
+    // todo: trigger DataTable UI highlighting
     layer.setStyle({
-        weight: 3,
-        color: 'white',
-        dashArray: '',
+        weight: 4,
+        color: '#222',
+        opacity: 0.8,
         fillOpacity: 0.25
     });
 
@@ -75,6 +86,12 @@ function switchGeography(newGeography){
 
 $(document).ready(function() {
     switchGeography('communityarea');
+    $('#tbl').dataTable( {
+      'bProcessing':true,
+      'aSorting':true,
+      'sAjaxSource':'/static/landbank_data/json/test.json'
+    });
+    $('#tbl-wrapper').show();
 });
 </script>
 {% endblock %}
@@ -90,7 +107,16 @@ $(document).ready(function() {
 {% endblock %}
 
 {% block content %}
-<div id="map"></div>
+<div class="col-5">
+  <div id="tbl-wrapper" class="panel">
+    <div class="panel-body">
+      <table id="tbl"></table>
+    </div>
+ </div>
+</div>
+<div class="col-7">
+  <div id="map"></div>
+</div>
 <script src="/static/landbank_data/json/communityarea.js"></script>
 <script src="/static/landbank_data/json/ward.js"></script>
 <script src="/static/landbank_data/json/censustract.js"></script>
