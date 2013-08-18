@@ -11,6 +11,10 @@ body {
 div[class^="col"] {
   padding: 0px
 }
+#tbl {
+  height: 100%;
+  overflow: auto;
+}
 #tbl-wrapper {
   margin: 15px;
   height: 90%;
@@ -28,13 +32,70 @@ li i {
   top: 6px;
 }
 </style>
+
 <script type="text/javascript">
-var map, currentGeography = '', defaultGeography = 'communityarea'
+// Allan Jardis DataTables plug-in for reloading ajax
+$.fn.dataTableExt.oApi.fnReloadAjax = function ( oSettings, sNewSource, fnCallback, bStandingRedraw )
+{
+    if ( sNewSource !== undefined && sNewSource !== null ) {
+        oSettings.sAjaxSource = sNewSource;
+    }
+ 
+    // Server-side processing should just call fnDraw
+    if ( oSettings.oFeatures.bServerSide ) {
+        this.fnDraw();
+        return;
+    }
+ 
+    this.oApi._fnProcessingDisplay( oSettings, true );
+    var that = this;
+    var iStart = oSettings._iDisplayStart;
+    var aData = [];
+ 
+    this.oApi._fnServerParams( oSettings, aData );
+ 
+    oSettings.fnServerData.call( oSettings.oInstance, oSettings.sAjaxSource, aData, function(json) {
+        /* Clear the old information from the table */
+        that.oApi._fnClearTable( oSettings );
+ 
+        /* Got the data - add it to the table */
+        var aData =  (oSettings.sAjaxDataProp !== "") ?
+            that.oApi._fnGetObjectDataFn( oSettings.sAjaxDataProp )( json ) : json;
+ 
+        for ( var i=0 ; i<aData.length ; i++ )
+        {
+            that.oApi._fnAddData( oSettings, aData[i] );
+        }
+         
+        oSettings.aiDisplay = oSettings.aiDisplayMaster.slice();
+ 
+        that.fnDraw();
+ 
+        if ( bStandingRedraw === true )
+        {
+            oSettings._iDisplayStart = iStart;
+            that.oApi._fnCalculateEnd( oSettings );
+            that.fnDraw( false );
+        }
+ 
+        that.oApi._fnProcessingDisplay( oSettings, false );
+ 
+        /* Callback user function - for event handlers etc */
+        if ( typeof fnCallback == 'function' && fnCallback !== null )
+        {
+            fnCallback( oSettings );
+        }
+    }, oSettings );
+};
+</script>
+<script type="text/javascript">
+var map, oTable,  currentGeography = '', defaultGeography = 'communityarea'
     ,tileLayers = {}
     ,featureLayers = {}
     ,defaultLat = 41.85
     ,defaultLng = -87.65
     ,defaultZoom = 11;
+
 function style(feature) {
     return {
         fillColor: 'white',
@@ -47,7 +108,7 @@ function style(feature) {
 function highlightFeatureFromEvent(e) {
     var layer = e.target;
     highlightFeature(layer);
-    highlightRow(layer.feature.id);
+    highlightRow(layer.feature.data.id);
 }
 function highlightFeature(layer) {
     layer.setStyle({
@@ -67,17 +128,15 @@ function highlightRow(idString) {
 function unhighlightRow(idString) {
   $('#'+idString).removeClass('dtr-highlight');
 }
-
 function getLayerFromIdString(idString) {
   var featureLayerKeys = Object.keys(featureLayers[currentGeography]._layers);
   for (var i=0; i< featureLayerKeys.length; i++) {
     var theLayer = featureLayers[currentGeography]._layers[featureLayerKeys[i]];
-    if (theLayer.feature.id === idString) {
+    if (theLayer.feature.data.id === idString) {
       return theLayer;
     }
   }
 }
-
 function onMouseOverRow(idString) {
   highlightRow(idString);
   highlightFeature(getLayerFromIdString(idString));
@@ -87,14 +146,12 @@ function onMouseOutRow(idString) {
   resetHighlight(getLayerFromIdString(idString));
 }
 function onMouseClickRow(idString) {
-  console.log(getLayerFromIdString(idString).getBounds());
   map.fitBounds(getLayerFromIdString(idString).getBounds());
 }
-
 function resetHighlightFromEvent(e) {
   var layer = e.target;
   resetHighlight(layer);
-  unhighlightRow(layer.feature.id);
+  unhighlightRow(layer.feature.data.id);
 }
 function resetHighlight(layer) {
   featureLayers[currentGeography].resetStyle(layer);
@@ -115,17 +172,20 @@ function resetView() {
 function switchGeography(newGeography){
   if (newGeography != currentGeography) {
     if (currentGeography != '') {
+      // Remove old map layers
       map.removeLayer(tileLayers[currentGeography]);
       map.removeLayer(featureLayers[currentGeography]);
+      // Update navigation UI
       $('li.active').removeClass('active');
     }
     map.addLayer(tileLayers[newGeography]);
     map.addLayer(featureLayers[newGeography]);
+    // Create new DataTable
+    createDataTable(newGeography);
     $('#'+newGeography+'_switcher').addClass('active');
   }
   currentGeography = newGeography;
 }
-
 var dataTableColumns = {
   'communityarea':[
     {'sTitle':'#'}
@@ -146,24 +206,38 @@ var dataTableColumns = {
     ,{'sTitle':'Vacancy Rate'}
     ,{'sTitle':'Median Income'}
   ]
+};
+
+function injectInitTableDOMElements(selectedNode) {
+    console.log('injecting table DOM...');
+    selectedNode.append("<table id='tbl'><thead><tr></tr></thead><tbody></tbody></table>");
 }
 
-function loadDataTable(geoType) {
-  // new ajax source
+function createDataTable(theGeography) {
+    //$('#tbl-wrapper').hide();
+    // Blow away old table rather than try to futz with changing # of columns
+    topDiv = $('#tbl-wrapper');
+    console.log('oTable vvv');
+    console.log(oTable);
+    if(oTable != null) {
+      console.log('found dupe table; destroying');
+      oTable.fnDestroy();
+    }
+    topDiv.empty();
+    injectInitTableDOMElements(topDiv);
 
-  // update column headers
-}
-
-$(document).ready(function() {
-    switchGeography(defaultGeography);
-    $('#tbl').dataTable( {
+    // Create 
+    var oTable = $('#tbl').dataTable( {
       'bProcessing':true
-      ,'aoColumns': dataTableColumns[defaultGeography].concat(dataTableColumns['all'])
+      ,'bDestroy':true
+      ,'bPaginate':false
+      ,'aoColumns': dataTableColumns[theGeography].concat(dataTableColumns['all'])
       ,'fnRowCallback': function( nRow, aData, iDisplayIndex ) {
-        $(nRow).attr("id",defaultGeography+"_"+aData[0]);
+        $(nRow).attr("id",theGeography+"_"+aData[0]);
       }
-      ,'sAjaxSource':'/static/landbank_data/json/' + defaultGeography + '_table.json'
+      ,'sAjaxSource':'/static/landbank_data/json/' + theGeography + '_table.json'
     });
+
     $('#tbl tbody').on(
       'click', 'tr', function() {
         onMouseClickRow($(this).attr('id'));
@@ -176,14 +250,21 @@ $(document).ready(function() {
       'mouseleave', 'tr', function() {
         onMouseOutRow($(this).attr('id'));
       });
+    oTable.fnDraw();
     $('#tbl-wrapper').show();
+    console.log(oTable);
+}
+
+$(document).ready(function() {
+    switchGeography(defaultGeography);
 });
+
 </script>
 {% endblock %}
 
 {% block topnav %}
 <ul class="nav navbar-nav pull-right">
-    <li id='communityarea_switcher'><a href="#" onClick="switchGeography(defaultGeography)">Community Area</a></li>
+    <li id='communityarea_switcher'><a href="#" onClick="switchGeography('communityarea')">Community Area</a></li>
     <li id='ward_switcher'><a href="#" onClick="switchGeography('ward')">Ward</a></li>
     <li id='censustract_switcher'><a href="#" onClick="switchGeography('censustract')">Census Tract</a></li>
     <li id='municipality_switcher'><a href="#" onClick="switchGeography('municipality')">Municipality</a></li>
@@ -195,13 +276,6 @@ $(document).ready(function() {
 <div class="col-5">
 <div id="tbl-wrapper" class="panel">
 <div class="panel-body">
-<table id="tbl">
-        <thead>
-          <tr>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
     </div>
  </div>
 </div>
