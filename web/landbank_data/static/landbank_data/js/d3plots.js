@@ -181,7 +181,7 @@ function d3timeline(div, data, title, marker) {
       .attr("class","line")
       .attr("d", line(data))
       .attr("stroke", "blue")
-      .attr("stroke-width", 3)
+      .attr("stroke-width", 1)
       .attr("fill", "none");
 
 
