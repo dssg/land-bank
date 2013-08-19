@@ -52,7 +52,7 @@
       <div class="span2"><h3>
 	<input type="button" class="btn btn-primary" onclick="toggleChart()" value="time trend" /></h3>
       </div>
-    </div
+    </div>
     {% for hist in hists %}
       <div id="d3div{{ forloop.parentloop.parentloop.counter }}_{{ forloop.counter }}" 
         class="col-lg-4"></div>
@@ -79,37 +79,37 @@
 
 
 </script>
-<div class="container" id="timeseries">
-  {% for timeseries_block in timeseriesData %}
-   {% for timeseriesType, hists in timeseries_block.items %}
-    <div class="row">
+<div class="container" id="timestream">
+  {% for timestream_block in timestreamData %}
+   {% for timestreamType, hists in timestream_block.items %}
+   <div class="row">
       <div class="col-lg-10">
 	     <div class="span10">
-               <h3> {{ timeseriesType.0 }} <small> {{ timeseriesType.1 }} </small> </h3> 
+               <h3> {{ timestreamType.0 }} <small> {{ timestreamType.1 }} </small> </h3> 
 	     </div>
       </div>
       <div class="span2"><h3>
-	<input type="button" class="btn btn-primary" onclick="toggleChart()" value="time trend" /></h3>
+	<input type="button" class="btn btn-primary" onclick="toggleChart()" value="dist snapshots" /></h3>
       </div>
     </div
-    {% for hist in hists %}
-      <div id="d3div{{ forloop.parentloop.parentloop.counter }}_{{ forloop.counter }}" 
+    {% for time in timess %}
+      <div id="d3divt1{{ forloop.parentloop.parentloop.counter }}_{{ forloop.counter }}" 
         class="col-lg-4"></div>
     {% endfor %}
    {% endfor %}
   {% endfor %}
  </div>
-    <script>
-      {% for timeseries_block in timeData %}
-      {% for timeseriesType, times in timeseries_block.items %}
+    <script type="text/javascript">
+      {% for timestream_block in timestreamData %}
+      {% for timestreamType, times in timestream_block.items %}
       {% for time in times %}
       var chart_data = {{ time.data | safe }};
       {% if time.marker != None %}
-      d3hist("#d3div{{ forloop.parentloop.parentloop.counter }}_{{ forloop.counter }}", chart_data, "{{ time.title}}", {{time.marker}});
+      d3timeline("#d3divt1{{ forloop.parentloop.parentloop.counter }}_{{ forloop.counter }}", chart_data, "{{ time.title}}", {{time.marker}});
       {% else %}
-      d3hist("#d3div{{ forloop.parentloop.parentloop.counter }}_{{ forloop.counter }}", chart_data, "{{ time.title}}");
+      d3timeline("#d3divt1{{ forloop.parentloop.parentloop.counter }}_{{ forloop.counter }}", chart_data, "{{ time.title}}");
       {% endif %}
-      $('#d3div{{ forloop.parentloop.parentloop.counter }}_{{ forloop.counter }}').popover(
+      $('#d3div1{{ forloop.parentloop.parentloop.counter }}_{{ forloop.counter }}').popover(
       {content:"{{ time.tooltip }}", trigger:"hover", placement:"top"});
       {% endfor %}
       {% endfor %}
