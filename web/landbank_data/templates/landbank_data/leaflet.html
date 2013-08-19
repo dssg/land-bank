@@ -229,8 +229,10 @@ function createDataTable(theGeography) {
     // Create 
     var oTable = $('#tbl').dataTable( {
       'bProcessing':true
+      ,'sDom':'rt<"clear">'
       ,'bDestroy':true
       ,'bPaginate':false
+      ,'sScrollY':'100%'
       ,'aoColumns': dataTableColumns[theGeography].concat(dataTableColumns['all'])
       ,'fnRowCallback': function( nRow, aData, iDisplayIndex ) {
         $(nRow).attr("id",theGeography+"_"+aData[0]);
@@ -266,17 +268,15 @@ $(document).ready(function() {
 <ul class="nav navbar-nav pull-right">
     <li id='communityarea_switcher'><a href="#" onClick="switchGeography('communityarea')">Community Area</a></li>
     <li id='ward_switcher'><a href="#" onClick="switchGeography('ward')">Ward</a></li>
-    <li id='censustract_switcher'><a href="#" onClick="switchGeography('censustract')">Census Tract</a></li>
+    <!--<li id='censustract_switcher'><a href="#" onClick="switchGeography('censustract')">Census Tract</a></li>-->
     <li id='municipality_switcher'><a href="#" onClick="switchGeography('municipality')">Municipality</a></li>
-<li><a href="#" onClick="resetView();"><i class="icon-resize-full icon-large"></i></a></li>
+    <li><a href="#" onClick="resetView();"><i class="icon-resize-full icon-large"></i></a></li>
 </ul>
 {% endblock %}
 
 {% block content %}
 <div class="col-5">
-<div id="tbl-wrapper" class="panel">
-<div class="panel-body">
-    </div>
+<div id="tbl-wrapper">
  </div>
 </div>
 <div class="col-7">
@@ -284,10 +284,11 @@ $(document).ready(function() {
 </div>
 <script src="/static/landbank_data/json/communityarea_geojson.js"></script>
 <script src="/static/landbank_data/json/ward_geojson.js"></script>
-<script src="/static/landbank_data/json/censustract_geojson.js"></script>
+<!-- <script src="/static/landbank_data/json/censustract_geojson.js"></script> -->
 <script src="/static/landbank_data/json/municipality_geojson.js"></script>
 <script type="text/javascript">
 map = L.map('map').setView([defaultLat, defaultLng], defaultZoom);
+map.zoomControl.setPosition('topright');
 
 tilelayer_urls = {'communityarea':'http://a.tiles.mapbox.com/v3/swhorton.communityarea_color/{z}/{x}/{y}.png'
                  ,'ward':'http://a.tiles.mapbox.com/v3/swhorton.ward/{z}/{x}/{y}.png'
