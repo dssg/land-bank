@@ -1,0 +1,18 @@
+{% extends "landbank_data/base.html" %}
+
+{% block head %}
+<script src="/static/landbank_data/js/dajaxice.core.js"></script>
+<script src="/static/landbank_data/js/jquery.dajax.core.js"></script>
+<script type="text/javascript">
+function randomize_callback(data) {
+alert(data);
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="container" style="padding-top: 25px;">
+<input type="text" value="" id="result" class="form-control">
+<input type="button" onclick="Dajaxice.landbank_data.randomize(Dajax.process);" value="Random!" class="btn">
+</div>
+{% endblock %}

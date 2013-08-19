@@ -20,9 +20,16 @@ div[class^="col"] {
   height: 90%;
   display: none;
 }
+.navbar {
+  font-size: 120%;
+  font-variant: smallcaps;
+}
+table {
+  font-size: 80%;
+}
 .dtr-highlight {
   /* todo: make a better highlight style, after integrating bootstrap */
-  font-weight: bold;
+  text-decoration: underline;
 }
 #map {
   height: 100%;
@@ -90,6 +97,7 @@ $.fn.dataTableExt.oApi.fnReloadAjax = function ( oSettings, sNewSource, fnCallba
 </script>
 <script type="text/javascript">
 var map, oTable,  currentGeography = '', defaultGeography = 'communityarea'
+    ,prevSortColumn = -1
     ,tileLayers = {}
     ,featureLayers = {}
     ,defaultLat = 41.85
@@ -97,13 +105,32 @@ var map, oTable,  currentGeography = '', defaultGeography = 'communityarea'
     ,defaultZoom = 11;
 
 function style(feature) {
-    return {
-        fillColor: 'white',
+  var defaultStyleObj = {
         weight: 0,
         opacity: 0,
         color: 'white',
-        fillOpacity: 0
+        fillColor: defaultColor(feature.data.color_id);
+        fillOpacity: 1
     };
+  if (!oTable || !currentGeography || !oTable.fnSettings()) {
+    return defaultStyleObj;
+  }
+  var sortedColumnIndex = oTable.fnSettings().aaSorting[0][0];
+  // Same sort column as before? If so, don't recolor
+  // Can't recolor based on geography-specific categorical data
+  if (!validColumn(sortedColumnIndex)) {
+    return defaultStlyeObj;
+  }
+  // Loop through each row in the DataTable
+  var tableRows = $(oTable).children()[1].children; 
+  for (var i=0; i<tableRows.length; i++) {
+    var dataValue = parseFloat(tableRows[i].children[sortedColumnIndex].innerHTML);
+    var indicatorIndex = sortedColumnIndex-dataTableColumns[currentGeography].length;
+    var dataColumn = dataTableColumns['all'][indicatorIndex]['sTitle'];
+    applyHeatColor(tableRows[i].id, dataColumn, dataValue);
+  }
+  prevSortColumn = sortedColumnIndex;
+
 }
 function highlightFeatureFromEvent(e) {
     var layer = e.target;
@@ -112,10 +139,11 @@ function highlightFeatureFromEvent(e) {
 }
 function highlightFeature(layer) {
     layer.setStyle({
-        weight: 4,
+        weight: 6,
         color: '#222',
-        opacity: 0.8,
-        fillOpacity: 0.25
+        opacity: 0.75,
+        fillColor: 'white',
+        fillOpacity: 0.0
     });
     if (!L.Browser.ie && !L.Browser.opera) {
         layer.bringToFront();
@@ -159,11 +187,15 @@ function resetHighlight(layer) {
 function zoomToFeature(e) {
   map.fitBounds(e.target.getBounds());
 }
+function redirectToArea(e) {
+  var layer= e.target;
+  console.log(layer);
+}
 function onEachFeature(feature, layer) {
   layer.on({
     mouseover: highlightFeatureFromEvent,
     mouseout: resetHighlightFromEvent,
-    click: zoomToFeature
+    click: redirectToArea
   });
 }
 function resetView() {
@@ -178,14 +210,15 @@ function switchGeography(newGeography){
       // Update navigation UI
       $('li.active').removeClass('active');
     }
-    map.addLayer(tileLayers[newGeography]);
     map.addLayer(featureLayers[newGeography]);
+    map.addLayer(tileLayers[newGeography]);
     // Create new DataTable
     createDataTable(newGeography);
     $('#'+newGeography+'_switcher').addClass('active');
   }
   currentGeography = newGeography;
 }
+
 var dataTableColumns = {
   'communityarea':[
     {'sTitle':'#'}
@@ -208,29 +241,80 @@ var dataTableColumns = {
   ]
 };
 
-function injectInitTableDOMElements(selectedNode) {
-    console.log('injecting table DOM...');
-    selectedNode.append("<table id='tbl'><thead><tr></tr></thead><tbody></tbody></table>");
+function validColumn(columnIndex) {
+  return (columnIndex > dataTableColumns[currentGeography].length-1);
 }
+function recolorMap() {
+}
+
+function applyHeatColor(idString, dataColumn, dataValue) {
+  var numBins = 5;
+  var layer = getLayerFromIdString(idString);
+  layer.setStyle({
+    fillColor: heatmapColor(dataColumn, dataValue, numBins),
+    fillOpacity: 1
+  });
+  if (!L.Browser.ie && !L.Browser.opera) {
+    layer.bringToFront();
+  }
+}
+
+function defaultColor(dataValue) {
+  var theGeography = currentGeography==''?defaultGeography:currentGeography;
+  numBins = colorConfig[defaultGeography]['default'].length;
+  return colorConfig['defaultPalette'][numBins][dataValue-1];
+}
+
+function heatmapColor(dataColumn, dataValue, numBins) {
+  // Place the layer's data value for this indicator on the color spectrum
+  for (var i=0; i<numBins; i++) {
+    if (dataValue < colorConfig[currentGeography][dataColumn][i]) {
+      return colorConfig['colorPalette'][numBins][i];
+    }
+  }
+  // data out of palette range, or missing key/value pairs in colorConfig object
+  return '#000';
+}
+
+function injectInitTableDOMElements(selectedNode) {
+    selectedNode.append("<table id='tbl' class='table table-striped table-bordered table-hover table-condensed'><thead><tr></tr></thead><tbody></tbody></table>");
+}
+
+function updateSize() {
+  //Height
+  $('.dataTables_scrollBody').css('height', ($(window).height() - $('.dataTables_scrollBody').offset()['top']));
+  //Data columns
+  $(oTable).css({ width: $(oTable).parent().width() });
+  oTable.fnAdjustColumnSizing();
+  // Column headers?
+  //$('.dataTables_scrollHead').css({width: ($('.dataTables_scrollHead').parent().width()) });
+  //$('.dataTables_scrollHeadInner').css({width: ($('.dataTables_scrollHead').parent().width()) });
+  oTable.fnDraw();
+}
+
+$(window).resize(function() {
+  clearTimeout(window.refresh_size);
+  window.refresh_Size = setTimeout(function() { updateSize(); }, 250);
+});
 
 function createDataTable(theGeography) {
     //$('#tbl-wrapper').hide();
     // Blow away old table rather than try to futz with changing # of columns
     topDiv = $('#tbl-wrapper');
-    console.log('oTable vvv');
-    console.log(oTable);
     if(oTable != null) {
-      console.log('found dupe table; destroying');
       oTable.fnDestroy();
     }
     topDiv.empty();
     injectInitTableDOMElements(topDiv);
 
     // Create 
-    var oTable = $('#tbl').dataTable( {
+    oTable = $('#tbl').dataTable( {
       'bProcessing':true
+      ,'sDom':'<"top">rt<"bottom"lp><"clear">'
       ,'bDestroy':true
       ,'bPaginate':false
+      ,'bAutoWidth':false
+      ,'sScrollY':($(window).height()-125)+'px'
       ,'aoColumns': dataTableColumns[theGeography].concat(dataTableColumns['all'])
       ,'fnRowCallback': function( nRow, aData, iDisplayIndex ) {
         $(nRow).attr("id",theGeography+"_"+aData[0]);
@@ -252,52 +336,53 @@ function createDataTable(theGeography) {
       });
     oTable.fnDraw();
     $('#tbl-wrapper').show();
-    console.log(oTable);
 }
 
 $(document).ready(function() {
-    switchGeography(defaultGeography);
+  switchGeography(defaultGeography);
 });
 
 </script>
 {% endblock %}
 
 {% block topnav %}
-<ul class="nav navbar-nav pull-right">
+<ul class="nav navbar-nav navbar-right">
     <li id='communityarea_switcher'><a href="#" onClick="switchGeography('communityarea')">Community Area</a></li>
     <li id='ward_switcher'><a href="#" onClick="switchGeography('ward')">Ward</a></li>
-    <li id='censustract_switcher'><a href="#" onClick="switchGeography('censustract')">Census Tract</a></li>
+    <!--<li id='censustract_switcher'><a href="#" onClick="switchGeography('censustract')">Census Tract</a></li>-->
     <li id='municipality_switcher'><a href="#" onClick="switchGeography('municipality')">Municipality</a></li>
 <li><a href="#" onClick="resetView();"><i class="icon-resize-full icon-large"></i></a></li>
 </ul>
 {% endblock %}
 
 {% block content %}
-<div class="col-5">
-<div id="tbl-wrapper" class="panel">
-<div class="panel-body">
-    </div>
- </div>
+<div class="col-sm-6 col-md-5 col-lg-4">
+  <div id="tbl-wrapper"></div>
 </div>
-<div class="col-7">
+<div class="col-sm-6 col-md-7 col-lg-8">
   <div id="map"></div>
 </div>
+
 <script src="/static/landbank_data/json/communityarea_geojson.js"></script>
 <script src="/static/landbank_data/json/ward_geojson.js"></script>
 <script src="/static/landbank_data/json/censustract_geojson.js"></script>
 <script src="/static/landbank_data/json/municipality_geojson.js"></script>
+<script src="/static/landbank_data/json/color_config.js"></script>
+
 <script type="text/javascript">
 map = L.map('map').setView([defaultLat, defaultLng], defaultZoom);
+map.zoomControl.setPosition('topright');
 
-tilelayer_urls = {'communityarea':'http://a.tiles.mapbox.com/v3/swhorton.communityarea_color/{z}/{x}/{y}.png'
-                 ,'ward':'http://a.tiles.mapbox.com/v3/swhorton.ward/{z}/{x}/{y}.png'
-                 ,'censustract':'http://a.tiles.mapbox.com/v3/swhorton.censustract/{z}/{x}/{y}.png'
-                 ,'municipality':'http://a.tiles.mapbox.com/v3/swhorton.municipality/{z}/{x}/{y}.png'};
+base_mapbox_url = ['http://a.tiles.mapbox.com/v3/','/{z}/{x}/{y}.png']
+tilelayer_urls = {'communityarea':'swhorton.communityarea_color'
+                 ,'ward':'swhorton.ward_color'
+                 ,'censustract':'swhorton.censustract'
+                 ,'municipality':'swhorton.municipality'};
 
 // define four pairs of tile/feature (geojson) layers
 var geographies = ['communityarea','ward','censustract','municipality'];
 for (var i=0; i<geographies.length; i++) {
-    tileLayers[geographies[i]] = L.tileLayer(tilelayer_urls[geographies[i]], {
+    tileLayers[geographies[i]] = L.tileLayer(base_mapbox_url[0]+tilelayer_urls[geographies[i]]+base_mapbox_url[1], {
       minZoom: 10,
       maxZoom: 14,
     });

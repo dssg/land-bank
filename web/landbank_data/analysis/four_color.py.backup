@@ -1,0 +1,74 @@
+from models import CommunityArea
+from django.db.models import Q
+import collections
+import pprint
+import operator
+
+# Define all models to be used
+all_geographies = [{
+    'name':'communityarea'
+    ,'queryset':CommunityArea.objects.all().values('geom')
+    ,'geom_field_name':'geom'
+    },{ 
+    'name':'ward'
+    ,'queryset':Ward.objects.all().values('geom')
+    ,'geom_field_name':'geom'
+    },{ 
+    'name':'municipality'
+    ,'queryset':Municipality.objects.all().values('geom')
+    ,'geom_field_name':'geom'
+    },{ 
+    'name':'censustract'
+    ,'queryset':CensusTract.objects.all().values('loc')
+    ,'geom_field_name':'loc'
+    }]
+
+
+
+area_degrees = {}
+area_neighbors = {}
+area_colors = {}
+max_color = 1
+area_queryset = CommunityArea.objects.all()
+for a in area_queryset:
+  area_degrees[a.id] = 0
+  area_neighbors[a.id] = []
+  area_colors[a.id] = None
+  neighbors = CommunityArea.objects.filter(geom__intersects=a.geom).values('id')
+  for n in neighbors:
+    if n['id'] != a.id:
+      area_degrees[a.id] += 1
+      area_neighbors[a.id].append(n['id'])
+
+# sort areas in increasing order of number of neighbors
+sorted_by_deg = collections.deque(sorted(area_degrees.iteritems(), key=operator.itemgetter(1)))
+# use least-at-the-end heuristic for four color greedy algorithm
+sorted_by_deg.rotate(-1)
+# try to color each area
+for sbd in sorted_by_deg:
+  area_id = sbd[0]
+  print str(sbd[0]) + ", " + str(sbd[1]) + ":"
+  # neighbors' colors?
+  neighbor_colors = []
+  for neighbor in area_neighbors[area_id]:
+    neighbor_colors.append(area_colors[neighbor])
+  print "  neighbors have colors: " + str(neighbor_colors)
+  # try a color
+  for color in range(1,max_color+1):
+    print "  trying color " + str(color)
+    if color not in neighbor_colors:
+      area_colors[area_id] = color
+      break
+  if area_colors[area_id] == None:
+    max_color += 1
+    area_colors[area_id] = max_color
+    print "    had to add color " + str(max_color)
+
+
+pp=pprint.PrettyPrinter(indent=2)
+pp.pprint(area_colors)
+print str(max_color) + " colors"
+
+for a in area_queryset:
+    a.color_id = area_colors[a.id]
+    a.save()

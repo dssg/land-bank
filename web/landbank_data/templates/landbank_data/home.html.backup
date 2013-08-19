@@ -1,0 +1,115 @@
+{% extends "landbank_data/base.html" %}
+
+{% block head %}
+<style>
+    html, body, #map-canvas {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+    }
+    .wax-tooltip {
+        margin-top: 50px; /* adjust for fixed nav bar */
+    }
+</style>
+<!-- Skyler's google API key; <25k requests/day -->
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyDI19ju3HG5k6WRMU4mYyTJNv_YIWHUqxA&sensor=false"></script>
+<script src="/static/landbank_data/wax/dist/wax.g.js"></script>
+<link href="/static/landbank_data/wax/theme/controls.css" rel="stylesheet" type="text/css">
+<script>
+var map, mapInteraction;
+var chicagoLatLng = new google.maps.LatLng(41.85, -87.65);
+var overlay_key = 'community';
+var overlay_urls = {
+  'community':'http://api.tiles.mapbox.com/v3/swhorton.communityarea.jsonp'
+ ,'tract':'http://api.tiles.mapbox.com/v3/swhorton.censustract.jsonp'
+ ,'municipality':'http://api.tiles.mapbox.com/v3/swhorton.municipality.jsonp'
+ ,'ward':'http://api.tiles.mapbox.com/v3/swhorton.ward.jsonp'
+};
+
+function retile(new_key) {
+  if (new_key===overlay_key) { return; }
+  overlay_key = new_key;
+  setOverlay(overlay_urls[overlay_key]);
+}
+
+function setOverlay(url) {
+  wax.tilejson(url,
+    function(tilejson) {
+      if (mapInteraction) { 
+        map.overlayMapTypes.removeAt(0); 
+        /*mapInteraction.remove(map); */
+      }
+      map.overlayMapTypes.insertAt(0, new wax.g.connector(tilejson));
+      mapInteraction = wax.g.interaction()
+        .map(map)
+        .tilejson(tilejson)
+        .on(wax.location().events())
+        .on(wax.tooltip().parent(map.getDiv()).events());
+console.log(mapInteraction);
+    });
+  console.log(map.overlayMapTypes);
+}
+
+function initialize() {
+  var mapOptions = {
+    zoom: 11,
+    center: chicagoLatLng,
+    mapTypeId: google.maps.MapTypeId.ROADMAP,
+    streetViewControl: false,
+    mapTypeControl: false,
+    panControl: false,
+    zoomControl: false,
+  };
+  map = new google.maps.Map(document.getElementById('map-canvas')
+    ,mapOptions);
+  setOverlay(overlay_urls[overlay_key]);
+}
+google.maps.event.addDomListener(window, 'load', initialize);
+google.maps.event.addDomListener(window, 'resize', function() {
+    map.setCenter(chicagoLatLng); });
+</script>
+
+{% endblock %}
+
+{% block topnav %}
+<ul class="nav navbar-nav">
+    <li class="active"><a href="/">Explore</a></li>
+    <li><a href="/properties/">Properties</a></li>
+</ul>
+
+<form class="navbar-form pull-left" action="/search/" method="POST">
+    {% csrf_token %}
+    <input name="search" id="search-field" type="text" class="form-control" style="width: 350px;" placeholder="Enter an address or PIN" autocomplete="off">
+    <button type="submit" class="btn btn-default">Search</button>
+</form>
+
+<ul class="nav navbar-nav pull-right">
+    <li class="dropdown">
+        <a href="#" id="searchBox" class="dropdown-toggle" data-toggle="dropdown">Geography <b class="caret"></b></a>
+        <ul class="dropdown-menu">
+            <li><a href="#" onClick="retile('municipality');">Municipality</a></li>
+            <li><a href="#" onClick="retile('community');">Community</a></li>
+            <li><a href="#" onClick="retile('ward');">Ward</a></li>
+            <li><a href="#" onClick="retile('tract');">Tract</a></li>
+        </ul>
+    </li>
+</ul>
+{% endblock %}
+
+{% block content %}
+<div id="map-canvas"></div>
+
+<script type="text/javascript" src="/static/landbank_data/js/typeahead.js"></script>
+<script type="text/javascript" src="/static/landbank_data/js/jquery.places-search.js"></script>
+<script type="text/javascript">
+$(function() {
+    $('#search-field').placesSearch({
+        onSelectAddress: function(result) {
+            console.log(result);
+        },
+        componentRestrictions: {country: "US"},
+        types: ['geocode']
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,34 @@
+<html lang="en">
+<head>
+    <title>{% block title %}Cook County Land Bank - Analytics Tool{% endblock %}</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!-- <link href="/static/landbank_data/css/bootstrap.css" rel="stylesheet"> -->
+    <link href="/static/landbank_data/css/base.css" rel="stylesheet">
+    <link href="/static/landbank_data/css/jquery.dataTables.css" rel="stylesheet">
+    <link href="/static/landbank_data/css/bs3rc2.min.css" rel="stylesheet">
+    <!-- <link href="/static/landbank_data/css/dataTables.bootstrap.css" rel="stylesheet"> -->
+    <link href="/static/landbank_data/css/TableTools.css" rel="stylesheet">
+    <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+    <script src="/static/landbank_data/js/jquery-1.10.2.min.js"></script>
+    <!-- <script src="/static/landbank_data/js/bootstrap.js"></script> -->
+    <script src="/static/landbank_data/js/jquery.dataTables.min.js"></script>
+    <script src="/static/landbank_data/js/bs3rc2.min.js"></script>
+    <script src="/static/landbank_data/js/FixedHeader.min.js"></script>
+    <script src="/static/landbank_data/js/TableTools.min.js"></script>
+    <!-- <script src="/static/landbank_data/js/dataTables.bootstrap.js"></script> -->
+    {% block head %}{% endblock %}
+
+</head>
+<body>
+<div class="navbar navbar-header navbar-inverse navbar-fixed-top">
+  <a href="/" class="navbar-brand">CCLBA</a>
+  {% block topnav %}
+  {% endblock %}
+</div>
+{% block content %}
+{% endblock %}
+</body>
+</html>
