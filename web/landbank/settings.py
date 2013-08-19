@@ -141,7 +141,6 @@ INSTALLED_APPS = (
     'django.contrib.gis',
     'django_extensions',
     'django_pandas',
-    'django_nvd3',
     'dajaxice',
     'dajax',
     'south',

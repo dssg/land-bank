@@ -43,6 +43,7 @@ urlpatterns = patterns('',
     url(r'^$', 'landbank_data.views.home', name='home'),
     url(r'search/', 'landbank_data.views.search', name='search'),
     url(r'dajax_test/', 'landbank_data.views.dajax_test', name='dajax_test'),
+    url(r'leaflet/', 'landbank_data.views.leaflet', name='leaflet'),
 )
 
 urlpatterns += staticfiles_urlpatterns()

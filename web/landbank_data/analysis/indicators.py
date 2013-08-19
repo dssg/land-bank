@@ -2,7 +2,8 @@ from models import \
   CommunityArea, Ward, CensusTract, Municipality, \
   CensusTractMapping, AreaPlotCache, CensusTractCharacteristics, \
   IndicatorCache, Transaction, Foreclosure, Mortgage, Assessor,\
-  CensusBlock, CensusBlockEmployment, VacancyUSPS
+  CensusBlock, CensusBlockEmployment, VacancyUSPS, Vacancy311,\
+  BuildingPermit
 import json, datetime
 import numpy as np
 from indicator_utils import *
@@ -106,10 +107,8 @@ def quarter_to_datetime(quarter):
 
 def cache_market_indicators():
   for geom_type,geom_str in \
-    zip([Municipality,Ward,CommunityArea],\
-        ['Municipality', 'Ward', 'Community Area']):
-    #zip([CensusTract,Municipality,Ward,CommunityArea],\
-    #    ['Census Tract', 'Municipality', 'Ward', 'Community Area']):
+    zip([CensusTract,Municipality,Ward,CommunityArea],\
+        ['Census Tract', 'Municipality', 'Ward', 'Community Area']):
     for geom in geom_type.objects.all():
       print '.'
       retval = get_foreclosure_rate(geoms=geom)
@@ -382,10 +381,15 @@ def get_vacancyusps(\
         num += (v.res_vacant + v.res_nostat) * tract_mapping.communityarea_frac
         den += (v.naddr_res) * tract_mapping.communityarea_frac
        except: continue
-    retval[int(str(y)+str(q))] = float(num)/den if den!=0 else 0
+    retval[int(str(y)+str(q))] = float(num)/den*100 if den!=0 else 0
   return retval
    
 def cache_vacancy_indicators():
+  cache_demolition_indicator()
+  cache_vacancyusps_indicator()
+  cache_vacancy311_indicator()
+
+def cache_vacancyusps_indicator():
   for geom_type,geom_str in \
     zip([CensusTract,Municipality,Ward,CommunityArea],\
         ['Census Tract', 'Municipality', 'Ward', 'Community Area']):
@@ -396,6 +400,178 @@ def cache_vacancy_indicators():
         cv = IndicatorCache(\
           area_type=geom_str, area_id = geom.id,\
           indicator_name='vacancy_usps',\
-          indicator_value = v,\
+          indicator_value = v*100.0,\
           indicator_date = quarter_to_datetime(k))
         cv.save()
+
+def cache_vacancy311_indicator():
+  lastyear = cst.localize(datetime.datetime.now() - datetime.timedelta(days=365.25))
+  city_geom=Municipality.objects.get(name='Chicago').geom
+  for geom_type,geom_str in \
+    zip([CensusTract,Municipality,Ward,CommunityArea],\
+        ['Census Tract', 'Municipality', 'Ward', 'Community Area']):
+    for geom in geom_type.objects.all():
+      if (geom_type==CensusTract):
+        if not city_geom.intersects(geom.loc): continue
+        myinds = Vacancy311.objects.filter(loc__within=geom.loc).\
+                            filter(request_date__gte=lastyear)
+        assess = Assessor.objects.filter(loc__contained=geom.loc)
+        cv = IndicatorCache(\
+          area_type=geom_str, area_id = geom.id,\
+          indicator_name='vacancy_311',\
+          indicator_value = float(len(myinds))/len(assess)*100,\
+          indicator_date = lastyear)
+        cv.save()
+      else:
+        if not city_geom.intersects(geom.geom): continue
+        if geom_type==Municipality and geom.name!='Chicago': continue
+        myinds = Vacancy311.objects.filter(loc__within=geom.geom).\
+                            filter(request_date__gte=lastyear)
+        assess = Assessor.objects.filter(loc__contained=geom.geom)
+        cv = IndicatorCache(\
+          area_type=geom_str, area_id = geom.id,\
+          indicator_name='vacancy_311',\
+          indicator_value = float(len(myinds))/len(assess)*100,\
+          indicator_date = lastyear)
+        cv.save()
+
+def cache_accessibility_indicators():
+  for geom_type,geom_str in \
+    zip([CensusTract,Municipality,Ward,CommunityArea],\
+        ['Census Tract', 'Municipality', 'Ward', 'Community Area']):
+    for geom in geom_type.objects.all():
+      geomloc = geom.loc if geom_type==CensusTract else geom.geom
+      blocks = CensusBlock.objects.filter(loc__dwithin=(geomloc, 5280))
+      retval = 0.0
+      for block in blocks:
+        for emp in block.censusblockemployment_set.all(): retval += emp.jobs
+      pop = IndicatorCache.objects.get(indicator_name='pop', \
+            area_type=geom_str, area_id=geom.id).indicator_value
+      if pop==0: continue
+      cv = IndicatorCache(\
+        area_type=geom_str, area_id = geom.id,\
+        indicator_name='jobs_within_mile_pc',\
+        indicator_value = retval/float(pop))
+      cv.save()
+
+def cache_demolition_indicator():
+  lastyear = cst.localize(datetime.datetime.now() - datetime.timedelta(days=365.25))
+  city_geom=Municipality.objects.get(name='Chicago').geom
+  for geom_type,geom_str in \
+    zip([CensusTract,Municipality,Ward,CommunityArea],\
+        ['Census Tract', 'Municipality', 'Ward', 'Community Area']):
+    for geom in geom_type.objects.all():
+      pop = IndicatorCache.objects.get(indicator_name='pop', \
+            area_type=geom_str, area_id=geom.id).indicator_value
+      if pop==0: continue
+      if (geom_type==CensusTract):
+        if not city_geom.intersects(geom.loc): continue
+        myinds = BuildingPermit.objects.filter(loc__within=geom.loc).\
+                            filter(timestamp__gte=lastyear).\
+                            filter(permit_type__exact='PERMIT - WRECKING/DEMOLITION')
+        cv = IndicatorCache(\
+          area_type=geom_str, area_id = geom.id,\
+          indicator_name='demolitions_pc',\
+          indicator_value = float(len(myinds))/pop,\
+          indicator_date = lastyear)
+        cv.save()
+      else:
+        if not city_geom.intersects(geom.geom): continue
+        if geom_type==Municipality and geom.name!='Chicago': continue
+        myinds = BuildingPermit.objects.filter(loc__within=geom.geom).\
+                            filter(timestamp__gte=lastyear).\
+                            filter(permit_type__exact='PERMIT - WRECKING/DEMOLITION')
+        cv = IndicatorCache(\
+          area_type=geom_str, area_id = geom.id,\
+          indicator_name='demolitions_pc',\
+          indicator_value = float(len(myinds))/pop,\
+          indicator_date = lastyear)
+        cv.save()
+
+def cache_construction_indicator():
+  lastyear = cst.localize(datetime.datetime.now() - datetime.timedelta(days=365.25))
+  city_geom=Municipality.objects.get(name='Chicago').geom
+  for geom_type,geom_str in \
+    zip([CensusTract,Municipality,Ward,CommunityArea],\
+        ['Census Tract', 'Municipality', 'Ward', 'Community Area']):
+    for geom in geom_type.objects.all():
+      pop = IndicatorCache.objects.get(indicator_name='pop', \
+            area_type=geom_str, area_id=geom.id).indicator_value
+      if pop==0: continue
+      if (geom_type==CensusTract):
+        if not city_geom.intersects(geom.loc): continue
+        myinds = BuildingPermit.objects.filter(loc__within=geom.loc).\
+                            filter(timestamp__gte=lastyear)
+        retval = 0
+        for myind in myinds: 
+          if myind.cost is not None: retval += myind.cost
+        cv = IndicatorCache(\
+          area_type=geom_str, area_id = geom.id,\
+          indicator_name='construction_pc',\
+          indicator_value = float(retval)/pop,\
+          indicator_date = lastyear)
+        cv.save()
+      else:
+        if not city_geom.intersects(geom.geom): continue
+        if geom_type==Municipality and geom.name!='Chicago': continue
+        myinds = BuildingPermit.objects.filter(loc__within=geom.geom).\
+                            filter(timestamp__gte=lastyear)
+        retval = 0
+        for myind in myinds: 
+          if myind.cost is not None: retval += myind.cost
+        cv = IndicatorCache(\
+          area_type=geom_str, area_id = geom.id,\
+          indicator_name='construction_pc',\
+          indicator_value = float(retval)/pop,\
+          indicator_date = lastyear)
+        cv.save()
+
+def cache_landuse_indicators():
+  for geom_type,geom_str in \
+    zip([CensusTract,Municipality,Ward,CommunityArea],\
+        ['Census Tract', 'Municipality', 'Ward', 'Community Area']):
+    for geom in geom_type.objects.all():
+      allpins, sfh, condo, multi, commind = None, None, None, None, None
+      if (geom_type==CensusTract):
+        allpins = Assessor.objects.filter(loc__within=geom.loc)
+        sfh     = Assessor.objects.filter(loc__within=geom.loc).\
+                                   filter(ptype_id__exact=1)
+        condo   = Assessor.objects.filter(loc__within=geom.loc).\
+                                   filter(ptype_id__exact=2)
+        multi   = Assessor.objects.filter(loc__within=geom.loc).\
+                                   filter(ptype_id__in=(3,4))
+        commind = Assessor.objects.filter(loc__within=geom.loc).\
+                                   filter(ptype_id__exact=(5))
+      else:
+        allpins = Assessor.objects.filter(loc__within=geom.geom)
+        sfh     = Assessor.objects.filter(loc__within=geom.geom).\
+                                   filter(ptype_id__exact=1)
+        condo   = Assessor.objects.filter(loc__within=geom.geom).\
+                                   filter(ptype_id__exact=2)
+        multi   = Assessor.objects.filter(loc__within=geom.geom).\
+                                   filter(ptype_id__in=(3,4))
+        commind = Assessor.objects.filter(loc__within=geom.geom).\
+                                   filter(ptype_id__exact=(5))
+      tot_pins = len(allpins)
+      if tot_pins == 0: continue
+      cv = IndicatorCache(\
+        area_type=geom_str, area_id = geom.id,\
+        indicator_name='pct_sfh',\
+        indicator_value = float(len(sfh))/len(allpins)*100)
+      cv.save()
+      cv = IndicatorCache(\
+        area_type=geom_str, area_id = geom.id,\
+        indicator_name='pct_condo',\
+        indicator_value = float(len(condo))/len(allpins)*100)
+      cv.save()
+      cv = IndicatorCache(\
+        area_type=geom_str, area_id = geom.id,\
+        indicator_name='pct_multifamily',\
+        indicator_value = float(len(multi))/len(allpins)*100)
+      cv.save()
+      cv = IndicatorCache(\
+        area_type=geom_str, area_id = geom.id,\
+        indicator_name='pct_commind',\
+        indicator_value = float(len(commind))/len(allpins)*100)
+      cv.save()
+

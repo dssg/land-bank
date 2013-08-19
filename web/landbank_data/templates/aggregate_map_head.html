@@ -1,28 +1,17 @@
-<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
-
-<script type="text/javascript"
-  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBroCTXbMjlkQTtTjuICn2sMKtM7IssVp0&sensor=false">
-</script>
-<script type="text/javascript"
-  src="/static/landbank_data/wax/dist/wax.g.min.js">
-</script>
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBroCTXbMjlkQTtTjuICn2sMKtM7IssVp0&sensor=false"></script>
+<script type="text/javascript" src="/static/landbank_data/wax/dist/wax.g.js"></script>
 <link href="/static/landbank_data/wax/theme/controls.css" rel="stylesheet" type="text/css" />
-<script src='http://api.tiles.mapbox.com/mapbox.js/v1.3.1/mapbox.js'></script>
-<link href='http://api.tiles.mapbox.com/mapbox.js/v1.3.1/mapbox.css' rel='stylesheet' />
-
-
 <script type="text/javascript">
 function initialize() {
-
   var mapOptions = {
     zoom: 14,
     center: new google.maps.LatLng({{mapcenter.lat}}, {{mapcenter.lon}}),
+    mapTypeControl: false,
     mapTypeId: google.maps.MapTypeId.ROADMAP
   };
   var bounds = new google.maps.LatLngBounds();
   var map = new google.maps.Map(document.getElementById("map-aggregate"),
       mapOptions);
-
   var polygonCoords = [
     {% with outline.0.0 as the_polygon %}
         {% for point in the_polygon %}
@@ -48,32 +37,19 @@ function initialize() {
   var transitLayer = new google.maps.TransitLayer();
   transitLayer.setMap(map); 
 
-  var url_1 = 'http://a.tiles.mapbox.com/v3/salice412.parcel.json';
-  var base = {
-          tilejson: '2.0.0',
-          tiles: [
-          "http://a.tiles.mapbox.com/v3/salice412.parcel/{z}/{x}/{y}.png",
-          "http://b.tiles.mapbox.com/v3/salice412.parcel/{z}/{x}/{y}.png",
-          "http://c.tiles.mapbox.com/v3/salice412.parcel/{z}/{x}/{y}.png",
-          "http://d.tiles.mapbox.com/v3/salice412.parcel/{z}/{x}/{y}.png"
-          ]};
-  var base_layer = new wax.g.connector(base);
-  map.overlayMapTypes.insertAt(0,base_layer);
+  // Composited raster layer of parcel outline and shaded foreclosure
+  var base_foreclosure_url = 'http://api.tiles.mapbox.com/v3/salice412.parcel,salice412.parcel_foreclosure.jsonp';
+  wax.tilejson(base_foreclosure_url,
+    function(tilejson) {
+      map.overlayMapTypes.insertAt(0, new wax.g.connector(tilejson));
+    });
 
-
-  var url_1 = 'http://a.tiles.mapbox.com/v3/salice412.parcel_foreclosure.json';
-  var foreclosure = {
-          tilejson: '2.0.0',
-          tiles: [
-          "http://a.tiles.mapbox.com/v3/salice412.parcel_foreclosure/{z}/{x}/{y}.png",
-          "http://b.tiles.mapbox.com/v3/salice412.parcel_foreclosure/{z}/{x}/{y}.png",
-          "http://c.tiles.mapbox.com/v3/salice412.parcel_foreclosure/{z}/{x}/{y}.png",
-          "http://d.tiles.mapbox.com/v3/salice412.parcel_foreclosure/{z}/{x}/{y}.png"
-          ]};
-  var foreclosure_layer = new wax.g.connector(foreclosure);
-  map.overlayMapTypes.insertAt(0,foreclosure_layer);
   map.fitBounds(bounds);
-
+  // Position map area label
+  google.maps.event.addListenerOnce(map, 'idle', function() {
+    $('#map-aggregate')[0].childNodes[0].appendChild($('.wax-tooltip')[0]);
+    $('.wax-tooltip').show()[0];
+  });
 }
 google.maps.event.addDomListener(window, 'load', initialize);
 

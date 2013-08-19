@@ -17,5 +17,7 @@ def cache_market_indicators():
 
 def cache_indicators():
   IndicatorCache.objects.all().delete()
-  cache_census_indicators()
-  cache_market_indicators() 
+  indicators.cache_census_indicators()
+  indicators.cache_market_indicators() 
+  indicators.cache_vacancy_indicators()
+  indicators.cache_landuse_indicators()

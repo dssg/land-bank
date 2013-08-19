@@ -1,0 +1,312 @@
+{% extends "landbank_data/base.html" %}
+{% block head %}
+<script src="/static/landbank_data/leaflet/leaflet.js"></script>
+<link rel="stylesheet" href="/static/landbank_data/leaflet/leaflet.css">
+<link href='http://api.tiles.mapbox.com/mapbox.js/v1.3.1/mapbox.css' rel='stylesheet' />
+<script src='http://api.tiles.mapbox.com/mapbox.js/v1.3.1/mapbox.js'></script>
+<style type="text/css">
+body {
+  background-color: #ddd;
+}
+div[class^="col"] {
+  padding: 0px
+}
+#tbl {
+  height: 100%;
+  overflow: auto;
+}
+#tbl-wrapper {
+  margin: 15px;
+  height: 90%;
+  display: none;
+}
+.dtr-highlight {
+  /* todo: make a better highlight style, after integrating bootstrap */
+  font-weight: bold;
+}
+#map {
+  height: 100%;
+}
+li i {
+  position: relative;
+  top: 6px;
+}
+</style>
+
+<script type="text/javascript">
+// Allan Jardis DataTables plug-in for reloading ajax
+$.fn.dataTableExt.oApi.fnReloadAjax = function ( oSettings, sNewSource, fnCallback, bStandingRedraw )
+{
+    if ( sNewSource !== undefined && sNewSource !== null ) {
+        oSettings.sAjaxSource = sNewSource;
+    }
+ 
+    // Server-side processing should just call fnDraw
+    if ( oSettings.oFeatures.bServerSide ) {
+        this.fnDraw();
+        return;
+    }
+ 
+    this.oApi._fnProcessingDisplay( oSettings, true );
+    var that = this;
+    var iStart = oSettings._iDisplayStart;
+    var aData = [];
+ 
+    this.oApi._fnServerParams( oSettings, aData );
+ 
+    oSettings.fnServerData.call( oSettings.oInstance, oSettings.sAjaxSource, aData, function(json) {
+        /* Clear the old information from the table */
+        that.oApi._fnClearTable( oSettings );
+ 
+        /* Got the data - add it to the table */
+        var aData =  (oSettings.sAjaxDataProp !== "") ?
+            that.oApi._fnGetObjectDataFn( oSettings.sAjaxDataProp )( json ) : json;
+ 
+        for ( var i=0 ; i<aData.length ; i++ )
+        {
+            that.oApi._fnAddData( oSettings, aData[i] );
+        }
+         
+        oSettings.aiDisplay = oSettings.aiDisplayMaster.slice();
+ 
+        that.fnDraw();
+ 
+        if ( bStandingRedraw === true )
+        {
+            oSettings._iDisplayStart = iStart;
+            that.oApi._fnCalculateEnd( oSettings );
+            that.fnDraw( false );
+        }
+ 
+        that.oApi._fnProcessingDisplay( oSettings, false );
+ 
+        /* Callback user function - for event handlers etc */
+        if ( typeof fnCallback == 'function' && fnCallback !== null )
+        {
+            fnCallback( oSettings );
+        }
+    }, oSettings );
+};
+</script>
+<script type="text/javascript">
+var map, oTable,  currentGeography = '', defaultGeography = 'communityarea'
+    ,tileLayers = {}
+    ,featureLayers = {}
+    ,defaultLat = 41.85
+    ,defaultLng = -87.65
+    ,defaultZoom = 11;
+
+function style(feature) {
+    return {
+        fillColor: 'white',
+        weight: 0,
+        opacity: 0,
+        color: 'white',
+        fillOpacity: 0
+    };
+}
+function highlightFeatureFromEvent(e) {
+    var layer = e.target;
+    highlightFeature(layer);
+    highlightRow(layer.feature.data.id);
+}
+function highlightFeature(layer) {
+    layer.setStyle({
+        weight: 4,
+        color: '#222',
+        opacity: 0.8,
+        fillOpacity: 0.25
+    });
+    if (!L.Browser.ie && !L.Browser.opera) {
+        layer.bringToFront();
+    }
+}
+function highlightRow(idString) {
+  $('#'+idString).addClass('dtr-highlight');
+
+}
+function unhighlightRow(idString) {
+  $('#'+idString).removeClass('dtr-highlight');
+}
+function getLayerFromIdString(idString) {
+  var featureLayerKeys = Object.keys(featureLayers[currentGeography]._layers);
+  for (var i=0; i< featureLayerKeys.length; i++) {
+    var theLayer = featureLayers[currentGeography]._layers[featureLayerKeys[i]];
+    if (theLayer.feature.data.id === idString) {
+      return theLayer;
+    }
+  }
+}
+function onMouseOverRow(idString) {
+  highlightRow(idString);
+  highlightFeature(getLayerFromIdString(idString));
+}
+function onMouseOutRow(idString) {
+  unhighlightRow(idString);
+  resetHighlight(getLayerFromIdString(idString));
+}
+function onMouseClickRow(idString) {
+  map.fitBounds(getLayerFromIdString(idString).getBounds());
+}
+function resetHighlightFromEvent(e) {
+  var layer = e.target;
+  resetHighlight(layer);
+  unhighlightRow(layer.feature.data.id);
+}
+function resetHighlight(layer) {
+  featureLayers[currentGeography].resetStyle(layer);
+}
+function zoomToFeature(e) {
+  map.fitBounds(e.target.getBounds());
+}
+function onEachFeature(feature, layer) {
+  layer.on({
+    mouseover: highlightFeatureFromEvent,
+    mouseout: resetHighlightFromEvent,
+    click: zoomToFeature
+  });
+}
+function resetView() {
+  map.setView([defaultLat, defaultLng], defaultZoom);
+}
+function switchGeography(newGeography){
+  if (newGeography != currentGeography) {
+    if (currentGeography != '') {
+      // Remove old map layers
+      map.removeLayer(tileLayers[currentGeography]);
+      map.removeLayer(featureLayers[currentGeography]);
+      // Update navigation UI
+      $('li.active').removeClass('active');
+    }
+    map.addLayer(tileLayers[newGeography]);
+    map.addLayer(featureLayers[newGeography]);
+    // Create new DataTable
+    createDataTable(newGeography);
+    $('#'+newGeography+'_switcher').addClass('active');
+  }
+  currentGeography = newGeography;
+}
+var dataTableColumns = {
+  'communityarea':[
+    {'sTitle':'#'}
+    ,{'sTitle':'Area Name'}
+  ]
+  ,'ward':[
+    {'sTitle':'#'}
+    ,{'sTitle':'Alderman'}
+  ]
+  ,'municipality':[
+    {'sTitle':'Municipality'}
+  ]
+  ,'censustract':[
+    {'sTitle':'FIPS Code'}
+  ]
+  ,'all':[
+    {'sTitle':'Foreclosure Rate'}
+    ,{'sTitle':'Vacancy Rate'}
+    ,{'sTitle':'Median Income'}
+  ]
+};
+
+function injectInitTableDOMElements(selectedNode) {
+    console.log('injecting table DOM...');
+    selectedNode.append("<table id='tbl'><thead><tr></tr></thead><tbody></tbody></table>");
+}
+
+function createDataTable(theGeography) {
+    //$('#tbl-wrapper').hide();
+    // Blow away old table rather than try to futz with changing # of columns
+    topDiv = $('#tbl-wrapper');
+    console.log('oTable vvv');
+    console.log(oTable);
+    if(oTable != null) {
+      console.log('found dupe table; destroying');
+      oTable.fnDestroy();
+    }
+    topDiv.empty();
+    injectInitTableDOMElements(topDiv);
+
+    // Create 
+    var oTable = $('#tbl').dataTable( {
+      'bProcessing':true
+      ,'sDom':'rt<"clear">'
+      ,'bDestroy':true
+      ,'bPaginate':false
+      ,'sScrollY':'100%'
+      ,'aoColumns': dataTableColumns[theGeography].concat(dataTableColumns['all'])
+      ,'fnRowCallback': function( nRow, aData, iDisplayIndex ) {
+        $(nRow).attr("id",theGeography+"_"+aData[0]);
+      }
+      ,'sAjaxSource':'/static/landbank_data/json/' + theGeography + '_table.json'
+    });
+
+    $('#tbl tbody').on(
+      'click', 'tr', function() {
+        onMouseClickRow($(this).attr('id'));
+      })
+    .on(
+      'mouseenter', 'tr', function() {
+        onMouseOverRow($(this).attr('id'));
+      })
+    .on(
+      'mouseleave', 'tr', function() {
+        onMouseOutRow($(this).attr('id'));
+      });
+    oTable.fnDraw();
+    $('#tbl-wrapper').show();
+    console.log(oTable);
+}
+
+$(document).ready(function() {
+    switchGeography(defaultGeography);
+});
+
+</script>
+{% endblock %}
+
+{% block topnav %}
+<ul class="nav navbar-nav pull-right">
+    <li id='communityarea_switcher'><a href="#" onClick="switchGeography('communityarea')">Community Area</a></li>
+    <li id='ward_switcher'><a href="#" onClick="switchGeography('ward')">Ward</a></li>
+    <!--<li id='censustract_switcher'><a href="#" onClick="switchGeography('censustract')">Census Tract</a></li>-->
+    <li id='municipality_switcher'><a href="#" onClick="switchGeography('municipality')">Municipality</a></li>
+    <li><a href="#" onClick="resetView();"><i class="icon-resize-full icon-large"></i></a></li>
+</ul>
+{% endblock %}
+
+{% block content %}
+<div class="col-5">
+<div id="tbl-wrapper">
+ </div>
+</div>
+<div class="col-7">
+  <div id="map"></div>
+</div>
+<script src="/static/landbank_data/json/communityarea_geojson.js"></script>
+<script src="/static/landbank_data/json/ward_geojson.js"></script>
+<!-- <script src="/static/landbank_data/json/censustract_geojson.js"></script> -->
+<script src="/static/landbank_data/json/municipality_geojson.js"></script>
+<script type="text/javascript">
+map = L.map('map').setView([defaultLat, defaultLng], defaultZoom);
+map.zoomControl.setPosition('topright');
+
+tilelayer_urls = {'communityarea':'http://a.tiles.mapbox.com/v3/swhorton.communityarea_color/{z}/{x}/{y}.png'
+                 ,'ward':'http://a.tiles.mapbox.com/v3/swhorton.ward/{z}/{x}/{y}.png'
+                 ,'censustract':'http://a.tiles.mapbox.com/v3/swhorton.censustract/{z}/{x}/{y}.png'
+                 ,'municipality':'http://a.tiles.mapbox.com/v3/swhorton.municipality/{z}/{x}/{y}.png'};
+
+// define four pairs of tile/feature (geojson) layers
+var geographies = ['communityarea','ward','censustract','municipality'];
+for (var i=0; i<geographies.length; i++) {
+    tileLayers[geographies[i]] = L.tileLayer(tilelayer_urls[geographies[i]], {
+      minZoom: 10,
+      maxZoom: 14,
+    });
+    var geojson_varname = geographies[i]+'_geojson';
+    featureLayers[geographies[i]] = L.geoJson(window[geojson_varname], {
+      style: style,
+      onEachFeature: onEachFeature
+    });
+}
+</script>
+{% endblock %}

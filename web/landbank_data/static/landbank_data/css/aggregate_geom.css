@@ -24,6 +24,7 @@
   color: #999999;
   font-style:italic;
 }
+
 .time-button {
 float:right;
 font-family:sans-serif;
@@ -31,3 +32,8 @@ font-size:12px;
 font-style:italic;
 color:#000000;
 }
+.wax-tooltip {
+  text-align: right;
+  display: none;
+}
+
