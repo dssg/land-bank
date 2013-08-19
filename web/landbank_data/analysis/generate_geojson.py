@@ -66,7 +66,7 @@ for g in all_geographies:
         feature_id = g['name'] + '_' + str(getattr(a, g['specific_fields'][0]['column_name']))
         geometry = getattr(a,g['geom_field_name']).transform(4326, clone=True)
         geojson = json.loads(geometry.json)
-        data = {'id':feature_id}
+        data = {'id':feature_id,'color_id':a.color_id}
         #for sf in g['specific_fields']:
         #    data[sf['display_name']] = getattr(a, sf['column_name'])
         # todo: add map coloration ID based on binning...
@@ -77,3 +77,4 @@ for g in all_geographies:
     js_file = open(js_filename, 'w')
     file_string = 'var ' + g['name'] + '_geojson = ' + json.dumps(feature_collection) + ';'
     js_file.write(file_string)
+
