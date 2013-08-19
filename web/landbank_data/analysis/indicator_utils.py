@@ -3,6 +3,7 @@ from models import \
   CensusTractMapping, AreaPlotCache, CensusTractCharacteristics, \
   IndicatorCache, Foreclosure, Assessor, Transaction, CensusTractIncome
 import json
+import datetime
 import numpy as np
 
 def indicator_hist(area_type, indicator_name, indicator_val, notzero=True, nbins=10, hist_range=None):
@@ -29,7 +30,7 @@ def indicator_timestream(area_type, area_id, indicator_name, notzero=True):
     myinds = myinds.filter(indicator_value__gt=0)
   retval = []
   return [{'x': b, 'y': v} for b, v in \
-    zip([i.indicator_date for i in myinds],\
+    zip([datetime.datetime.strftime(i.indicator_date, '%Y-%m-%d') for i in myinds],\
         [i.indicator_value for i in myinds])]
 
 def percentile(values, thisvalue):
