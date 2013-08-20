@@ -1,8 +1,13 @@
-{% for prop in proplist %}
-  {% if prop.key == "BR" %}
-    <div class="col-12"><BR></div>
-  {% else %}
-    <div class="col-3"><dfn> {{ prop.key }} </dfn></div>
-    <div class="col-9"> {{ prop.val }} </div>
-  {% endif %}
-{% endfor %}
+<div class="well well-sm">
+  <table class="table">
+    {% for prop in proplist %}
+      {% if prop.key == "BR" %}
+  </table>
+  <table class="table">
+      {% else %}
+        <tr><th>{{ prop.key }}</th>
+        <td>{{ prop.val }}</td></tr>
+      {% endif %}
+    {% endfor %}
+  </table>
+</div>

@@ -265,11 +265,13 @@ $(document).ready(function() {
 {% endblock %}
 
 {% block topnav %}
-<ul class="nav navbar-nav pull-right">
+<ul class="nav navbar-nav pull-left">
     <li id='communityarea_switcher'><a href="#" onClick="switchGeography('communityarea')">Community Area</a></li>
     <li id='ward_switcher'><a href="#" onClick="switchGeography('ward')">Ward</a></li>
     <!--<li id='censustract_switcher'><a href="#" onClick="switchGeography('censustract')">Census Tract</a></li>-->
     <li id='municipality_switcher'><a href="#" onClick="switchGeography('municipality')">Municipality</a></li>
+</ul>
+<ul class="nav navbar-nav pull-right">
     <li><a href="#" onClick="resetView();"><i class="icon-resize-full icon-large"></i></a></li>
 </ul>
 {% endblock %}

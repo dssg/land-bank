@@ -7,33 +7,35 @@
   background-color: rgba(64,64,64,.1);
   border: 1px solid rgba(128,128,128,.7);
 }
-
-.page-header {
-  padding-left: 15px;
-}
-
 .row {
   margin-bottom: 0px;
 }
 
-[class*="col-lg-"] {
-  padding-top: 0px;
-  padding-bottom: 0px;
+[class*="col-"] {
+  padding: 0px;
 }
 .unavailable {
   color: #999999;
   font-style:italic;
 }
-
 .time-button {
-float:right;
-font-family:sans-serif;
-font-size:12px;
-font-style:italic;
-color:#000000;
+  float:right;
+  font-family:sans-serif;
+  font-size:12px;
+  font-style:italic;
+  color:#000000;
 }
-.wax-tooltip {
-  text-align: right;
-  display: none;
+#map-aggregate, #stats {
+  height: 100%;
+}
+#stats {
+  padding: 8px;
+  overflow: scroll;
+}
+.table {
+  font-size: 85%;
+}
+.table th {
+  width: 200px;
 }
 
