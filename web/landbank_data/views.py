@@ -20,14 +20,8 @@ re_num = re.compile('[0-9]+')
 
 @csrf_protect
 def home(request):
-    return render_to_response('landbank_data/home.html', {}, RequestContext(request))
+    return render_to_response('landbank_data/leaflet.html', {}, RequestContext(request))
 #    return render(request, 'landbank_data/home.html', {})
-
-def leaflet(request):
-    return render_to_response('landbank_data/leaflet.html')
-
-def base_map(request):
-    return render(request, 'landbank_data/base_map.html', {})
 
 def map(request, ca_number=1):
     #ca = CommunityArea.objects.filter(pk__lte=10)

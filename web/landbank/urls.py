@@ -32,18 +32,16 @@ urlpatterns = patterns('',
     # Uncomment the next line to enable the admin:
     # url(r'^admin/', include(admin.site.urls)),
     url(dajaxice_config.dajaxice_url, include('dajaxice.urls')),
+    url(r'^$', 'landbank_data.views.home', name='home'),
     url(r'^pin/', include('landbank_data.urls')),
     url(r'^commarea/(?P<search_commarea>[0-9]+)/$', 'landbank_data.views.commarea'),
     url(r'^ward/(?P<search_ward>[0-9]+)/$', 'landbank_data.views.ward'),
     url(r'^tract/(?P<search_tract>[0-9]+)/$', 'landbank_data.views.tract'),
     url(r'^municipality/(?P<search_muni>[a-z_A-Z]+)/$', 'landbank_data.views.municipality'),
-    url(r'^map/(?P<ca_number>[0-9]+)/$', 'landbank_data.views.map'),     
-    url(r'^base_map/', 'landbank_data.views.base_map'),
-    url(r'api/', include(v1_api.urls)),
-    url(r'^$', 'landbank_data.views.home', name='home'),
+    url(r'^(?P<search_pin>\d{14})/$', 'landbank_data.views.pin', name='pin'),
     url(r'search/', 'landbank_data.views.search', name='search'),
     url(r'dajax_test/', 'landbank_data.views.dajax_test', name='dajax_test'),
-    url(r'leaflet/', 'landbank_data.views.leaflet', name='leaflet'),
+    url(r'api/', include(v1_api.urls)),
 )
 
 urlpatterns += staticfiles_urlpatterns()
