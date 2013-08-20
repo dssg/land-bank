@@ -28,10 +28,13 @@ def indicator_timestream(area_type, area_id, indicator_name, notzero=True):
            filter(indicator_name__exact=indicator_name)
   if notzero:
     myinds = myinds.filter(indicator_value__gt=0)
-  retval = []
-  return [{'x': b, 'y': v} for b, v in \
+  retval =  [{'x': b, 'y': v} for b, v in \
     zip([datetime.datetime.strftime(i.indicator_date, '%Y-%m-%d') for i in myinds],\
         [i.indicator_value for i in myinds])]
+  for i in range(len(retval)):
+    if retval[i]['y'] > 1000:
+      retval[i]['y'] = 0.001 * retval[i]['y']
+  return retval
 
 def percentile(values, thisvalue):
   return int(sum(np.array(values) <= thisvalue)/float(len(values))*100)
