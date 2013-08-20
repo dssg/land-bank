@@ -102,8 +102,8 @@ var parcelDataFields =
        ,"display":"Description"
       },{
         "id":"cmap_url"
+       ,"link":true
        ,"display":"Website"
-      },{
       }]
   }
 ]

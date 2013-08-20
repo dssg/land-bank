@@ -15,7 +15,6 @@ var map
 
 // Callback for map-click listener
 function onGotParcelData(parcel) {
-  console.log(parcel);
   updateParcelView(parcel);
   if (pageContext=='area') {
     pageContext = 'parcel';
@@ -59,13 +58,12 @@ function updateNav() {
 
 // Load new parcel data into the detail pane
 function updateParcelView(parcel) {
+  if (parcel['status']=='error') { return; }
   newPin = parcel['parcel_info']['pin']
-  if (newPin == currentPin) { console.log('skipping updateParcelView'); return; }
   currentPin = newPin;
 
   // Update navbar text and parcel detail pane heading
   var pInfo = parcel['parcel_info'];
-console.log(pInfo);
   var title = pInfo['address'];
   if (title == null || title == '') {
     title = 'PIN:' + pInfo['pin'];
@@ -76,20 +74,21 @@ console.log(pInfo);
   // Update table of data in parcel detail pane
   for (var i=0; i<parcelDataFields.length; i++) {
     var thisSection = parcelDataFields[i];
-    console.log(thisSection.id);
-    console.log(thisSection.fields);
     for (var j=0; j<thisSection.fields.length; j++) {
       // Hide this section until we've seen a defined value for it
       $('table#'+thisSection.id).parent().hide();
       var thisField = thisSection.fields[j];
       var thisFieldVal = pInfo[thisField.id];
-      console.log('val ' + thisFieldVal);
+      $('td#'+thisField.id+'-td').empty();
       if (thisFieldVal == null || thisFieldVal ==='') {
         // No value? hide this row
-        $('td#'+thisField.id+'-td').text('');
         $('tr#'+thisField.id).hide();
       } else {
-        $('td#'+thisField.id+'-td').text(thisFieldVal);
+        if (thisField['link']==true) {
+          $('td#'+thisField.id+'-td').append('<a href="' + thisFieldVal + '" target="_blank">' + thisFieldVal + '</a>');
+        } else {
+          $('td#'+thisField.id+'-td').text(thisFieldVal);
+        }
         $('tr#'+thisField.id).show();
         // We have at least one thing shown, so show the parent well
         $('table#'+thisSection.id).parent().show();
@@ -104,7 +103,6 @@ function refreshArea() {
   updateDetailPane();
   map.setCenter(currentAreaBounds.getCenter());
   map.fitBounds(currentAreaBounds);
-  console.log('zoom out to area');
 }
 
 function refreshParcel() {
@@ -112,15 +110,20 @@ function refreshParcel() {
   updateDetailPane();
   updateNav();
   map.setCenter();
-  console.log('zoom to parcel');
 }
 
 function initialize() {
   var mapOptions = {
     zoom: 14,
     center: new google.maps.LatLng({{mapcenter.lat}}, {{mapcenter.lon}}),
-    mapTypeControl: false,
-    mapTypeId: google.maps.MapTypeId.ROADMAP
+    mapTypeControl: true,
+    mapTypeId: google.maps.MapTypeId.ROADMAP,
+    zoomControlOptions: {
+      position: google.maps.ControlPosition.TOP_RIGHT
+    },
+    panControlOptions: {
+      position: google.maps.ControlPosition.TOP_RIGHT
+    }
   };
   var bounds = new google.maps.LatLngBounds();
   map = new google.maps.Map(document.getElementById("map-aggregate"),
@@ -175,8 +178,6 @@ function initialize() {
 // ************* Inject base HTML table for parcel details *********** //
 for (var i=0; i<parcelDataFields.length; i++) {
   var thisSection = parcelDataFields[i];
-  console.log(thisSection.id);
-  console.log(thisSection.fields);
   var $parcelDiv = $('#parcel');
   var $well = $('<div class="well well-sm">');
   $parcelDiv.append($well);
