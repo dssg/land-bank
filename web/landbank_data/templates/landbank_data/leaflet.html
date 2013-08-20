@@ -146,7 +146,13 @@ function onMouseOutRow(idString) {
   resetHighlight(getLayerFromIdString(idString));
 }
 function onMouseClickRow(idString) {
-  map.fitBounds(getLayerFromIdString(idString).getBounds());
+  //map.fitBounds(getLayerFromIdString(idString).getBounds());
+  var url = "/" + idString.replace("_","/").replace(" ","_").toLowerCase();
+  window.location.assign(url);
+}
+function areaRedirect(e) {
+  var url = "/" + e.target.feature.data.id.replace("_","/").replace(" ","_").toLowerCase();
+  window.location.assign(url);
 }
 function resetHighlightFromEvent(e) {
   var layer = e.target;
@@ -163,7 +169,7 @@ function onEachFeature(feature, layer) {
   layer.on({
     mouseover: highlightFeatureFromEvent,
     mouseout: resetHighlightFromEvent,
-    click: zoomToFeature
+    click: areaRedirect
   });
 }
 function resetView() {
@@ -265,11 +271,13 @@ $(document).ready(function() {
 {% endblock %}
 
 {% block topnav %}
-<ul class="nav navbar-nav pull-right">
+<ul class="nav navbar-nav pull-left">
     <li id='communityarea_switcher'><a href="#" onClick="switchGeography('communityarea')">Community Area</a></li>
     <li id='ward_switcher'><a href="#" onClick="switchGeography('ward')">Ward</a></li>
     <!--<li id='censustract_switcher'><a href="#" onClick="switchGeography('censustract')">Census Tract</a></li>-->
     <li id='municipality_switcher'><a href="#" onClick="switchGeography('municipality')">Municipality</a></li>
+</ul>
+<ul class="nav navbar-nav pull-right">
     <li><a href="#" onClick="resetView();"><i class="icon-resize-full icon-large"></i></a></li>
 </ul>
 {% endblock %}

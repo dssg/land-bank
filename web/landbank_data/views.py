@@ -20,14 +20,8 @@ re_num = re.compile('[0-9]+')
 
 @csrf_protect
 def home(request):
-    return render_to_response('landbank_data/home.html', {}, RequestContext(request))
+    return render_to_response('landbank_data/leaflet.html', {}, RequestContext(request))
 #    return render(request, 'landbank_data/home.html', {})
-
-def leaflet(request):
-    return render_to_response('landbank_data/leaflet.html')
-
-def base_map(request):
-    return render(request, 'landbank_data/base_map.html', {})
 
 def map(request, ca_number=1):
     #ca = CommunityArea.objects.filter(pk__lte=10)
@@ -54,7 +48,7 @@ def search(request):
 	    match = re.search(re_num, search_term)
 	    if match is not None:
 	        area_number = match.group(0)
-                url = '/commarea/' + area_number 
+                url = '/communityarea/' + area_number 
 		# TODO: check if area_number is 1-77, if not, give 404
 	        return redirect(url)
 	if re.match(re_ward, search_term):
@@ -113,9 +107,9 @@ def pin(request, search_pin=None):
         ,'histData': histData\
 	})
 
-def commarea(request, search_commarea=None):
-  commarea = get_object_or_404(CommunityArea,area_number=search_commarea)
-  return aggregate(request, commarea, commarea.area_name.title(), 'Community Area')
+def communityarea(request, search_communityarea=None):
+  communityarea = get_object_or_404(CommunityArea,area_number=search_communityarea)
+  return aggregate(request, communityarea, communityarea.area_name.title(), 'Community Area')
 
 def ward(request, search_ward=None):
   ward = get_object_or_404(Ward,ward=search_ward)
