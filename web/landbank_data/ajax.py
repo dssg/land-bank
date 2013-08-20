@@ -22,6 +22,7 @@ def get_property_from_latlng(request, lat, lng):
     try: data = serializers.serialize('json', Assessor.objects.filter(pin__exact=fetched_pin)) 
     except: data = None
     dajax = Dajax()
-    #dajax.add_data(data, 'pin_callback')
-    dajax.redirect('/pin/'+fetched_pin, delay=0)
+    dajax.add_data(data, 'onGotPropertyData')
+    #dajax.add_data(fetched_pin, 'onGotPropertyData')
+    #dajax.redirect('/pin/'+fetched_pin, delay=0)
     return dajax.json()

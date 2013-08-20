@@ -180,6 +180,7 @@ def fetch_indicators_and_hists(search_geom, search_geom_name, geom_type, city_fl
 
   return retval
 
+@csrf_protect
 def aggregate(request, search_geom, search_geom_name, geom_type):
   city_flag=True
   if geom_type=='Municipality' and search_geom_name!='Chicago': city_flag=False

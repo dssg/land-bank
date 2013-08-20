@@ -1,3 +1,4 @@
+{% load dajaxice_templatetags %}
 <html lang="en">
 <head>
     <title>{% block title %}Cook County Land Bank - Analytics Tool{% endblock %}</title>
@@ -13,21 +14,12 @@
     <link href="/static/landbank_data/css/jquery.dataTables.css" rel="stylesheet">
     <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
     {% block head %}{% endblock %}
-
 </head>
 <body>
-<!--
-<div class="container">
--->
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <a href="/" class="navbar-brand">CCLBA</a>
-        {% block topnav %}
-        {% endblock %}
-    </div>
-<!--
-</div>
--->
-{% block content %}
-{% endblock %}
+  <div class="navbar navbar-inverse navbar-fixed-top">
+    <a href="/" class="navbar-brand">CCLBA</a>
+      {% block topnav %}{% endblock %}
+  </div>
+{% block content %}{% endblock %}
 </body>
 </html>

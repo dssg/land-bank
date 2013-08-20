@@ -1,7 +1,13 @@
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBroCTXbMjlkQTtTjuICn2sMKtM7IssVp0&sensor=false"></script>
 <script type="text/javascript" src="/static/landbank_data/wax/dist/wax.g.js"></script>
 <link href="/static/landbank_data/wax/theme/controls.css" rel="stylesheet" type="text/css" />
+<script src="/static/landbank_data/js/dajaxice.core.js"></script>
+<script src="/static/landbank_data/js/jquery.dajax.core.js"></script>
 <script type="text/javascript">
+function onGotPropertyData(property) {
+  console.log('onGotPropertyData');
+  console.log(property);
+}
 function initialize() {
   var mapOptions = {
     zoom: 14,
@@ -12,6 +18,7 @@ function initialize() {
   var bounds = new google.maps.LatLngBounds();
   var map = new google.maps.Map(document.getElementById("map-aggregate"),
       mapOptions);
+  // todo: get ALL polygons for areas and add them to map...
   var polygonCoords = [
     {% with outline.0.0 as the_polygon %}
         {% for point in the_polygon %}
@@ -20,6 +27,7 @@ function initialize() {
       {% endwith %}
     ];
     var the_polygon = new google.maps.Polygon({
+      clickable: false,
       paths: polygonCoords,
       strokeColor: "#222",
       strokeOpacity: 0.8,
@@ -43,16 +51,16 @@ function initialize() {
     function(tilejson) {
       map.overlayMapTypes.insertAt(0, new wax.g.connector(tilejson));
     });
-
   map.fitBounds(bounds);
-  // Position map area label
-  /*
-  google.maps.event.addListenerOnce(map, 'idle', function() {
-    $('#map-aggregate')[0].childNodes[0].appendChild($('.wax-tooltip')[0]);
-    $('.wax-tooltip').show()[0];
+  google.maps.event.addDomListener(map, 'click', function(e) {
+    console.log(e);
+    console.log(e.latLng.lat());
+    console.log(e.latLng.lng());
+    Dajaxice.landbank_data.get_property_from_latlng(Dajax.process,
+      {'lat':e.latLng.lat()
+      ,'lng':e.latLng.lng()
+    });
   });
-  */
 }
 google.maps.event.addDomListener(window, 'load', initialize);
-
 </script>
