@@ -3,6 +3,7 @@
 <link href="/static/landbank_data/wax/theme/controls.css" rel="stylesheet" type="text/css" />
 <script src="/static/landbank_data/js/dajaxice.core.js"></script>
 <script src="/static/landbank_data/js/jquery.dajax.core.js"></script>
+<script src="/static/landbank_data/js/parcel_data_fields.js"></script>
 <script type="text/javascript">
 var map
   ,pageContext = 'area'
@@ -11,6 +12,8 @@ var map
   ,currentParcelLatLng
   ,currentAreaBounds
   ,currentMarker;
+
+// Callback for map-click listener
 function onGotParcelData(parcel) {
   console.log(parcel);
   updateParcelView(parcel);
@@ -29,6 +32,8 @@ function onGotParcelData(parcel) {
   currentMarker.setMap(map);
 }
 
+// Switch the left hand navigation between parcel/area views
+// as necessary
 function updateDetailPane() {
   if (pageContext == 'parcel') {
     $('#area').hide();
@@ -39,6 +44,7 @@ function updateDetailPane() {
   }
 }
 
+// Change the navbar links depending on current context
 function updateNav() {
   if (pageContext == 'parcel') {
     $('#parcel-title').show();
@@ -51,14 +57,46 @@ function updateNav() {
   }
 }
 
+// Load new parcel data into the detail pane
 function updateParcelView(parcel) {
-  var title = parcel['parcel_info']['address'];
+  newPin = parcel['parcel_info']['pin']
+  if (newPin == currentPin) { console.log('skipping updateParcelView'); return; }
+  currentPin = newPin;
+
+  // Update navbar text and parcel detail pane heading
+  var pInfo = parcel['parcel_info'];
+console.log(pInfo);
+  var title = pInfo['address'];
   if (title == null || title == '') {
-    title = 'PIN:' + parcel['parcel_info']['pin'];
+    title = 'PIN:' + pInfo['pin'];
   }
-  $('#parcel-h3').text(title);
+  //$('#parcel-h3').text(title);
   $('#parcel-title a').text(title);
-}
+
+  // Update table of data in parcel detail pane
+  for (var i=0; i<parcelDataFields.length; i++) {
+    var thisSection = parcelDataFields[i];
+    console.log(thisSection.id);
+    console.log(thisSection.fields);
+    for (var j=0; j<thisSection.fields.length; j++) {
+      // Hide this section until we've seen a defined value for it
+      $('table#'+thisSection.id).parent().hide();
+      var thisField = thisSection.fields[j];
+      var thisFieldVal = pInfo[thisField.id];
+      console.log('val ' + thisFieldVal);
+      if (thisFieldVal == null || thisFieldVal ==='') {
+        // No value? hide this row
+        $('td#'+thisField.id+'-td').text('');
+        $('tr#'+thisField.id).hide();
+      } else {
+        $('td#'+thisField.id+'-td').text(thisFieldVal);
+        $('tr#'+thisField.id).show();
+        // We have at least one thing shown, so show the parent well
+        $('table#'+thisSection.id).parent().show();
+      }
+    }
+  }
+} 
 
 function refreshArea() {
   pageContext = 'area';
@@ -122,12 +160,42 @@ function initialize() {
       map.overlayMapTypes.insertAt(0, new wax.g.connector(tilejson));
     });
   map.fitBounds(bounds);
+
+  // Create a listener for map clicks; sends an AJAX call to Django
+  // server to request information about a parcel given the clicked
+  // latitude/longitude
+  // Triggers callback function "onGotParcelData"
   google.maps.event.addDomListener(map, 'click', function(e) {
     Dajaxice.landbank_data.get_property_from_latlng(Dajax.process,
       {'lat':e.latLng.lat()
       ,'lng':e.latLng.lng()
     });
   });
+
+// ************* Inject base HTML table for parcel details *********** //
+for (var i=0; i<parcelDataFields.length; i++) {
+  var thisSection = parcelDataFields[i];
+  console.log(thisSection.id);
+  console.log(thisSection.fields);
+  var $parcelDiv = $('#parcel');
+  var $well = $('<div class="well well-sm">');
+  $parcelDiv.append($well);
+  var $heading = $('<h3 id="parcel-h3">' + thisSection.heading + '</h3>');
+  $well.append($heading);
+  var $table = $('<table class="table" id="' + thisSection.id + '">');
+  $well.append($table);
+  var $tbody = $('<tbody>');
+  $table.append($tbody);
+  for (var j=0; j<thisSection.fields.length; j++) {
+    var thisField = thisSection.fields[j];
+    var $row = $('<tr id="' + thisField.id + '">');
+    $tbody.append($row);
+    var $header = $('<th id="' + thisField.id + '-th">' + thisField.display + '</th>');
+    $row.append($header);
+    var $value = $('<td id="' + thisField.id + '-td">');
+    $row.append($value);
+  }
+} 
 }
 google.maps.event.addDomListener(window, 'load', initialize);
 </script>
