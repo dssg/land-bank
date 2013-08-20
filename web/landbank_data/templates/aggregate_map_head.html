@@ -19,9 +19,14 @@ function onGotParcelData(parcel) {
     updateDetailPane();
     updateNav();
   }
-  currentParcelLatLng = [parcel['assessor']['lat_y'],parcel['assessor']['long_x']];
-  map.setCenter(new google.maps.LatLng(currentParcelLatLng[0],currentParcelLatLng[1]));
-  map.setZoom(17);
+  currentParcelLatLng = new google.maps.LatLng(parcel['assessor']['lat_y'],parcel['assessor']['long_x']);
+  map.setCenter(currentParcelLatLng);
+  if (map.getZoom() <17) { map.setZoom(17); }
+  if (currentMarker) { currentMarker.setMap(null); }
+    currentMarker = new google.maps.Marker({
+      position: currentParcelLatLng
+  });
+  currentMarker.setMap(map);
 }
 
 function updateDetailPane() {
