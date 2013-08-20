@@ -1,7 +1,7 @@
 {% for histogram_block in histData %}
   {% for histType, hists in histogram_block.items %}
   <div class="panel histogram">
-    <div class="panel-title">{{ histType.0|title }} <small> {{ histType.1 }} </small></div>
+    <div class="panel-title"><div class="panel-heading">{{ histType.0|title }}</div></div>
     <!-- <div><input type="button" class="btn btn-primary" onclick="toggleChart()" value="Trends" /></div> -->
     <div class="panel-body">
       {% for hist in hists %}
@@ -15,7 +15,7 @@
 {% for timestream_block in timestreamData %}
   {% for timestreamType, times in timestream_block.items %}
     <div class="panel timestream">
-      <div class="panel-title">{{ timestreamType.0 }} <small> {{ timestreamType.1 }}</small></div>
+      <div class="panel-title"><div class="panel-heading">{{ timestreamType.0 }}</div></div>
       <!-- <div><input type="button" class="btn btn-primary" onclick="toggleChart()" value="Histograms" /></div> -->
       {% for time in times %}
         <div id="d3divt1{{ forloop.parentloop.parentloop.counter }}_{{ forloop.counter }}" class="center"></div>
@@ -27,7 +27,7 @@
 
 <script type="text/javascript">
   // Timestreams start hidden
-  $('.timestream').toggle();
+  //$('.timestream').toggle();
   
   function toggleChart() {
     $('.histogram').toggle();
@@ -44,7 +44,7 @@
            d3hist("#d3div{{ forloop.parentloop.parentloop.counter }}_{{ forloop.counter }}", chart_data, "{{ hist.title}}", "{{ hist.label }}");
          {% endif %}
            $('#d3div{{ forloop.parentloop.parentloop.counter }}_{{ forloop.counter }}').popover(
-             {content:"{{ hist.tooltip }}", trigger:"hover", placement:"top"});
+             {content:"{{ hist.tooltip|safe }}", trigger:"hover", placement:"top"});
       {% endfor %}
     {% endfor %}
   {% endfor %}
@@ -59,7 +59,7 @@
             d3timeline("#d3divt1{{ forloop.parentloop.parentloop.counter }}_{{ forloop.counter }}", chart_data, "{{ time.title}}");
           {% endif %}
         $('#d3div1{{ forloop.parentloop.parentloop.counter }}_{{ forloop.counter }}').popover(
-          {content:"{{ time.tooltip }}", trigger:"hover", placement:"top"});
+          {content:"{{ time.tooltip|safe }}", trigger:"hover", placement:"top"});
       {% endfor %}
     {% endfor %}
   {% endfor %}
