@@ -4,6 +4,7 @@ from dajaxice.decorators import dajaxice_register
 from django.db import connection
 from models import Assessor
 from django.core import serializers
+from landbank_data.util import sqltodict
 
 @dajaxice_register
 def randomize(request):
@@ -16,13 +17,21 @@ def randomize(request):
 def get_property_from_latlng(request, lat, lng):
     lat = str(lat)
     lng = str(lng)
+    data = {}
     cursor = connection.cursor()
     cursor.execute("SELECT * FROM latlng_to_pin14(" + lat + ", " + lng + ");")
     fetched_pin = cursor.fetchone()[0]
-    try: data = serializers.serialize('json', Assessor.objects.filter(pin__exact=fetched_pin)) 
-    except: data = None
+    try:
+        assessor = Assessor.objects.get(pin__exact=fetched_pin).__dict__
+        assessor.pop('_state',None)
+        assessor.pop('loc',None)
+        data['assessor'] = assessor
+        q = "SELECT * FROM parcel_with_data WHERE pin='" + fetched_pin + "';"
+        result = sqltodict(q,None)[0]
+        result.pop('wkb_geometry', None)
+        data['parcel_info'] = result
+    except:
+        data['status'] = 'error' 
     dajax = Dajax()
     dajax.add_data(data, 'onGotPropertyData')
-    #dajax.add_data(fetched_pin, 'onGotPropertyData')
-    #dajax.redirect('/pin/'+fetched_pin, delay=0)
     return dajax.json()

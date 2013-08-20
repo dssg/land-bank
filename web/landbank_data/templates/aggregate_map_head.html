@@ -53,9 +53,6 @@ function initialize() {
     });
   map.fitBounds(bounds);
   google.maps.event.addDomListener(map, 'click', function(e) {
-    console.log(e);
-    console.log(e.latLng.lat());
-    console.log(e.latLng.lng());
     Dajaxice.landbank_data.get_property_from_latlng(Dajax.process,
       {'lat':e.latLng.lat()
       ,'lng':e.latLng.lng()

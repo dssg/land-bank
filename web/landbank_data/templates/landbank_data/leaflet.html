@@ -146,12 +146,13 @@ function onMouseOutRow(idString) {
   resetHighlight(getLayerFromIdString(idString));
 }
 function onMouseClickRow(idString) {
-  //map.fitBounds(getLayerFromIdString(idString).getBounds());
-  var url = "/" + idString.replace("_","/").replace(" ","_").toLowerCase();
-  window.location.assign(url);
+  areaRedirect(idString);
 }
-function areaRedirect(e) {
-  var url = "/" + e.target.feature.data.id.replace("_","/").replace(" ","_").toLowerCase();
+function onFeatureClicked(e) {
+  areaRedirect(e.target.feature.data.id);
+}
+function areaRedirect(areaString) {
+  var url = "/" + areaString.replace("_","/").replace(" ","_").toLowerCase();
   window.location.assign(url);
 }
 function resetHighlightFromEvent(e) {
@@ -169,7 +170,7 @@ function onEachFeature(feature, layer) {
   layer.on({
     mouseover: highlightFeatureFromEvent,
     mouseout: resetHighlightFromEvent,
-    click: areaRedirect
+    click: onFeatureClicked
   });
 }
 function resetView() {
@@ -299,9 +300,9 @@ map = L.map('map').setView([defaultLat, defaultLng], defaultZoom);
 map.zoomControl.setPosition('topright');
 
 tilelayer_urls = {'communityarea':'http://a.tiles.mapbox.com/v3/swhorton.communityarea_color/{z}/{x}/{y}.png'
-                 ,'ward':'http://a.tiles.mapbox.com/v3/swhorton.ward/{z}/{x}/{y}.png'
+                 ,'ward':'http://a.tiles.mapbox.com/v3/swhorton.ward_color/{z}/{x}/{y}.png'
                  ,'censustract':'http://a.tiles.mapbox.com/v3/swhorton.censustract/{z}/{x}/{y}.png'
-                 ,'municipality':'http://a.tiles.mapbox.com/v3/swhorton.municipality/{z}/{x}/{y}.png'};
+                 ,'municipality':'http://a.tiles.mapbox.com/v3/swhorton.municipality_color/{z}/{x}/{y}.png'};
 
 // define four pairs of tile/feature (geojson) layers
 var geographies = ['communityarea','ward','censustract','municipality'];
