@@ -25,12 +25,20 @@
   font-style:italic;
   color:#000000;
 }
-#map-aggregate, #stats {
+#parcel-title {
+  display: none;
+  width: 200px;
+}
+#map-aggregate, #area {
   height: 100%;
 }
-#stats {
+#area, #parcel{
+  height: 100%;
   padding: 8px;
-  overflow: scroll;
+  overflow: auto;
+}
+#parcel {
+  display: none;
 }
 .table {
   font-size: 85%;

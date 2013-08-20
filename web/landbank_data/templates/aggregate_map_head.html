@@ -4,10 +4,74 @@
 <script src="/static/landbank_data/js/dajaxice.core.js"></script>
 <script src="/static/landbank_data/js/jquery.dajax.core.js"></script>
 <script type="text/javascript">
-function onGotPropertyData(property) {
-  console.log('onGotPropertyData');
-  console.log(property);
+var map
+  ,pageContext = 'area'
+  ,currentPin
+  ,newPin
+  ,currentParcelLatLng
+  ,currentAreaBounds
+  ,currentMarker;
+function onGotParcelData(parcel) {
+  console.log(parcel);
+  updateParcelView(parcel);
+  if (pageContext=='area') {
+    pageContext = 'parcel';
+    updateDetailPane();
+    updateNav();
+  }
+  currentParcelLatLng = [parcel['assessor']['lat_y'],parcel['assessor']['long_x']];
+  map.setCenter(new google.maps.LatLng(currentParcelLatLng[0],currentParcelLatLng[1]));
+  map.setZoom(17);
 }
+
+function updateDetailPane() {
+  if (pageContext == 'parcel') {
+    $('#area').hide();
+    $('#parcel').show();
+  } else {
+    $('#parcel').hide();
+    $('#area').show();
+  }
+}
+
+function updateNav() {
+  if (pageContext == 'parcel') {
+    $('#parcel-title').show();
+    $('#area-title').removeClass('active');
+    $('#parcel-title').addClass('active');
+  } else {
+    $('#parcel-title').hide();
+    $('#parcel-title').removeClass('active');
+    $('#area-title').addClass('active');
+  }
+}
+
+function updateParcelView(parcel) {
+  var title = parcel['parcel_info']['address'];
+  if (title == null || title == '') {
+    title = 'PIN:' + parcel['parcel_info']['pin'];
+  }
+  $('#parcel-h3').text(title);
+  $('#parcel-title a').text(title);
+}
+
+function refreshArea() {
+  pageContext = 'area';
+  updateNav();
+  updateDetailPane();
+  map.setCenter(currentAreaBounds.getCenter());
+  map.fitBounds(currentAreaBounds);
+  console.log('zoom out to area');
+}
+
+function refreshParcel() {
+  pageContext = 'parcel';
+  updateDetailPane();
+  updateNav();
+  map.setCenter();
+  console.log('zoom to parcel');
+}
+
 function initialize() {
   var mapOptions = {
     zoom: 14,
@@ -16,7 +80,7 @@ function initialize() {
     mapTypeId: google.maps.MapTypeId.ROADMAP
   };
   var bounds = new google.maps.LatLngBounds();
-  var map = new google.maps.Map(document.getElementById("map-aggregate"),
+  map = new google.maps.Map(document.getElementById("map-aggregate"),
       mapOptions);
   // todo: get ALL polygons for areas and add them to map...
   var polygonCoords = [
@@ -40,6 +104,7 @@ function initialize() {
       bounds.extend(polygonCoords[i]);
     }
 
+    currentAreaBounds = bounds;
     the_polygon.setMap(map);
 
   var transitLayer = new google.maps.TransitLayer();

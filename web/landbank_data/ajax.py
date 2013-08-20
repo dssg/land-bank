@@ -5,6 +5,7 @@ from django.db import connection
 from models import Assessor
 from django.core import serializers
 from landbank_data.util import sqltodict
+from django.contrib.gis.geos import GEOSGeometry
 
 @dajaxice_register
 def randomize(request):
@@ -33,5 +34,5 @@ def get_property_from_latlng(request, lat, lng):
     except:
         data['status'] = 'error' 
     dajax = Dajax()
-    dajax.add_data(data, 'onGotPropertyData')
+    dajax.add_data(data, 'onGotParcelData')
     return dajax.json()

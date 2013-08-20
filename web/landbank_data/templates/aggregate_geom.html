@@ -13,16 +13,20 @@
 
 {% block topnav %}
 <ul class="nav navbar-nav">
-    <li class=""><a href="/">{{type}}</a></li>
-    <li class="active"><a href="#">{{title}}</a></li>
+    <li><a href="/">{{type}}</a></li>
+    <li id="area-title" class="active"><a href="#" onClick="refreshArea();">{{title}}</a></li>
+    <li id="parcel-title"><a href="#" onClick="refreshParcel();"></a></li>
 </ul>
 {% endblock %}
 
 {% block content %}
 <div class="col-lg-4 col-md-5 col-sm-6">
-  <div id="stats">
+  <div id="area">
     {% include "aggregate_properties.html" %}
     {% include "aggregate_charts.html" %}
+  </div>
+  <div id="parcel">
+    {% include "parcel_info.html" %}
   </div>
 </div>
 <div class="col-lg-8 col-md-7 col-sm-6" id="map-aggregate">
