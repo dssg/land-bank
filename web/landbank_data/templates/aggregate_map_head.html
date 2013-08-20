@@ -9,13 +9,22 @@ var map
   ,pageContext = 'area'
   ,currentPin
   ,newPin
+  ,currentParcel=null
   ,currentParcelLatLng
   ,currentAreaBounds
   ,currentMarker;
 
+function returnToParcel() {
+  if (currentParcel != null) {
+    onGotParcelData(currentParcel);
+  }
+}
+
 // Callback for map-click listener
 function onGotParcelData(parcel) {
-  updateParcelView(parcel);
+  if (updateParcelView(parcel) == false) {
+    return;
+  }
   if (pageContext=='area') {
     pageContext = 'parcel';
     updateDetailPane();
@@ -25,8 +34,11 @@ function onGotParcelData(parcel) {
   map.setCenter(currentParcelLatLng);
   if (map.getZoom() <17) { map.setZoom(17); }
   if (currentMarker) { currentMarker.setMap(null); }
-    currentMarker = new google.maps.Marker({
-      position: currentParcelLatLng
+  currentMarker = new google.maps.Marker({
+    position: currentParcelLatLng
+  });
+  google.maps.event.addListener(currentMarker, 'click', function() {
+    returnToParcel();
   });
   currentMarker.setMap(map);
 }
@@ -50,7 +62,9 @@ function updateNav() {
     $('#area-title').removeClass('active');
     $('#parcel-title').addClass('active');
   } else {
-    $('#parcel-title').hide();
+    if (currentParcel == null) {
+      $('#parcel-title').hide();
+    }
     $('#parcel-title').removeClass('active');
     $('#area-title').addClass('active');
   }
@@ -58,9 +72,10 @@ function updateNav() {
 
 // Load new parcel data into the detail pane
 function updateParcelView(parcel) {
-  if (parcel['status']=='error') { return; }
+  if (parcel['status']=='error') { return false; }
   newPin = parcel['parcel_info']['pin']
   currentPin = newPin;
+  currentParcel = parcel;
 
   // Update navbar text and parcel detail pane heading
   var pInfo = parcel['parcel_info'];
@@ -95,6 +110,7 @@ function updateParcelView(parcel) {
       }
     }
   }
+  return true;
 } 
 
 function refreshArea() {
@@ -109,7 +125,7 @@ function refreshParcel() {
   pageContext = 'parcel';
   updateDetailPane();
   updateNav();
-  map.setCenter();
+  returnToParcel();
 }
 
 function initialize() {
