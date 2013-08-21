@@ -17,6 +17,8 @@ var map
 function returnToParcel() {
   if (currentParcel != null) {
     onGotParcelData(currentParcel);
+    // Disable street view if necessary
+    closeStreetView();
   }
 }
 
@@ -119,6 +121,8 @@ function refreshArea() {
   updateDetailPane();
   map.setCenter(currentAreaBounds.getCenter());
   map.fitBounds(currentAreaBounds);
+  // Disable street view if necessary
+  closeStreetView();
 }
 
 function refreshParcel() {
@@ -126,6 +130,18 @@ function refreshParcel() {
   updateDetailPane();
   updateNav();
   returnToParcel();
+}
+
+function closeStreetView() {
+  console.log('closing street view');
+  if (map != null) {
+    var streetView = map.getStreetView();
+    if (streetView.getVisible()) {
+      streetView.setVisible(false);
+    } else {
+      return;
+    }
+  }
 }
 
 function initialize() {
