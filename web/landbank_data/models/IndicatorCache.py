@@ -1,8 +1,7 @@
 from django.contrib.gis.db import models
 
 class IndicatorCache(models.Model):
-  area_type	= models.CharField('municipality, ward, tract or community area',\
-    max_length=100, db_index=True)
+  area_type	= models.CharField('municipality, ward, tract or community area', max_length=100, db_index=True)
   area_id	= models.IntegerField('Foreign key to the ward, censustract or communityarea table depending on area_type', null=True, db_index=True)
   indicator_name = models.CharField('indicator name', max_length=100, db_index=True)
   indicator_value = models.FloatField('indicator value')
