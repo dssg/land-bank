@@ -7,6 +7,7 @@ import datetime
 import numpy as np
 
 def indicator_hist(area_type, indicator_name, indicator_val, notzero=True, nbins=10, hist_range=None):
+  # creates the table from which each of distributions is created from
   myinds = IndicatorCache.objects.filter(area_type__exact=area_type).\
            filter(indicator_name__exact=indicator_name)
   if notzero:
@@ -17,6 +18,7 @@ def indicator_hist(area_type, indicator_name, indicator_val, notzero=True, nbins
 
   retval = [i.indicator_value for i in myinds]
   if hist_range is None:
+    # form the histogram
     values, bins = np.histogram(retval,bins=nbins)
   else:
     values, bins = np.histogram(retval,bins=nbins,range=hist_range)
@@ -26,6 +28,7 @@ def indicator_timestream(area_type, area_id, indicator_name, notzero=True):
   myinds = IndicatorCache.objects.filter(area_type__exact=area_type).\
            filter(area_id__exact=area_id).\
            filter(indicator_name__exact=indicator_name)
+  # the above is an intersection of area_type, area_id and indicator
   if notzero:
     myinds = myinds.filter(indicator_value__gt=0)
   retval =  [{'x': b, 'y': v} for b, v in \

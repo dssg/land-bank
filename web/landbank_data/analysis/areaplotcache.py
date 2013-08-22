@@ -33,6 +33,7 @@ def set_or_update_plot(area_type, area_id, key_name, value, area_label):
     cached_data.save()
 
 def run():
+    # each of these creates property list to be processed
     create_community_area_plots()
     create_ward_plots()
     create_census_tract_plots()
@@ -59,15 +60,19 @@ def create_census_tract_plots():
         save_hist_data_from_properties(properties, 'Census Tract', ct.id, ct.fips)
 
 def save_hist_data_from_properties(properties, area_type_label, area_fk_id, area_name):
+    # change the Assessor properties table to a dataframe
     prop_values= properties.values('ptype', 'ptype_desc','sqft_land', 'sqft_bldg','current_land_assmt','current_building_assmt')
     df=pd.DataFrame.from_records(prop_values)
+    # single family housing is type 1
     sf=df[df['ptype']== 1 ]
+    # exclude the properties of size 0
     sf['sqft_land_tmp']=sf['sqft_land']
     sf['sqft_land_tmp'][sf['sqft_land'] == 0.0]=np.nan
     sf['sqft_bldg_tmp']=sf['sqft_bldg']
     sf['sqft_bldg_tmp'][sf['sqft_bldg'] == 0.0]=np.nan
     sf['land_assmt_11_psf']=sf['current_land_assmt']/sf['sqft_land_tmp']
     sf['bldg_assmt_11_psf']=sf['current_building_assmt']/sf['sqft_bldg_tmp']
+    # convert to 1000's of square feet
     sf['Msqft_land_11']=(10 ** (-3))*sf['sqft_land']
     sf['Msqft_bldg_11']=(10 ** (-3))*sf['sqft_bldg']
     ap_land_psf=sf['land_assmt_11_psf'].map(lambda x: x if x != np.inf else np.nan)

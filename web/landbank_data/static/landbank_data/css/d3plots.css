@@ -1,10 +1,12 @@
 .axis path,
 .axis line {
+/* thins out the axis list */
    fill: none;
    stroke: black;
    shape-rendering: crispEdges;
  }
  .axis text {
+ /* styles the text that describes the axis labels */    
     font-family: sans-serif;
     font-size: 11px;
     color: #000000;
