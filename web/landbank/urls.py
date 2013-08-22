@@ -1,4 +1,3 @@
-#from django.conf.urls import patterns, include, url
 from django.conf.urls.defaults import *
 from django.conf.urls import patterns, include, url
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
@@ -34,13 +33,12 @@ urlpatterns = patterns('',
     url(dajaxice_config.dajaxice_url, include('dajaxice.urls')),
     url(r'^$', 'landbank_data.views.home', name='home'),
     url(r'^pin/', include('landbank_data.urls')),
-    url(r'^communityarea/(?P<search_communityarea>[0-9]+)/$', 'landbank_data.views.communityarea'),
-    url(r'^ward/(?P<search_ward>[0-9]+)/$', 'landbank_data.views.ward'),
-    url(r'^tract/(?P<search_tract>[0-9]+)/$', 'landbank_data.views.tract'),
-    url(r'^municipality/(?P<search_muni>[a-z_A-Z]+)/$', 'landbank_data.views.municipality'),
+    url(r'^communityarea/(?P<search_communityarea>[0-9]+)/$', 'landbank_data.views.communityarea', name='communityarea'),
+    url(r'^ward/(?P<search_ward>[0-9]+)/$', 'landbank_data.views.ward', name='ward'),
+    url(r'^tract/(?P<search_tract>[0-9]+)/$', 'landbank_data.views.tract', name='tract'),
+    url(r'^municipality/(?P<search_muni>[a-z_A-Z]+)/$', 'landbank_data.views.municipality', name='municipality'),
     url(r'^(?P<search_pin>\d{14})/$', 'landbank_data.views.pin', name='pin'),
     url(r'search/', 'landbank_data.views.search', name='search'),
-    url(r'dajax_test/', 'landbank_data.views.dajax_test', name='dajax_test'),
     url(r'api/', include(v1_api.urls)),
 )
 

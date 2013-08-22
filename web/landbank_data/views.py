@@ -20,18 +20,13 @@ re_num = re.compile('[0-9]+')
 
 @csrf_protect
 def home(request):
-    return render_to_response('landbank_data/leaflet.html', {}, RequestContext(request))
-#    return render(request, 'landbank_data/home.html', {})
+    return render_to_response('landbank_data/index.html', {}, RequestContext(request))
 
 def map(request, ca_number=1):
-    #ca = CommunityArea.objects.filter(pk__lte=10)
     ca = CommunityArea.objects.get(area_number=ca_number)
     ca.geom.transform(4326)
     ca_list = []
     ca_list.append(ca)
-    #for c in ca:
-        #c.geom.transform(4326)
-        #ca_list.append(c)
     return render(request, 'landbank_data/map.html', {'object_list': ca_list})
 
 @csrf_protect
@@ -75,16 +70,12 @@ def pin(request, search_pin=None):
 
     try:      ward = Ward.objects.get(pk=lookup.ward_id)
     except:   ward = None
-
     try:      ca = CommunityArea.objects.get(pk=lookup.community_area_id)
     except:   ca = None
-
     try:      tract = CensusTract.objects.get(pk=lookup.census_tract_id)
     except:   tract = None
-
     try:      score = TractScores.objects.get(census_tract_id=lookup.census_tract_id)
     except:   score = None
-
     try:
       apc = AreaPlotCache.objects.\
         filter(area_type__exact='Community Area').\
@@ -361,6 +352,3 @@ def aggregate(request, search_geom, search_geom_name, geom_type):
     'timestreamData': timestreamData\
     },\
     context_instance=RequestContext(request))
-
-def dajax_test(request):
-  return render(request, 'landbank_data/dajax_test.html', {})

@@ -1,6 +1,7 @@
 # Utilities for various web project tasks
 
 # Turns a sql query resultset into a python dict
+# Used for accessing non-ORM-managed database tables
 def sqltodict(query,param):
     from django.db import connection
     cursor = connection.cursor()

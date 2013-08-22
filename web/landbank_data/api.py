@@ -1,3 +1,5 @@
+# Definition of API endpoints using tastypie library
+
 from tastypie import fields
 from landbank_data.models import Assessor, Auction, CashFin, Foreclosure, Mortgage, Scavenger, Transaction
 from tastypie.resources import ModelResource

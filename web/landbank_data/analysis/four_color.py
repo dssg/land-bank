@@ -3,7 +3,13 @@ import collections
 import pprint
 import operator
 
-# Define all models to be used
+# Compares geometries and greedily determines a map-coloring reuslting in non-
+# adjacent colors for adjacent areas. Inspired by the 'four-color theorem'
+# and the Welsh-Poewll algorithm from graphy theory and described here: 
+# http://en.wikipedia.org/wiki/Graph_coloring#Greedy_coloring
+# The "color_id" field was used as conditional styling for TileMill maps.
+
+# Define all geographical models to be used
 all_geographies = [{
   'name':'communityarea'
   ,'queryset':CommunityArea.objects.all()
@@ -22,6 +28,7 @@ all_geographies = [{
   ,'geom_field_name':'loc'
   }]
 
+# Determine coloring of all geometries in each of the above models
 for geography in all_geographies:
   area_degrees = {}
   area_neighbors = {}
@@ -61,11 +68,8 @@ for geography in all_geographies:
       max_color += 1
       area_colors[area_id] = max_color
       print "    had to add color " + str(max_color)
-  
-  #pp=pprint.PrettyPrinter(indent=2)
-  #pp.pprint(area_colors)
-  #print str(max_color) + " colors"
-  
+
+  # Save results
   for a in area_queryset:
     a.color_id = area_colors[a.id]
     a.save()

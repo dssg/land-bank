@@ -1,11 +1,16 @@
-from models import CommunityArea as CA, Ward as W, CensusTract as CT, AreaPlotCache as Cache, Assessor, PinAreaLookup as PAL
+from models import CommunityArea as CA,\
+	Ward as W,\
+	CensusTract as CT,\
+	AreaPlotCache as Cache,\
+	Assessor,\
+	PinAreaLookup as PAL
 import json
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
 from django_pandas.managers import *
 
 # This script should be run whenever we want to update the area plots
+# Generates (d)janky models that hold a JSON string, used by D3.js plots
 def set_or_update_plot(area_type, area_id, key_name, value, area_label):
     cached_data, was_created = Cache.objects.get_or_create(\
         area_type = area_type\
