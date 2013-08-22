@@ -16,10 +16,7 @@ def load_auctions(auction_file, verbose = False):
     skip_lookup = False
     if Auction.objects.count() == 0:
       skip_lookup = True
-    #i = 0;
     for row in reader:
-      #if (i==10):
-        #break
       pin     = '{:0>14}'.format(int(Decimal(row[1])))
       doc    = row[2].strip()
       date_doc = spss_to_posix(row[3])
@@ -131,5 +128,4 @@ def load_auctions(auction_file, verbose = False):
 	,adj_yd = adj_yd\
         ,loc = loc\
         )
-      #i += 1
       auction.save()

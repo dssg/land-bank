@@ -13,14 +13,10 @@ def load_transactions(transaction_file, verbose = False):
   with open(transaction_file,'r') as f:
     reader = csv.reader(f, delimiter="\t")
     reader.next()
-    #i = 0;
     skip_lookup = False
     if Transaction.objects.count() == 0:
       skip_lookup = True
     for row in reader:
-      #if (i==10):
-        #break
-      pin     = '{:0>14}'.format(int(Decimal(row[1])))
       try:	amount_prime = float(row[2])
       except:	amount_prime = None
       doc    = row[3].strip()
@@ -144,5 +140,4 @@ def load_transactions(transaction_file, verbose = False):
 	,adj_yd = adj_yd\
         ,loc = loc\
         )
-      #i += 1
       transaction.save()

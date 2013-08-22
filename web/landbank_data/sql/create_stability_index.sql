@@ -1,3 +1,6 @@
+-- Creates a real estate market "stability index" based on the
+-- 2010 Walker & Winston paper from LISC:
+-- http://www.foreclosure-response.org/assets/maps&data/Walker_and_Winston_2010.pdf
 drop view tract_stability_raw_values cascade;
 drop view tract_stability_means_stddevs cascade;
 drop table tract_stability cascade;

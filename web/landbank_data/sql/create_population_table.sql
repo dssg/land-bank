@@ -1,3 +1,5 @@
+-- Populate a table with estimated population by interpolating census population
+-- across other geometries: Municipality, Comm. Area, Ward
 CREATE TABLE population (area_name varchar(100), area_type varchar(50), pop integer);
 INSERT INTO  population 
   SELECT m.name, 'Municipality', 

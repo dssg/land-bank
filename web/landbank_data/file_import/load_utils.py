@@ -2,7 +2,7 @@ import pytz, datetime, time
 from pytz import timezone
 from decimal import Decimal
 
-# SPSS uses a timestamp based on the year 1582. Makes sense, right?
+# SPSS uses a timestamp format based on the year 1582. Makes sense, right?
 # We can convert this into a POSIX timestamp by applying a delta defined here...
 utc = pytz.utc
 central_tz = timezone('US/Central')

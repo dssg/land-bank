@@ -13,13 +13,10 @@ def load_mortgages(mortgage_file, verbose = False):
   with open(mortgage_file,'r') as f:
     reader = csv.reader(f, delimiter="\t")
     reader.next()
-    #i = 0;
     skip_lookup = False
     if Mortgage.objects.count() == 0:
       skip_lookup = True
     for row in reader:
-      #if (i==10):
-        #break
       pin = '{:0>14}'.format(int(Decimal(row[1])))
       doc = row[2].strip()
       try:	mort_amt = float(row[3])
@@ -138,5 +135,4 @@ def load_mortgages(mortgage_file, verbose = False):
 	,adj_yd = adj_yd\
         ,loc = loc\
         )
-      #i += 1
       mortgage.save()

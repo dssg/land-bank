@@ -7,16 +7,16 @@ from pytz import timezone
 import os.path, time
 
 
-chicago_host    = 'data.cityofchicago.org'
-crime_view      = 'ijzp-q8t2'
-crime_file      = '/mnt/ebs/data/crime/crime.csv'
+chicago_host = 'data.cityofchicago.org'
+crime_view   = 'ijzp-q8t2'
+crime_file   = '/mnt/ebs/data/crime/crime.csv'
 
 class SocrataClient:
   def __init__(self, hostname, view, outfile):
-    self.view       = view
-    self.outfile    = outfile
-    self.data       = None
-    self.header     = None
+    self.view    = view
+    self.outfile = outfile
+    self.data    = None
+    self.header  = None
 
   def get_data(self):
     urllib.urlretrieve('http://'+chicago_host+'/api/views/'+self.view+\

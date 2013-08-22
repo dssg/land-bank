@@ -16,8 +16,8 @@ def load_census(census_file, verbose = False):
     if CensusBlockPopulation.objects.count() == 0:
       skip_lookup = True
     for row in reader:
-      fips               = '{:0>15}'.format(int(Decimal(row[1])))
-      pop                = int(row[3])
+      fips = '{:0>15}'.format(int(Decimal(row[1])))
+      pop  = int(row[3])
       try:
         if skip_lookup:
           raise Exception('no lookup')
@@ -25,7 +25,7 @@ def load_census(census_file, verbose = False):
           fips = fips)
       except:
         block = CensusBlockPopulation(\
-          fips               = fips               ,\
-          pop                = pop                 \
+          fips               = fips,\
+          pop                = pop\
         )
       block.save()

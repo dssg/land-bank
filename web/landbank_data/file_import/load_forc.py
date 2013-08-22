@@ -13,13 +13,10 @@ def load_foreclosures(forc_file, verbose = False):
   with open(forc_file,'r') as f:
     reader = csv.reader(f, delimiter="\t")
     reader.next()
-    #i = 0;
     skip_lookup = False
     if Foreclosure.objects.count() == 0
       skip_lookup = True
     for row in reader:
-      #if (i==10):
-        #break
       pin     = '{:0>14}'.format(int(Decimal(row[1])))
       filing_date   = spss_to_posix(row[2])
       try:	case_num1 = int(row[3])
@@ -131,5 +128,4 @@ def load_foreclosures(forc_file, verbose = False):
 	,adj_yd = adj_yd\
         ,loc = loc\
         )
-      #i += 1
       forc.save()
