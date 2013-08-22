@@ -1,0 +1,56 @@
+{% extends "landbank_data/base.html" %} 
+
+{% block title %}CCLBA Analytics Tool - {{ title }}{% endblock %}
+
+{% block head %}
+<link href="/static/landbank_data/css/d3plots.css" rel="stylesheet">
+<link href="/static/landbank_data/wax/theme/controls.css" rel="stylesheet" type="text/css" />
+<link href="/static/landbank_data/css/area_parcel_map.css" rel="stylesheet">
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="/static/landbank_data/js/d3plots.js"></script>
+<script src="/static/landbank_data/js/dajaxice.core.js"></script>
+<script src="/static/landbank_data/js/jquery.dajax.core.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBroCTXbMjlkQTtTjuICn2sMKtM7IssVp0&sensor=false"></script>
+<script src="/static/landbank_data/wax/dist/wax.g.js"></script>
+<script src="/static/landbank_data/js/parcel_data_fields.js"></script>
+<!-- For time being, load these rendered vars from django.
+//  TODO: turn it into post data instead -->
+<script type="text/javascript">
+var mapCenterLat = {{mapcenter.lat}},
+    mapCenterLng = {{mapcenter.lon}};
+var polygonCoords = [
+  {% with outline.0.0 as the_polygon %}
+    {% for point in the_polygon %}
+      new google.maps.LatLng({{ point.1 }}, {{ point.0 }}),
+    {% endfor %}
+  {% endwith %}
+];
+</script>
+<script src="/static/landbank_data/js/area_parcel_map.js"></script>
+{% endblock %}
+
+{% block topnav %}
+<ul class="nav navbar-nav">
+    <li><a href="/">{{type}}</a></li>
+    <li id="area-title" class="active"><a href="#" onClick="refreshArea();">{{title}}</a></li>
+    <li id="parcel-title"><a href="#" onClick="refreshParcel();"></a></li>
+</ul>
+{% endblock %}
+
+{% block content %}
+<!-- All the things go here -->
+<div class="col-lg-4 col-md-5 col-sm-6">
+  <div id="area-details">
+    <!-- this is a django include because data current comes from django rendering
+    //  todo: turn into a post/ajax communication since we may do more dynamic
+    // things with area loading/interaction -->
+    {% include "landbank_data/area_charts.html" %}
+  </div>
+  <!-- this is populated by ajax callbacks in area_parcel_map.js -->
+  <div id="parcel-details">
+  </div>
+</div>
+<!-- Map is populated by area_parcel_map.js after page loads -->
+<div class="col-lg-8 col-md-7 col-sm-6" id="map-pane">
+</div>
+{% endblock %}

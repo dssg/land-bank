@@ -1,21 +1,80 @@
-<div id="d3div"></div>
-<div id="d3div2"></div>
+<div class="well well-sm">
+  <h3>{{title}}</h3>
+  <table class="table">
+    {% for prop in proplist %}
+      {% if prop.key == "BR" %}
+  </table>
+  <table class="table">
+      {% else %}
+        <tr><th>{{ prop.key }}</th>
+        <td>{{ prop.val }}</td></tr>
+      {% endif %}
+    {% endfor %}
+  </table>
+</div>
 
-<script type="text/javascript"
-  src="/static/landbank_data/js/d3plots.js">
-</script>
+{% for histogram_block in histData %}
+  {% for histType, hists in histogram_block.items %}
+  <div class="panel histogram">
+    <div class="panel-title"><div class="panel-heading">{{ histType.0|title }}</div></div>
+    <!-- <div><input type="button" class="btn btn-primary" onclick="toggleChart()" value="Trends" /></div> -->
+    <div class="panel-body">
+      {% for hist in hists %}
+        <div id="d3div{{ forloop.parentloop.parentloop.counter }}_{{ forloop.counter }}"></div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endfor %}
+{% endfor %}
+
+{% for timestream_block in timestreamData %}
+  {% for timestreamType, times in timestream_block.items %}
+    <div class="panel timestream">
+      <div class="panel-title"><div class="panel-heading">{{ timestreamType.0 }}</div></div>
+      <!-- <div><input type="button" class="btn btn-primary" onclick="toggleChart()" value="Histograms" /></div> -->
+      {% for time in times %}
+        <div id="d3divt1{{ forloop.parentloop.parentloop.counter }}_{{ forloop.counter }}" class="center"></div>
+      {% endfor %}
+    </div>
+  {% endfor %}
+{% endfor %}
 
 <script type="text/javascript">
-
-var chart_data = {{ histData | safe }};
-var mydata = chart_data.histData.land_psf;
-var myfakedata = [
-  { "x": "2012-01-01", "y": 50 },
-  { "x": "2011-01-01", "y": 30 },
-  { "x": "2011-05-01", "y": 20 },
-  { "x": "2010-01-01", "y": 10 }];
-
-d3hist("#d3div", mydata, "Assessed Land Value Per Square Foot", 0.48);
-d3timeline("#d3div2", myfakedata, "Fake time series");
-
-</script>
+  // Timestreams start hidden
+  //$('.timestream').toggle();
+  
+  function toggleChart() {
+    $('.histogram').toggle();
+    $('.timestream').toggle();
+  }
+  
+  {% for histogram_block in histData %}
+    {% for histType, hists in histogram_block.items %}
+      {% for hist in hists %}
+        var chart_data = {{ hist.data | safe }};
+         {% if hist.marker != None %}
+           d3hist("#d3div{{ forloop.parentloop.parentloop.counter }}_{{ forloop.counter }}", chart_data, "{{ hist.title}}", "{{ hist.label }}",{{hist.marker}});
+         {% else %}
+           d3hist("#d3div{{ forloop.parentloop.parentloop.counter }}_{{ forloop.counter }}", chart_data, "{{ hist.title}}", "{{ hist.label }}");
+         {% endif %}
+           $('#d3div{{ forloop.parentloop.parentloop.counter }}_{{ forloop.counter }}').popover(
+             {content:"{{ hist.tooltip|safe }}", trigger:"hover", placement:"top"});
+      {% endfor %}
+    {% endfor %}
+  {% endfor %}
+  
+  {% for timestream_block in timestreamData %}
+    {% for timestreamType, times in timestream_block.items %}
+      {% for time in times %}
+        var chart_data = {{ time.data | safe }};
+          {% if time.marker != None %}
+            d3timeline("#d3divt1{{ forloop.parentloop.parentloop.counter }}_{{ forloop.counter }}", chart_data, "{{ time.title}}", {{time.marker}});
+          {% else %}
+            d3timeline("#d3divt1{{ forloop.parentloop.parentloop.counter }}_{{ forloop.counter }}", chart_data, "{{ time.title}}");
+          {% endif %}
+        $('#d3div1{{ forloop.parentloop.parentloop.counter }}_{{ forloop.counter }}').popover(
+          {content:"{{ time.tooltip|safe }}", trigger:"hover", placement:"top"});
+      {% endfor %}
+    {% endfor %}
+  {% endfor %}
+</script>        

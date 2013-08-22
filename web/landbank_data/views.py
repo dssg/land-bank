@@ -342,7 +342,7 @@ def aggregate(request, search_geom, search_geom_name, geom_type):
   proplist.append({'key': 'Commercial/Industrial', 'val': '%4.1f%%' % (inds['pct_commind']['indicator'])})
   
   # And we're ready to render.
-  return render_to_response('aggregate_geom.html', {\
+  return render_to_response('landbank_data/area_parcel_map.html', {\
     'title': search_geom_name,\
     'type': geom_type,\
     'proplist': proplist,\

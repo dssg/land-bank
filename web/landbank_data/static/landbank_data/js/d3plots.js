@@ -122,7 +122,6 @@ function d3timeline(div, data, title, marker) {
   var ytop = ymax+0.1*(ymax-ymin);
 
     // scales and axes
-
   var xScale = d3.time.scale()
       .domain(d3.extent(data, function(d) { return d.x; }))
       .range([0, width]);
@@ -196,7 +195,4 @@ function d3timeline(div, data, title, marker) {
       .attr("stroke", "blue")
       .attr("stroke-width", 1)
       .attr("fill", "none");
-
-
-
 };

@@ -1,10 +1,3 @@
-<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBroCTXbMjlkQTtTjuICn2sMKtM7IssVp0&sensor=false"></script>
-<script type="text/javascript" src="/static/landbank_data/wax/dist/wax.g.js"></script>
-<link href="/static/landbank_data/wax/theme/controls.css" rel="stylesheet" type="text/css" />
-<script src="/static/landbank_data/js/dajaxice.core.js"></script>
-<script src="/static/landbank_data/js/jquery.dajax.core.js"></script>
-<script src="/static/landbank_data/js/parcel_data_fields.js"></script>
-<script type="text/javascript">
 var map
   ,pageContext = 'area'
   ,currentPin
@@ -49,11 +42,11 @@ function onGotParcelData(parcel) {
 // as necessary
 function updateDetailPane() {
   if (pageContext == 'parcel') {
-    $('#area').hide();
-    $('#parcel').show();
+    $('#area-details').hide();
+    $('#parcel-details').show();
   } else {
-    $('#parcel').hide();
-    $('#area').show();
+    $('#parcel-details').hide();
+    $('#area-details').show();
   }
 }
 
@@ -146,7 +139,7 @@ function closeStreetView() {
 function initialize() {
   var mapOptions = {
     zoom: 14,
-    center: new google.maps.LatLng({{mapcenter.lat}}, {{mapcenter.lon}}),
+    center: new google.maps.LatLng(mapCenterLat, mapCenterLng),
     mapTypeControl: true,
     mapTypeId: google.maps.MapTypeId.ROADMAP,
     zoomControlOptions: {
@@ -157,25 +150,18 @@ function initialize() {
     }
   };
   var bounds = new google.maps.LatLngBounds();
-  map = new google.maps.Map(document.getElementById("map-aggregate"),
+  map = new google.maps.Map(document.getElementById("map-pane"),
       mapOptions);
   // todo: get ALL polygons for areas and add them to map...
-  var polygonCoords = [
-    {% with outline.0.0 as the_polygon %}
-        {% for point in the_polygon %}
-          new google.maps.LatLng({{ point.1 }}, {{ point.0 }}),
-        {% endfor %}
-      {% endwith %}
-    ];
-    var the_polygon = new google.maps.Polygon({
-      clickable: false,
-      paths: polygonCoords,
-      strokeColor: "#222",
-      strokeOpacity: 0.8,
-      strokeWeight: 5,
-      fillColor: null,
-      fillOpacity: 0
-    });
+  var the_polygon = new google.maps.Polygon({
+    clickable: false,
+    paths: polygonCoords,
+    strokeColor: "#222",
+    strokeOpacity: 0.8,
+    strokeWeight: 5,
+    fillColor: null,
+    fillOpacity: 0
+  });
 
     for (i=0; i<polygonCoords.length; i++) {
       bounds.extend(polygonCoords[i]);
@@ -206,28 +192,27 @@ function initialize() {
     });
   });
 
-// ************* Inject base HTML table for parcel details *********** //
-for (var i=0; i<parcelDataFields.length; i++) {
-  var thisSection = parcelDataFields[i];
-  var $parcelDiv = $('#parcel');
-  var $well = $('<div class="well well-sm">');
-  $parcelDiv.append($well);
-  var $heading = $('<h3 id="parcel-h3">' + thisSection.heading + '</h3>');
-  $well.append($heading);
-  var $table = $('<table class="table" id="' + thisSection.id + '">');
-  $well.append($table);
-  var $tbody = $('<tbody>');
-  $table.append($tbody);
-  for (var j=0; j<thisSection.fields.length; j++) {
-    var thisField = thisSection.fields[j];
-    var $row = $('<tr id="' + thisField.id + '">');
-    $tbody.append($row);
-    var $header = $('<th id="' + thisField.id + '-th">' + thisField.display + '</th>');
-    $row.append($header);
-    var $value = $('<td id="' + thisField.id + '-td">');
-    $row.append($value);
-  }
-} 
+  // ************* Inject base HTML table for parcel details *********** //
+  for (var i=0; i<parcelDataFields.length; i++) {
+    var thisSection = parcelDataFields[i];
+    var $parcelDiv = $('#parcel-details');
+    var $well = $('<div class="well well-sm">');
+    $parcelDiv.append($well);
+    var $heading = $('<h3 id="parcel-h3">' + thisSection.heading + '</h3>');
+    $well.append($heading);
+    var $table = $('<table class="table" id="' + thisSection.id + '">');
+    $well.append($table);
+    var $tbody = $('<tbody>');
+    $table.append($tbody);
+    for (var j=0; j<thisSection.fields.length; j++) {
+      var thisField = thisSection.fields[j];
+      var $row = $('<tr id="' + thisField.id + '">');
+      $tbody.append($row);
+      var $header = $('<th id="' + thisField.id + '-th">' + thisField.display + '</th>');
+      $row.append($header);
+      var $value = $('<td id="' + thisField.id + '-td">');
+      $row.append($value);
+    }
+  } 
 }
 google.maps.event.addDomListener(window, 'load', initialize);
-</script>
