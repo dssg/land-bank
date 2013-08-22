@@ -216,7 +216,6 @@ var dataTableColumns = {
 };
 
 function injectInitTableDOMElements(selectedNode) {
-    console.log('injecting table DOM...');
     selectedNode.append("<table id='tbl'><thead><tr></tr></thead><tbody></tbody></table>");
 }
 
@@ -224,10 +223,7 @@ function createDataTable(theGeography) {
     //$('#tbl-wrapper').hide();
     // Blow away old table rather than try to futz with changing # of columns
     topDiv = $('#tbl-wrapper');
-    console.log('oTable vvv');
-    console.log(oTable);
     if(oTable != null) {
-      console.log('found dupe table; destroying');
       oTable.fnDestroy();
     }
     topDiv.empty();
@@ -261,7 +257,6 @@ function createDataTable(theGeography) {
       });
     oTable.fnDraw();
     $('#tbl-wrapper').show();
-    console.log(oTable);
 }
 
 $(document).ready(function() {
