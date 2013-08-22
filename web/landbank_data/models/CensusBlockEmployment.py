@@ -5,7 +5,6 @@ class CensusBlockEmployment(models.Model):
   # http://lehd.ces.census.gov/data/#lodes
   fips                          = models.BigIntegerField('Census block identifying FIPS number')
   censusblock                   = models.ForeignKey(CensusBlock, null=False)
- 
   jobs				= models.IntegerField('Number of jobs')
   def __unicode__(self):
     return unicode(self.fips)
