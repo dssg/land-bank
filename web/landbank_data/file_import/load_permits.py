@@ -6,7 +6,6 @@ from decimal  import Decimal
 from pytz import timezone
 import os.path, time
 
-
 chicago_host     = 'data.cityofchicago.org'
 permit_view      = 'ydr8-5enu'
 permit_file      = '/mnt/ebs/data/permit.csv'

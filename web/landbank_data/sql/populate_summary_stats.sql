@@ -82,4 +82,3 @@ insert into landbank_data_summarystats
         ,area_name
         ,pt_type1_cat
     order by area_number, ptype asc);
-

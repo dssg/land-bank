@@ -3,9 +3,9 @@ from models import ZoningPolygon
 from django.contrib.gis.utils import LayerMapping
 
 zoning_mapping = {
-  'zone_class'    : 'ZONE_CLASS',
-  'zone_type'     : 'ZONE_TYPE',
-  'geom'          : 'MULTIPOLYGON'
+  'zone_class': 'ZONE_CLASS',
+  'zone_type' : 'ZONE_TYPE',
+  'geom'      : 'MULTIPOLYGON'
 }
 
 zoning_shp = '/mnt/ebs/data/zoning/Zoning_nov2012.shp'

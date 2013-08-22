@@ -15,10 +15,7 @@ def load_occupancy(occupancy_file, verbose = False):
     skip_lookup = False
     if CensusTractOccupancy.objects.count() == 0:
       skip_lookup = True
-    #i = 0;
     for row in reader:
-      #if (i==10):
-        #break
       fips               = '{:0>14}'.format(int(Decimal(row[0])))
       try: owner_occ     = int(row[1])
       except: owner_occ = None
@@ -38,5 +35,4 @@ def load_occupancy(occupancy_file, verbose = False):
           ,owner_occ = owner_occ\
           ,renter_occ = renter_occ\
         )
-      #i += 1
       occupancy.save()

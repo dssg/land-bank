@@ -13,13 +13,10 @@ def load_cashfin(cashfin_file, verbose = False):
   with open(cashfin_file,'r') as f:
     reader = csv.reader(f, delimiter="\t")
     reader.next()
-    #i = 0;
     skip_lookup = False
     if CashFin.objects.count() == 0:
       skip_lookup = True
     for row in reader:
-      #if (i==10):
-        #break
       pin = '{:0>14}'.format(int(Decimal(row[1])))
       doc = row[2]
       date_doc = spss_to_posix(row[3])
@@ -126,5 +123,4 @@ def load_cashfin(cashfin_file, verbose = False):
 	,residential = residential\
         ,loc = loc\
         )
-      #i += 1
       cashfin.save()

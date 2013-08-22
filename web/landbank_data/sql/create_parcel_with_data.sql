@@ -11,11 +11,7 @@ create table parcel_with_data as
   vac.vac_request_date,
   scav.scav_tax_year, scav.scav_tax_amt, scav.scav_tot_amt,
   brown.brown_grant_types,
-  cmap.cmap_name,
-  cmap.cmap_status,
-  cmap.cmap_area,
-  cmap.cmap_desc,
-  cmap.cmap_url,
+  cmap.cmap_name, cmap.cmap_status, cmap.cmap_area, cmap.cmap_desc, cmap.cmap_url,
   parcel.wkb_geometry
 from
 parcel left join (select

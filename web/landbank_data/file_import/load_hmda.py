@@ -14,15 +14,10 @@ def convert_3val_boolean(value):
 def load_loanapplications(scavenger_file, verbose = False):
   with open(loanapplication_file,'r') as f:
     reader = csv.reader(f, delimiter=",")
-    #reader.next() # no header in this file
-    #i = 0;
     skip_lookup = False
     if LoanApplication.objects.count() == 0:
       skip_lookup = True
-
     for row in reader:
-      #if (i==2):
-        #break
       year			= int(row[0])
       respondent_id		= row[1].strip()
       agency_id			= int(row[2])
@@ -120,5 +115,4 @@ def load_loanapplications(scavenger_file, verbose = False):
           ,num_owner_occ     = num_owner_occ\
           ,num_1_4           = num_1_4\
       )
-      #i += 1
       loanapp.save()

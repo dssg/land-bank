@@ -13,33 +13,30 @@ def load_income(income_file, verbose = False):
     skip_lookup = False
     if CensusTractIncome.objects.count() == 0:
       skip_lookup = True
-    #i = 0;
     for row in reader:
-      #if (i==10):
-        #break
-      fips			= '{:0>14}'.format(int(Decimal(row[0])))
-      try: inc_lt_10		= float(row[1])
-      except: inc_lt_10		= None
-      try: inc_10_15            = float(row[2])
-      except: inc_10_15         = None 
-      try: inc_15_25            = float(row[3])
-      except: inc_15_25         = None 
-      try: inc_25_35            = float(row[4])
-      except: inc_25_35         = None 
-      try: inc_35_50            = float(row[5])
-      except: inc_35_50         = None 
-      try: inc_50_75            = float(row[6])
-      except: inc_50_75         = None 
-      try: inc_75_100           = float(row[7])
-      except: inc_75_100        = None 
-      try: inc_100_150          = float(row[8])
-      except: inc_100_150       = None 
-      try: inc_150_200          = float(row[9])
-      except: inc_150_200       = None 
-      try: inc_gt_200		= float(row[10])
-      except: inc_gt_200	= None 
-      try: med_inc     		= int(row[11])
-      except: med_inc 		= None
+      fips		  = '{:0>14}'.format(int(Decimal(row[0])))
+      try: inc_lt_10	  = float(row[1])
+      except: inc_lt_10	  = None
+      try: inc_10_15      = float(row[2])
+      except: inc_10_15   = None 
+      try: inc_15_25      = float(row[3])
+      except: inc_15_25   = None 
+      try: inc_25_35      = float(row[4])
+      except: inc_25_35   = None 
+      try: inc_35_50      = float(row[5])
+      except: inc_35_50   = None 
+      try: inc_50_75      = float(row[6])
+      except: inc_50_75   = None 
+      try: inc_75_100     = float(row[7])
+      except: inc_75_100  = None 
+      try: inc_100_150    = float(row[8])
+      except: inc_100_150 = None 
+      try: inc_150_200    = float(row[9])
+      except: inc_150_200 = None 
+      try: inc_gt_200     = float(row[10])
+      except: inc_gt_200  = None 
+      try: med_inc     	  = int(row[11])
+      except: med_inc 	  = None
       try:
         if skip_lookup:
           raise Exception('no lookup')
@@ -72,5 +69,4 @@ def load_income(income_file, verbose = False):
           inc_gt_200   = inc_gt_200 ,\
           med_inc      = med_inc\
         )
-      #i += 1
       income.save()
