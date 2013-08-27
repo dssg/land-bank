@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404, render_to_response, redirect
 from django.template import RequestContext
 from django.views.decorators.csrf import csrf_protect
+from django.middleware.csrf import get_token
 from landbank_data.models import \
   Assessor, PinAreaLookup, CommunityArea, \
   CensusTract, Ward, Transaction, TractScores, AreaPlotCache,\
@@ -340,7 +341,9 @@ def aggregate(request, search_geom, search_geom_name, geom_type):
   proplist.append({'key': 'Condo', 'val': '%4.1f%%' % (inds['pct_condo']['indicator'])})
   proplist.append({'key': 'Multi-family', 'val': '%4.1f%%' % (inds['pct_multifamily']['indicator'])})
   proplist.append({'key': 'Commercial/Industrial', 'val': '%4.1f%%' % (inds['pct_commind']['indicator'])})
-  
+
+  get_token(request)
+
   # And we're ready to render.
   return render_to_response('landbank_data/area_parcel_map.html', {\
     'title': search_geom_name,\
