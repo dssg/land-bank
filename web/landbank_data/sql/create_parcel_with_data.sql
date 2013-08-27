@@ -1,8 +1,8 @@
 -- Should be run before deploying
 -- The /aggregate_geom.html page has ajax calls
 -- that hit this table for map interaction
-create table parcel_with_data as
-(select
+create table parcel_with_data as (
+select
   parcel.pin14 pin,
   ass.address, ass.property_type,
   mort.mort_date, mort.mort_borrower, mort.mort_lender, mort.mort_amt,
@@ -16,14 +16,13 @@ create table parcel_with_data as
 from
 parcel left join (select
   pin,
-  initcap(lda.houseno || ' ' || direction || ' ' || lda.street) as address,
+  initcap(regexp_replace(lda.houseno || ' ' || direction || ' ' || lda.street, '  ', ' ', 'gi')) as address,
     case when lda.ptype_desc is not null then initcap(lda.ptype_desc) else null end
   as property_type
 FROM landbank_data_assessor lda
-  where lda.houseno != '0'
-  and lda.houseno != '' 
+  where lda.houseno not in ('', '0')
   and lda.houseno is not null
-  and lda.direction != '') ass on parcel.pin14=ass.pin
+  ) ass on parcel.pin14=ass.pin
 left join (select distinct on (pin)
   last_value(pin) OVER wnd as pin,
   last_value(date_doc::date::text) OVER wnd as mort_date,
@@ -53,12 +52,12 @@ WINDOW wnd AS (
   PARTITION BY pin ORDER BY date_doc
   ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING
 )) txn on (parcel.pin14=txn.pin)
-left join (select distinct on (initcap(houseno||' '||direction||' '||street))
-  last_value(initcap(houseno||' '||direction||' '||street)) OVER wnd as vac_address,
+left join (select distinct on (initcap(regexp_replace(houseno||' '||direction||' '||street, '  ', ' ', 'gi')))
+  last_value(initcap(regexp_replace(houseno || ' ' || direction || ' ' || street, '  ', ' ', 'gi'))) OVER wnd as vac_address,
   last_value(request_date::date::text) OVER wnd as vac_request_date
 FROM landbank_data_vacancy311
 WINDOW wnd AS (
-  PARTITION BY initcap(houseno||' '||direction||' '||street) ORDER BY request_date
+  PARTITION BY initcap(regexp_replace(houseno||' '||direction||' '||street, '  ', ' ', 'gi')) ORDER BY request_date
   ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING
 )) vac on (ass.address=vac.vac_address)
 left join (select distinct on (pin)
