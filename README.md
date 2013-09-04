@@ -6,8 +6,10 @@
 
 ####Data
 - Institute for Housing Studies (IHS) at DePaul University datasets
-- Cook County Assessor file
-- County shapefile
+- Cook County GIS and other agencies
+- County and City public data
+- Census
+- EPA
 
 ####Required Software
 - GIS software: ArcGIS 10.1 or QGIS
