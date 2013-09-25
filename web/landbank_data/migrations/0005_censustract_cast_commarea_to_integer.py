@@ -272,8 +272,8 @@ class Migration(SchemaMigration):
             'yeard': ('django.db.models.fields.IntegerField', [], {'null': 'True'}),
             'yq_doc': ('django.db.models.fields.IntegerField', [], {'null': 'True'})
         },
-        'landbank_data.wards': {
-            'Meta': {'object_name': 'Wards'},
+        'landbank_data.ward': {
+            'Meta': {'object_name': 'Ward'},
             'address': ('django.db.models.fields.CharField', [], {'max_length': '39', 'null': 'True'}),
             'alderman': ('django.db.models.fields.CharField', [], {'max_length': '60', 'null': 'True'}),
             'data_admin': ('django.db.models.fields.FloatField', [], {'null': 'True'}),

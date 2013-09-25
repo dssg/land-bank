@@ -1,0 +1,72 @@
+<!-- <h2>Property Details</h2> -->
+{% if assessor %}
+    <img src="http://www.cookcountyassessor.com/ImageStreamer/StreamImage.aspx?pin={{ assessor.pin }}" class="img-responsive" />
+    <br />
+    <div class="row">
+        <div class="col-5">PIN</div><div class="col-7">{{ assessor.pin }}</div>
+    </div><div class="row">
+        <div class="col-5">Address</div><div class="col-7">
+            {% if assessor.street %}
+                {{ assessor.houseno}} {{ assessor.direction|title }} {{ assessor.street|title }}
+            {% else %}
+                <span class="unavailable">Unavailable</span>
+            {% endif %}
+        </div>
+    </div><div class="row">
+        <div class="col-5">Property type</div>
+        <div class="col-7">
+            {% if assessor.ptype_desc %}
+                {{ assessor.ptype_desc|title }}
+            {% else %}
+                <span class="unavailable">Unavailable</span>
+            {% endif %}
+        </div>
+    </div><div class="row">
+        <div class="col-5">Assessed value</div><div class="col-7">
+            {% if assessor.current_total_assmt %}
+                {{ assessor.current_total_assmt }}
+            {% else %}
+                <span class="unavailable">Unavailable</span>
+            {% endif %}
+        </div>
+    </div><div class="row">
+        <div class="col-5">Building area</div><div class="col-7">
+            {% if assessor.sqft_bldg %}
+                {{ assessor.sqft_bldg }} sq. ft.
+            {% else %}
+                <span class="unavailable">Unavailable</span>                                                                                                   
+            {% endif %}
+        </div>
+    </div><div class="row">
+        <div class="col-5">Land area</div><div class="col-7">
+            {% if assessor.sqft_land %}
+                {{ assessor.sqft_land }} sq. ft.
+            {% else %}
+                <span class="unavailable">Unavailable</span>
+            {% endif %}
+        </div>
+    </div>
+    <div class="row"><div class="col-5">Ward</div><div class="col-7">
+        {% if ward %}
+            {{ ward.ward }}: {{ ward.alderman|title }}
+        {% else %}
+            <span class="unavailable">Unavailable</span>
+        {% endif %}
+    </div></div>
+    <div class="row"><div class="col-5">Community Area</div><div class="col-7">
+        {% if ca %}
+            {{ ca.area_number }}: {{ ca.area_name|title }}
+        {% else %}
+            <span class="unavailable">Unavailable</span>
+        {% endif %}
+    </div></div>
+    <div class="row"><div class="col-5">Census Tract</div><div class="col-7">
+        {% if tract %}
+            {{ tract.fips }}
+        {% else %}
+            <span class="unavailable">Unavailable</span>
+        {% endif %}
+    </div></div>
+{% else %}
+    <p class="unavailable">No property found by that PIN....</p>
+{% endif %}

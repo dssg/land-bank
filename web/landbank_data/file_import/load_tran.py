@@ -13,11 +13,10 @@ def load_transactions(transaction_file, verbose = False):
   with open(transaction_file,'r') as f:
     reader = csv.reader(f, delimiter="\t")
     reader.next()
-    #i = 0;
+    skip_lookup = False
+    if Transaction.objects.count() == 0:
+      skip_lookup = True
     for row in reader:
-      #if (i==10):
-        #break
-      pin     = '{:0>14}'.format(int(Decimal(row[1])))
       try:	amount_prime = float(row[2])
       except:	amount_prime = None
       doc    = row[3].strip()
@@ -56,8 +55,8 @@ def load_transactions(transaction_file, verbose = False):
       ca_name = row[27].strip()
       place = row[28].strip()
       gisdate = row[29].strip()
-      try:	ptype = int(row[30])
-      except:   ptype = None
+      try:	ptype_id = int(row[30])
+      except:   ptype_id = None
       try: 	residential = int(row[31])
       except:	residential = None
       try:	adj_yq = int(row[32])
@@ -66,6 +65,8 @@ def load_transactions(transaction_file, verbose = False):
       except:	adj_yd = None
       loc       = None if row[22]=='' else Point((Decimal(row[23]), Decimal(row[22])),srid=4326).transform(3435)
       try:
+        if skip_lookup:
+          raise Exception('no lookup')
         transaction =  Transaction.objects.get(\
         pin = pin\
 	,amount_prime = amount_prime\
@@ -96,7 +97,7 @@ def load_transactions(transaction_file, verbose = False):
 	,ca_name = ca_name\
 	,place = place\
 	,gisdate = gisdate\
-	,ptype = ptype\
+	,ptype_id = ptype_id\
 	,residential = residential\
 	,adj_yq = adj_yq\
 	,adj_yd = adj_yd\
@@ -133,11 +134,10 @@ def load_transactions(transaction_file, verbose = False):
 	,ca_name = ca_name\
 	,place = place\
 	,gisdate = gisdate\
-	,ptype = ptype\
+	,ptype_id = ptype_id\
 	,residential = residential\
 	,adj_yq = adj_yq\
 	,adj_yd = adj_yd\
         ,loc = loc\
         )
-      #i += 1
       transaction.save()

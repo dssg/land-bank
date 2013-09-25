@@ -1,0 +1,39 @@
+.container {
+  margin: 15px;
+  padding-top: 0px;
+  padding-bottom: 15px;
+  padding-left: 15px;
+  padding-right: 15px;
+  background-color: rgba(64,64,64,.1);
+  border: 1px solid rgba(128,128,128,.7);
+}
+[class*="col-"] {
+  padding: 0px;
+}
+#parcel-title {
+  display: none;
+  width: 200px;
+}
+#map-pane {
+  height: 100%;
+}
+#area-details, #parcel-details {
+  height: 100%;
+  padding: 8px;
+  overflow: auto;
+}
+#parcel-details {
+  display: none;
+}
+.well h3 {
+  margin-top: 0px;
+  margin-bottom: 8px;
+}
+.table {
+  font-size: 85%;
+  margin-bottom: 0px;
+}
+.table th {
+  width: 200px;
+}
+

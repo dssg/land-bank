@@ -151,8 +151,8 @@ class Migration(SchemaMigration):
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'loc': ('django.contrib.gis.db.models.fields.MultiPolygonField', [], {'srid': '3435'})
         },
-        'landbank_data.communityareas': {
-            'Meta': {'object_name': 'CommunityAreas'},
+        'landbank_data.communityarea': {
+            'Meta': {'object_name': 'CommunityArea'},
             'area_name': ('django.db.models.fields.CharField', [], {'max_length': '80', 'null': 'True'}),
             'area_number': ('django.db.models.fields.IntegerField', [], {'null': 'True'}),
             'geom': ('django.contrib.gis.db.models.fields.MultiPolygonField', [], {'srid': '3435'}),
@@ -310,8 +310,8 @@ class Migration(SchemaMigration):
             'yeard': ('django.db.models.fields.IntegerField', [], {'null': 'True'}),
             'yq_doc': ('django.db.models.fields.IntegerField', [], {'null': 'True'})
         },
-        'landbank_data.wards': {
-            'Meta': {'object_name': 'Wards'},
+        'landbank_data.ward': {
+            'Meta': {'object_name': 'Ward'},
             'address': ('django.db.models.fields.CharField', [], {'max_length': '39', 'null': 'True'}),
             'alderman': ('django.db.models.fields.CharField', [], {'max_length': '60', 'null': 'True'}),
             'data_admin': ('django.db.models.fields.FloatField', [], {'null': 'True'}),

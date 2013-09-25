@@ -13,10 +13,10 @@ def load_foreclosures(forc_file, verbose = False):
   with open(forc_file,'r') as f:
     reader = csv.reader(f, delimiter="\t")
     reader.next()
-    #i = 0;
+    skip_lookup = False
+    if Foreclosure.objects.count() == 0
+      skip_lookup = True
     for row in reader:
-      #if (i==10):
-        #break
       pin     = '{:0>14}'.format(int(Decimal(row[1])))
       filing_date   = spss_to_posix(row[2])
       try:	case_num1 = int(row[3])
@@ -51,8 +51,8 @@ def load_foreclosures(forc_file, verbose = False):
       ca_name = row[23].strip()
       place = row[24].strip()
       gisdate = row[25].strip()
-      try:	ptype = int(row[26])
-      except:	ptype = None
+      try:	ptype_id = int(row[26])
+      except:	ptype_id = None
       try:	residential = int(row[27])
       except:	residential = None
       try:	adj_yq = int(row[28])
@@ -61,6 +61,8 @@ def load_foreclosures(forc_file, verbose = False):
       except:	adj_yd = None
       loc = None if row[18]=='' else Point((Decimal(row[19]), Decimal(row[18])),srid=4326).transform(3435)
       try:
+        if skip_lookup:
+          raise Exception('no lookup')
         forc = Foreclosure.objects.get(\
         pin = pin\
 	,filing_date   = filing_date\
@@ -87,7 +89,7 @@ def load_foreclosures(forc_file, verbose = False):
 	,ca_name = ca_name\
 	,place = place\
 	,gisdate = gisdate\
-	,ptype = ptype\
+	,ptype_id = ptype_id\
 	,residential = residential\
 	,adj_yq = adj_yq\
 	,adj_yd = adj_yd\
@@ -120,11 +122,10 @@ def load_foreclosures(forc_file, verbose = False):
 	,ca_name = ca_name\
 	,place = place\
 	,gisdate = gisdate\
-	,ptype = ptype\
+	,ptype_id = ptype_id\
 	,residential = residential\
 	,adj_yq = adj_yq\
 	,adj_yd = adj_yd\
         ,loc = loc\
         )
-      #i += 1
       forc.save()

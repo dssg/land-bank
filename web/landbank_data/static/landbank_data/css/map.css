@@ -1,0 +1,13 @@
+#map-base {
+        height: 100%;
+        max-height: 500px;
+}
+#map-aggregate {
+        height: 70%;
+        margin: 15px;
+        max-height: 500px;
+}
+
+html, body {
+	height: 100%;
+}

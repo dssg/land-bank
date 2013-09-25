@@ -15,14 +15,14 @@ insert into landbank_data_pinarealookup
         (select lda.pin
             ,ldw.id as ward_id
         from landbank_data_assessor as lda
-            ,landbank_data_wards as ldw
+            ,landbank_data_ward as ldw
         where ST_Intersects(lda.loc, ldw.geom)) as pin_ward
     on (assessor.pin = pin_ward.pin)
     left join
         (select lda.pin
             ,ldca.id as community_area_id
         from landbank_data_assessor as lda
-            ,landbank_data_communityareas as ldca
+            ,landbank_data_communityarea as ldca
         where ST_Intersects(lda.loc, ldca.geom)) as pin_ca
     on (assessor.pin = pin_ca.pin)
     left join

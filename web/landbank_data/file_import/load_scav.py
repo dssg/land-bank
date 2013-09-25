@@ -12,11 +12,13 @@ def load_scavengers(scavenger_file, verbose = False):
   with open(scavenger_file,'r') as f:
     reader = csv.reader(f, delimiter="\t")
     reader.next()
-    #i = 0;
+    skip_lookup = False
+    if Scavenger.objects.count() == 0
+      skip_lookup = True
     for row in reader:
-      #if (i==10):
-        #break
       try:
+        if skip_lookup:
+          raise Exception('no lookup')
         scavenger =  Scavenger.objects.get(\
 	township = int(row[0])\
 	,volume = row[1].strip()
@@ -38,5 +40,4 @@ def load_scavengers(scavenger_file, verbose = False):
 	,tax_amount = Decimal(row[5].translate(None, '$,'))\
 	,total_amount = Decimal(row[6].translate(None, '$,'))\
         )
-      #i += 1
       scavenger.save()

@@ -4,7 +4,7 @@ from decimal import Decimal
 from django.contrib.gis.geos import Point
 
 assessor_file = '/mnt/ebs/data/cook_2011.csv'
-base_year = 2011	# Year from which these statistics are based; needed to calculate year built
+base_year = 2011 # Year from which these statistics are based; needed to calculate year built
 
 def run(verbose = True):
   load_assessors(assessor_file, verbose = verbose)
@@ -13,10 +13,10 @@ def load_assessors(assessor_file, verbose = False):
   with open(assessor_file,'r') as f:
     reader = csv.reader(f, delimiter=",")
     reader.next()
-    #i = 0;
+    skip_lookup = False
+    if Assessor.objects.count() == 0:
+      skip_lookup = True
     for row in reader:
-      #if (i==10):
-        #break
       pin             = '{:0>14}'.format(int(Decimal(row[1])))
       houseno         = row[2].strip()
       direction       = row[3].strip()
@@ -65,6 +65,8 @@ def load_assessors(assessor_file, verbose = False):
       gisdate              = row[34].strip()
       loc       = None if row[25]=='' else Point((Decimal(row[26]), Decimal(row[25])), srid=4326).transform(3435)
       try:
+	if skip_lookup:
+          raise Exception('no lookup')
         assessor = Assessor.objects.get(\
         pin                            = pin,\
 	houseno                        = houseno,\
@@ -140,6 +142,4 @@ def load_assessors(assessor_file, verbose = False):
 	gisdate                        = gisdate,\
         loc                            = loc\
         )
-      #i += 1
       assessor.save()
-

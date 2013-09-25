@@ -13,10 +13,10 @@ def load_mortgages(mortgage_file, verbose = False):
   with open(mortgage_file,'r') as f:
     reader = csv.reader(f, delimiter="\t")
     reader.next()
-    #i = 0;
+    skip_lookup = False
+    if Mortgage.objects.count() == 0:
+      skip_lookup = True
     for row in reader:
-      #if (i==10):
-        #break
       pin = '{:0>14}'.format(int(Decimal(row[1])))
       doc = row[2].strip()
       try:	mort_amt = float(row[3])
@@ -52,8 +52,8 @@ def load_mortgages(mortgage_file, verbose = False):
       ca_name = row[26].strip()
       place = row[27].strip()
       gisdate = row[28].strip()
-      try: 	ptype = int(row[29])
-      except:	ptype = None
+      try: 	ptype_id = int(row[29])
+      except:	ptype_id = None
       try:	residential = int(row[30])
       except:	residential = None
       try:	adj_yq = int(row[31])
@@ -62,6 +62,8 @@ def load_mortgages(mortgage_file, verbose = False):
       except:	adj_yd = None
       loc       = None if row[21]=='' else Point((Decimal(row[22]), Decimal(row[21])))
       try:
+        if skip_lookup:
+          raise Exception('no lookup')
         mortgage =  Mortgage.objects.get(\
         pin = pin\
         ,doc = doc\
@@ -91,7 +93,7 @@ def load_mortgages(mortgage_file, verbose = False):
 	,ca_name = ca_name\
 	,place = place\
 	,gisdate = gisdate\
-	,ptype = ptype\
+	,ptype_id = ptype_id\
 	,residential = residential\
 	,adj_yq = adj_yq\
 	,adj_yd = adj_yd\
@@ -127,11 +129,10 @@ def load_mortgages(mortgage_file, verbose = False):
 	,ca_name = ca_name\
 	,place = place\
 	,gisdate = gisdate\
-	,ptype = ptype\
+	,ptype_id = ptype_id\
 	,residential = residential\
 	,adj_yq = adj_yq\
 	,adj_yd = adj_yd\
         ,loc = loc\
         )
-      #i += 1
       mortgage.save()

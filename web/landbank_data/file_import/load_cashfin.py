@@ -13,10 +13,10 @@ def load_cashfin(cashfin_file, verbose = False):
   with open(cashfin_file,'r') as f:
     reader = csv.reader(f, delimiter="\t")
     reader.next()
-    #i = 0;
+    skip_lookup = False
+    if CashFin.objects.count() == 0:
+      skip_lookup = True
     for row in reader:
-      #if (i==10):
-        #break
       pin = '{:0>14}'.format(int(Decimal(row[1])))
       doc = row[2]
       date_doc = spss_to_posix(row[3])
@@ -50,12 +50,14 @@ def load_cashfin(cashfin_file, verbose = False):
       ca_name = row[25].strip()
       place = row[26].strip()
       gisdate = row[27].strip()
-      try: 	ptype = int(row[28])
-      except:   ptype = None
+      try: 	ptype_id = int(row[28])
+      except:   ptype_id = None
       try:	residential = int(row[29])
       except:	residential = None
       loc       = None if row[20]=='' else Point((Decimal(row[21]), Decimal(row[20])))
       try:
+        if skip_lookup:
+          raise Exception('no lookup')
         cashfin =  CashFin.objects.get(\
         pin = pin\
         ,doc = doc\
@@ -84,7 +86,7 @@ def load_cashfin(cashfin_file, verbose = False):
 	,ca_name = ca_name\
 	,place = place\
 	,gisdate = gisdate\
-	,ptype = ptype\
+	,ptype_id = ptype_id\
 	,residential = residential\
         ,loc = loc\
         )
@@ -117,9 +119,8 @@ def load_cashfin(cashfin_file, verbose = False):
 	,ca_name = ca_name\
 	,place = place\
 	,gisdate = gisdate\
-	,ptype = ptype\
+	,ptype_id = ptype_id\
 	,residential = residential\
         ,loc = loc\
         )
-      #i += 1
       cashfin.save()

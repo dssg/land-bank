@@ -13,10 +13,10 @@ def load_auctions(auction_file, verbose = False):
   with open(auction_file,'r') as f:
     reader = csv.reader(f, delimiter="\t")
     reader.next()
-    #i = 0;
+    skip_lookup = False
+    if Auction.objects.count() == 0:
+      skip_lookup = True
     for row in reader:
-      #if (i==10):
-        #break
       pin     = '{:0>14}'.format(int(Decimal(row[1])))
       doc    = row[2].strip()
       date_doc = spss_to_posix(row[3])
@@ -49,8 +49,8 @@ def load_auctions(auction_file, verbose = False):
       ca_name = row[24].strip()
       place = row[25].strip()
       gisdate = row[26].strip()
-      try:    ptype = int(row[27])
-      except: ptype = None
+      try:    ptype_id = int(row[27])
+      except: ptype_id = None
       try:    residential = int(row[28])
       except: residential = None
       try:    adj_yq = int(row[29])
@@ -59,6 +59,8 @@ def load_auctions(auction_file, verbose = False):
       except: adj_yd = None
       loc       = None if row[19]=='' else Point((Decimal(row[20]), Decimal(row[19])))
       try:
+        if skip_lookup:
+          raise Exception('no lookup')
         auction = Auction.objects.get(\
         pin = pin\
         ,doc = doc\
@@ -86,7 +88,7 @@ def load_auctions(auction_file, verbose = False):
 	,ca_name = ca_name\
 	,place = place\
 	,gisdate = gisdate\
-	,ptype = ptype\
+	,ptype_id = ptype_id\
 	,residential = residential\
 	,adj_yq = adj_yq\
 	,adj_yd = adj_yd\
@@ -120,11 +122,10 @@ def load_auctions(auction_file, verbose = False):
 	,ca_name = ca_name\
 	,place = place\
 	,gisdate = gisdate\
-	,ptype = ptype\
+	,ptype_id = ptype_id\
 	,residential = residential\
 	,adj_yq = adj_yq\
 	,adj_yd = adj_yd\
         ,loc = loc\
         )
-      #i += 1
       auction.save()
