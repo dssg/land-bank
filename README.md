@@ -67,6 +67,9 @@ $ python manage.py migrate landbank_data
 
 Finally, modify and run load_*.py scripts with desired input files to populate base tables.
 
+## Team
+![Team](https://raw.github.com/dssg/dssg.github.io/761993c24ea2991170ef64048115cb805f5f13fb/img/people/teams/landbank.png)
+
 ## Contributing to the project
 To get involved, please check the [issue tracker](https://github.com/dssg/bikeshare/issues).
 
