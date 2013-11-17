@@ -18,7 +18,7 @@ These abandoned homes can lower property values, serve as magnets for crime and 
 ## The solution: analytics web tool to target properties
 The Cook County Land Bank Authority (CCLBA) was created in January 2013 with the goal of returning these properties to productive use. The agency won't have the resources to invest in every property, and the appropriate policy strategies from community to community.
 
-<img src="http://www.dssg.io/img/posts/land-bank-screenshot.png" align="center">
+![web app screenshot](http://www.dssg.io/img/posts/land-bank-screenshot.png)
 
 Our purpose was to create a web tool to view and understand Cook County's property data, and to analyze it in order to help the CCLBA develop its policy strategies.
 
