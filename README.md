@@ -34,6 +34,8 @@ Our purpose was to create a web tool to view and understand Cook County's proper
 - ACS demographic data from the Census Bureau
 - Brownfield data from the EPA
 
+**[Read more about the data we used in the wiki](../../wiki/Data)**
+
 ## Project layout
 - `analysis`: exploratory data analsys of real estate and demographic tends in Cook County
 - `web`: a django app that implements the analy
