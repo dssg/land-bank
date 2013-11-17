@@ -6,7 +6,7 @@ An analytics tool to help the Cook County Land Bank acquire vacant and abandoned
 
 This project is a part of the 2013 [Data Science for Social Good](http://www.dssg.io) fellowship, in partnership with the [Cook County Land Bank](http://www.cookcountylandbank.org) and [DePaul University Institute for Housing Studies](http://www.housingstudies.org/).
 
-### The problem: vacant and abandoned property
+## The problem: vacant and abandoned property
 Parts of Cook County have long struggled with vacancy and abandonment, but the recent foreclosure crisis spread these problems into areas which had previously experienced relative stability. 
 Many of the properties that went into foreclosure ended up becoming vacant because the residents would abandon the property long before the foreclosure process was completed. 
 
@@ -15,8 +15,10 @@ These abandoned homes can lower property values, serve as magnets for crime and 
 **[Read more about the abandoned property problem on our blog](http://dssg.io/2013/07/11/cook-county-land-bank.html)**
 
 
-### The solution: analytics web tool to target properties
+## The solution: analytics web tool to target properties
 The Cook County Land Bank Authority (CCLBA) was created in January 2013 with the goal of returning these properties to productive use. The agency won't have the resources to invest in every property, and the appropriate policy strategies from community to community.
+
+<img src="http://www.dssg.io/img/posts/land-bank-screenshot.png" align="center">
 
 Our purpose was to create a web tool to view and understand Cook County's property data, and to analyze it in order to help the CCLBA develop its policy strategies.
 
@@ -25,17 +27,18 @@ Our purpose was to create a web tool to view and understand Cook County's proper
 
 **[Read more about our analysis in the wiki](../../wiki/Analysis)**
 
-### The data: property and building data from Cook County and the City of Chicago
+## The data: property and building data from Cook County and the City of Chicago
 - Property data from the Cook County Assessor and Recorder of Deeds, courtsety of the Institute for Housing Studies
 - Cook County parcel shapefile from County GIS department
 - City of Chicago open data portal datasets
 - ACS demographic data from the Census Bureau
 - Brownfield data from the EPA
 
-### Project layout
-Coming soon!
+## Project layout
+- `analysis`: exploratory data analsys of real estate and demographic tends in Cook County
+- `web`: a django app that implements the analy
 
-### Installation guide
+## Installation guide
 
 Here's the software you'll need to install:
 
