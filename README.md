@@ -1,10 +1,12 @@
 # Abandoned property analytics tool
 
-<a href="http://cookcountylandbank.org"><img src="http://dssg.io/img/partners/landbank.jpg" width="350" align="right"></a>
+<a href="http://cookcountylandbank.org"><img src="http://dssg.io/img/partners/landbank.jpg" width="400" align="right"></a>
 
 An analytics tool to help the Cook County Land Bank acquire vacant and abandoned properties strategically.
 
 This project is a part of the 2013 [Data Science for Social Good](http://www.dssg.io) fellowship, in partnership with the [Cook County Land Bank](http://www.cookcountylandbank.org) and [DePaul University Institute for Housing Studies](http://www.housingstudies.org/).
+
+*For a quick and gentle overview of the project, check out our [blog post](http://dssg.io/2013/07/11/cook-county-land-bank.html).*
 
 ## The problem: vacant and abandoned property
 Parts of Cook County have long struggled with vacancy and abandonment, but the recent foreclosure crisis spread these problems into areas which had previously experienced relative stability. 
