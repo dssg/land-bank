@@ -39,8 +39,10 @@ Our purpose was to create a web tool to view and understand Cook County's proper
 **[Read more about the data we used in the wiki](../../wiki/Data)**
 
 ## Project layout
-- `analysis`: exploratory data analsys of real estate and demographic tends in Cook County
-- `web`: a django app that implements the analy
+- `analysis`: exploratory data analsys of real estate and demographic tends in Cook County.
+- `web`: a django app that implements the analytics tool and a data API backend to power this tool.
+
+**[Read more about the analysis and webapp in the wiki](../../wiki)**
 
 ## Installation guide
 
